@@ -5,6 +5,7 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+. /usr/share/git/completion/git-completion.bash
 . /usr/share/git/git-prompt.sh
 
 alias ls='ls --color=auto'
