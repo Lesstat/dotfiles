@@ -12,7 +12,7 @@ alias ls='ls --color=auto'
 alias ll='ls -al'
 alias emacs='emacs -nw'
 alias sys=systemctl
-
+alias pacman='pacman --color always'
 
 export GIT_PS1_SHOWDIRTYSTATE=1
 export PS1='[\u@\h \W$(__git_ps1 " (%s)")]\$ '
