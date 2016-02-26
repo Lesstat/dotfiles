@@ -62,6 +62,9 @@
  
 (use-package magit
   :ensure t )
+(use-package ox-ioslide
+  :ensure t
+  )
 ;;;;(setq org-refile-targets (quote (
 		;;		 ("~/ownCloud/Flo/Documents/Selbstorganisation/notes.org"
 				;;  "~/ownCloud/Flo/Documents/Selbstorganisation/gtd.org"
@@ -71,3 +74,5 @@
 (define-key global-map "\C-cc" 'org-capture)
 (dolist (hook '(org-mode-hook))
       (add-hook hook (lambda () (flyspell-mode 1))))
+(global-hl-line-mode 1)
+(set-face-background 'hl-line "black")
