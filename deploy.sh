@@ -1,10 +1,13 @@
 #!/bin/bash
-
-ln -sf ~/workspaces/bash/bash_config/.emacs ~/.emacs
-ln -sf ~/workspaces/bash/bash_config/config.org ~/.emacs.d/config.org
+current_path=$(pwd)
+ln -sf ${current_path}/.emacs ~/.emacs
+ln -sf ${current_path}/config.org ~/.emacs.d/config.org
 touch ~/.emacs.d/custom.el #File needs to be existing for emacs config to work
-ln -sf ~/workspaces/bash/bash_config/.bashrc ~/.bashrc
-ln -sf ~/workspaces/bash/bash_config/.bash_login ~/.bash_login
-ln -sf ~/workspaces/bash/bash_config/.bash_logout ~/.bash_logout
-ln -sf ~/workspaces/bash/bash_config/.bash_profile ~/.bash_profile
-ln -sf ~/workspaces/bash/bash_config/.bashrc ~/.bashrc
+ln -sf ${current_path}/.bashrc ~/.bashrc
+ln -sf ${current_path}/.bash_login ~/.bash_login
+ln -sf ${current_path}/.bash_logout ~/.bash_logout
+ln -sf ${current_path}/.bash_profile ~/.bash_profile
+ln -sf ${current_path}/.bashrc ~/.bashrc
+ln -sf ${current_path}/.zshrc ~/.zshrc
+ln -sf ${current_path}/.zlogin ~/.zlogin
+ln -sf ${current_path}/.zlogout ~/.zlogout
