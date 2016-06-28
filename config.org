@@ -119,7 +119,8 @@
   (use-package ox-reveal
     :ensure t
     :config
-    (setq org-reveal-root "/home/flo/workspaces/js/reveal.js")
+    (if (f-exists?  "/home/flo/workspaces/js/reveal.js") 
+    (setq org-reveal-root "/home/flo/workspaces/js/reveal.js"))
     )
 #+END_SRC
 
@@ -321,6 +322,10 @@ keys suck.
   (global-set-key (kbd "C-x C-f")                      'helm-find-files) 
   )
 #+END_SRC
+
+#+RESULTS:
+: t
+
 * Programming
 ** General
 I don't want to mix tabs with spaces, so I'm going all spaces.
@@ -381,9 +386,12 @@ I don't want to mix tabs with spaces, so I'm going all spaces.
 #+END_SRC
 ** Go
 #+BEGIN_SRC emacs-lisp
-(add-hook 'before-save-hook 'gofmt-before-save)
+  (use-package go-mode
+    :ensure t
+    :config
+  (add-hook 'before-save-hook 'gofmt-before-save))
 #+END_SRC
-*** TODO Add proper loading of all the Go packages
+*** TODO Add proper loading of rest of the Go packages
 ** Lua
 #+BEGIN_SRC emacs-lisp
 (setq auto-mode-alist (cons '("\.lua$" . lua-mode) auto-mode-alist))
@@ -402,7 +410,7 @@ I don't want to mix tabs with spaces, so I'm going all spaces.
   (if (display-graphic-p)
       (load-theme 'dichromacy)
     (load-theme 'tsdh-light))
-  (global-highlight-parentheses-mode t) 
+    ;(global-highlight-parentheses-mode t) 
   (setq inhibit-startup-screen t)
 #+END_SRC
 * Temp
@@ -429,3 +437,4 @@ Enhanced Keybindings for Org-mode
 #+END_SRC
 
 
+** TODO find the package in which global-highlight-parentheses-mode lives
