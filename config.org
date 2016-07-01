@@ -39,18 +39,19 @@
 ** *Org*anizing features
 *** Todo Stuff
 #+BEGIN_SRC emacs-lisp
-  (setq org-todo-keywords
-        '((sequence "TODO(t)" "NEXT(n)" "IN-PROGRESS(p)" "|" "DONE(d)")
-                (sequence "WAITING(w)" "REFILE(r)" "|" "CANCELLED(c)")))
- '(org-enforce-todo-dependencies t)
-  (setq org-refile-targets
-        (quote( (org-agenda-files . (:maxlevel . 10))))
-        )
- (setq org-capture-templates
-    '(("t" "TODO" entry (file org-default-notes-file)
-      "** REFILE  %?  %t %a  ")
-     ("r" "Reference" entry (file my/org-references-file) ;; Variable is set in custom.el to differentiate between computers
-      "** %? %T %a %x")))
+   (setq org-todo-keywords
+         '((sequence "TODO(t)" "NEXT(n)" "IN-PROGRESS(p)" "|" "DONE(d)")
+                 (sequence "WAITING(w)" "REFILE(r)" "|" "CANCELLED(c)")))
+  '(org-enforce-todo-dependencies t)
+   (setq org-refile-targets
+         (quote( (org-agenda-files . (:maxlevel . 3))))
+         )
+  (setq org-capture-templates
+     '(("t" "TODO" entry (file+headline org-default-notes-file "Tasks")
+       "** REFILE  %?  %t %a ")
+      ("r" "Reference" entry 
+      (file+headline my/org-references-file "Referenzen") ;; Variable is set in custom.el to differentiate between computers
+      "%? %T %a %x")))
 #+END_SRC
 
 
