@@ -284,9 +284,9 @@ keys suck.
        :ensure t
        )
       (use-package evil-annoying-arrows
-       :ensure t
+       :ensure nil
        :config
-       (setq evil-annoying-arrows-super-annoying-mode t)
+       (setq evil-annoying-arrows-super-annoying-mode nil)
        )
       (use-package evil-surround
         :ensure t
@@ -363,19 +363,20 @@ I don't want to mix tabs with spaces, so I'm going all spaces.
 #+END_SRC
 ** Python
 #+BEGIN_SRC emacs-lisp
-(use-package elpy
-  :ensure t
-  :init (elpy-enable)
-  :config
-  (elpy-use-ipython)
-	  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-	  (add-hook 'elpy-mode-hook 'flycheck-mode)
-  (use-package ein
-    :ensure t)
-  (use-package py-autopep8
+  (use-package elpy
     :ensure t
+    :init (elpy-enable)
     :config
-    (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)))
+    (if (file-exists-p "/usr/bin/ipython")
+        (elpy-use-ipython))
+    (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+    (add-hook 'elpy-mode-hook 'flycheck-mode)
+    (use-package ein
+      :ensure t)
+    (use-package py-autopep8
+      :ensure t
+      :config
+      (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)))
 #+END_SRC
 
 ** Haskell
