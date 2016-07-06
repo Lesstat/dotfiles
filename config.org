@@ -81,8 +81,6 @@ define a path for packages I manipulate myself.
        nil))))
 #+END_SRC
 
-
- 
 ** In Buffer Styling
 #+BEGIN_SRC emacs-lisp
 (use-package org-bullets
@@ -460,13 +458,22 @@ I wrote a little shortcut for that.
     )
   (define-key global-map "\C-cd" 'fb/switch_dict)
 #+END_SRC
-k
-** Evil-org
-Enhanced Keybindings for Org-mode
+* Temp
+** Elfeed
+Elfeed is a cool Feedreader with which I'm playing right
+now. Unfortunately it doesn't work so well with evil mode.
 #+BEGIN_SRC emacs-lisp
-  (use-package evil-org
-    :ensure t )
+  (use-package elfeed
+    :ensure t
+    :config
+    (setq elfeed-feeds
+          '(("http://planet.emacsen.org/atom.xml" blog emacs tech))
+          )
+    (setq elfeed-use-curl t)
+    (push 'elfeed-search-mode evil-motion-state-modes)
+    (push 'elfeed-show-mode evil-motion-state-modes)
+    )
 #+END_SRC
 
 
-** TODO find the package in which global-highlight-parentheses-mode lives
+
