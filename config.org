@@ -50,7 +50,7 @@
      '(("t" "TODO" entry (file+headline org-default-notes-file "Tasks")
        "** REFILE  %?  %t %a ")
       ("r" "Reference" entry 
-      (file+headline my/org-references-file "Referenzen") ;; Variable is set in custom.el to differentiate between computers
+      (file+headline fb/org-references-file "Referenzen") ;; Variable is set in custom.el to differentiate between computers
       "%? %T %a %x")))
 #+END_SRC
 
@@ -260,14 +260,14 @@ comma in decimal numbers on export if I need a German display style in
 presentations / papers. Activation by uncommenting the add-hook call.
 #+BEGIN_SRC emacs-lisp
 
-(defun my/org-use-comma-in-exported-tables (backend)
+(defun fb/org-use-comma-in-exported-tables (backend)
   (goto-char (point-min))
   (while (re-search-forward "\\([0-9]\\)\\.\\([0-9]\\)" nil t)
      (when (save-match-data (org-at-table-p))
        (replace-match "\\1,\\2" t nil))))
 
 ;;(add-hook 'org-export-before-pro-hook
-;;          'my/org-use-comma-in-exported-tables)
+;;          'fb/org-use-comma-in-exported-tables)
 #+END_SRC
 * Evil-mode
 As much as I love Emacs I love having vim keybindings :)
@@ -426,9 +426,22 @@ downloaded from https://github.com/nicferrier/org-presie
 #+END_SRC
 *** EIMP 
 reuired by org-presie
+* Spelling
+** Change Dictionaries
+I only use German and English dictionaries but I switch frequently so
+I wrote a little shortcut for that. 
 #+BEGIN_SRC emacs-lisp
-  (use-package eimp
-    :ensure t)
+  (defvar fb/active_dict "german")
+  (defvar fb/next_dict "english")
+  (defun fb/switch_dict ()
+    (interactive)
+    (ispell-change-dictionary fb/next_dict)
+    (let ( (temp_dict fb/active_dict) )
+      (setq fb/active_dict fb/next_dict)
+      (setq fb/next_dict temp_dict)
+      )
+    )
+  (define-key global-map "\C-cd" 'fb/switch_dict)
 #+END_SRC
 k
 ** Evil-org
