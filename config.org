@@ -312,12 +312,19 @@ keys suck.
       (use-package powerline
         :ensure t
         :config
+        (set-face-foreground 'powerline-active1 "white")
+        (set-face-foreground 'powerline-active2 "white")
+        (set-face-foreground 'powerline-inactive1 "white")
+        (set-face-foreground 'powerline-inactive2 "white")
         (use-package powerline-evil
           :ensure t
           :config
           (powerline-evil-center-color-theme)
+          (set-face-foreground 'powerline-evil-normal-face "black")
           )
         )
+      (use-package evil-org
+        :ensure t )
       (use-package linum-relative
         :ensure t
         :config
@@ -325,7 +332,19 @@ keys suck.
         )
       )
 #+END_SRC
-
+I don't need Enter & Space as movement commands in motion state. But
+some modes want to use them.
+#+BEGIN_SRC emacs-lisp
+  ;;Source: https://www.emacswiki.org/emacs/Evil
+  (defun fb/move-key (keymap-from keymap-to key)
+       "Moves key binding from one keymap to another, deleting from the old location. "
+       (define-key keymap-to key (lookup-key keymap-from key))
+       (define-key keymap-from key nil))
+     (fb/move-key evil-motion-state-map evil-normal-state-map (kbd "RET"))
+     (fb/move-key evil-motion-state-map evil-normal-state-map " ")
+#+END_SRC 
+#+BEGIN_SRC emacs-lisp
+#+END_SRC
 * Helm
 #+BEGIN_SRC emacs-lisp
 (use-package helm
@@ -427,20 +446,15 @@ I don't want to mix tabs with spaces, so I'm going all spaces.
   (if (display-graphic-p)
       (load-theme 'dichromacy)
     (load-theme 'tsdh-light))
-    ;(global-highlight-parentheses-mode t) 
   (setq inhibit-startup-screen t)
 #+END_SRC
-* Temp
-** Org-presie
-downloaded from https://github.com/nicferrier/org-presie
+** Highlighting parentheses 
 #+BEGIN_SRC emacs-lisp
-    (add-to-list 'load-path "~/.emacs.d/custom_packages/")
-    (autoload 'org-presie "org-presie" nil t)
-    (use-package org-presie
-      :ensure nil)
+  (use-package highlight-parentheses
+    :ensure t
+    :config
+    (global-highlight-parentheses-mode t))
 #+END_SRC
-*** EIMP 
-reuired by org-presie
 * Spelling
 ** Change Dictionaries
 I only use German and English dictionaries but I switch frequently so
