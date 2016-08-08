@@ -284,7 +284,113 @@ to work.
 %% Schriftart in der Ausgabe/Eingabe
 \\usepackage[T1]{fontenc}
 \\usepackage{textcomp}
-\\usepackage[latin1]{inputenc}
+\\usepackage[utf8]{inputenc}
+
+%% Zitate
+\\usepackage[numbers]{natbib}
+\\bibliographystyle{abbrvnat}
+%\\bibliographystyle{dinat}
+%\\bibliographystyle{plainnat}
+%\\bibliographystyle{splncs}
+%% Similar to option \"sectionbib\" but \\refname instead of \\bibname
+\\makeatletter
+\\renewcommand\\bibsection{\\section*{\\refname\\@mkboth{\\MakeUppercase{\\refname}}{\\MakeUppercase{\\refname}}}}
+\\makeatother
+
+%% Index
+%\\usepackage{makeidx}
+%\\makeindex
+
+\\usepackage{minted}
+%% PDF Einstellungen
+% muss nach natbib geladen werden!
+\\usepackage{nameref}
+\\usepackage{varioref}
+\\usepackage[pdfusetitle,pdftex,colorlinks]{hyperref}
+\\hypersetup{pdfborder={0 0 0}}
+\\hypersetup{bookmarksdepth=3}
+\\hypersetup{bookmarksopen=true}
+\\hypersetup{bookmarksopenlevel=1}
+\\hypersetup{bookmarksnumbered=true}
+\\usepackage{color}
+\\hypersetup{colorlinks=false}
+
+%\\usepackage[section]{tocbibind}
+
+\\makeatletter
+\\gdef\\@keywords{}
+\\def\\keywords#1{\\gdef\\@keywords{#1}}
+\\gdef\\@subtitle{}
+\\def\\subtitle#1{\\gdef\\@subtitle{#1}}
+
+%% modified from llncs
+\\renewenvironment{abstract}{%
+  \\list{}{\\advance\\topsep by0.35cm\\relax\\small%
+          \\leftmargin=1cm%
+          \\labelwidth=\\z@%
+          \\listparindent=\\z@%
+          \\itemindent\\listparindent%
+          \\rightmargin\\leftmargin}%
+          \\item[\\hskip\\labelsep\\bfseries\\abstractname]}{%
+  \\if!\\@keywords!\\else{\\item[~]\\item[\\hskip\\labelsep\\bfseries\\keywordname]\\@keywords}\\fi%
+  \\endlist}
+
+\\AtBeginDocument{%
+  \\if!\\@subtitle!\\else\\hypersetup{pdfsubject={\\@subtitle}}\\fi
+  \\if!\\@keywords!\\else\\hypersetup{pdfkeywords={\\@keywords}}\\fi
+}
+\\makeatother
+
+% llncs hyperref fix
+\\makeatletter
+\\providecommand*{\\toclevel@author}{0}
+\\providecommand*{\\toclevel@title}{0}
+\\makeatother
+
+%% Grafiken
+\\usepackage[pdftex]{graphicx}
+\\DeclareGraphicsExtensions{.pdf,.jpg,.png}
+\\usepackage{subfigure}
+
+%% Mathe
+\\usepackage{amsmath}
+\\usepackage{amssymb}
+
+%% Listings
+\\usepackage{listings}
+\\lstset{escapechar=\\%, frame=tb, basicstyle=\\footnotesize}
+
+%% Sonstiges
+\\newcommand{\\TODO}[1]{\\par\\textcolor{red}{#1}\\marginpar{\\textcolor{red}{TODO}}}
+\\newcommand{\\TODOX}[1]{\\textcolor{red}{#1}\\marginpar{\\textcolor{red}{TODO}}}
+\\pagestyle{plain}
+
+% Keine \"Schusterjungen\"
+\\clubpenalty = 10000
+% Keine \"Hurenkinder\"
+\\widowpenalty = 10000 \\displaywidowpenalty = 10000
+      
+      [NO-DEFAULT-PACKAGES]
+      [NO-PACKAGES]"
+  ("\\section{%s}" . "\\section*{%s}")
+  ("\\subsection{%s}" . "\\subsection*{%s}")
+  ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+  ("\\paragraph{%s}" . "\\paragraph*{%s}")
+  ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+	     )
+
+(add-to-list 'org-latex-classes
+	     '("llncs_deutsch"
+	       "
+\\documentclass[pdftex,german,oribibl]{llncs}
+
+%% Spracheinstellungen laden
+\\usepackage[main=german]{babel}
+
+%% Schriftart in der Ausgabe/Eingabe
+\\usepackage[T1]{fontenc}
+\\usepackage{textcomp}
+\\usepackage[utf8]{inputenc}
 
 %% Zitate
 \\usepackage[numbers]{natbib}
