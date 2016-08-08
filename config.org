@@ -16,6 +16,131 @@ define a path for packages I manipulate myself.
 (load custom-file)
 (add-to-list 'load-path "~/.emacs.d/custom_packages/")
 #+END_SRC
+
+* General
+#+BEGIN_SRC emacs-lisp
+  (recentf-mode t)
+#+END_SRC
+** Styling
+#+BEGIN_SRC emacs-lisp
+  (global-hl-line-mode 0)
+  (if (display-graphic-p)
+      (load-theme 'dichromacy)
+    (load-theme 'tsdh-light))
+  (setq inhibit-startup-screen t)
+#+END_SRC
+*** Highlighting parentheses 
+#+BEGIN_SRC emacs-lisp
+  (use-package highlight-parentheses
+    :ensure t
+    :config
+    (global-highlight-parentheses-mode t))
+#+END_SRC
+** Evil-mode
+As much as I love Emacs I love having vim keybindings :)
+I added keybindings to switch buffers with C-xl and C-xh because arrow
+keys suck.
+#+BEGIN_SRC emacs-lisp
+
+  (use-package evil
+     :ensure t
+     :config 
+     (evil-mode 1)
+     (setq evil-insert-state-cursor '((bar . 3) "black"))
+     (define-key global-map "\C-xl" 'evil-next-buffer)
+     (define-key global-map "\C-xh" 'evil-prev-buffer)
+     (use-package evil-anzu
+       :ensure t
+       )
+      (use-package evil-annoying-arrows
+       :ensure nil
+       :config
+       (setq evil-annoying-arrows-super-annoying-mode nil)
+       )
+      (use-package evil-surround
+        :ensure t
+        :config
+        (global-evil-surround-mode 1)
+        )
+      (use-package powerline
+        :ensure t
+        :config
+        (set-face-foreground 'powerline-active1 "white")
+        (set-face-foreground 'powerline-active2 "white")
+        (set-face-foreground 'powerline-inactive1 "white")
+        (set-face-foreground 'powerline-inactive2 "white")
+        (use-package powerline-evil
+          :ensure t
+          :config
+          (powerline-evil-center-color-theme)
+          (set-face-foreground 'powerline-evil-normal-face "black")
+          )
+        )
+      (use-package evil-org
+        :ensure t )
+      (use-package linum-relative
+        :ensure t
+        :config
+        (linum-relative-global-mode)
+        )
+      )
+#+END_SRC
+I don't need Enter & Space as movement commands in motion state. But
+some modes want to use them.
+#+BEGIN_SRC emacs-lisp
+  ;;Source: https://www.emacswiki.org/emacs/Evil
+  (defun fb/move-key (keymap-from keymap-to key)
+       "Moves key binding from one keymap to another, deleting from the old location. "
+       (define-key keymap-to key (lookup-key keymap-from key))
+       (define-key keymap-from key nil))
+     (fb/move-key evil-motion-state-map evil-normal-state-map (kbd "RET"))
+     (fb/move-key evil-motion-state-map evil-normal-state-map " ")
+#+END_SRC 
+#+BEGIN_SRC emacs-lisp
+#+END_SRC
+** Helm
+#+BEGIN_SRC emacs-lisp
+  (use-package helm
+    :ensure t
+    :config
+    (helm-mode 1)
+    (global-set-key (kbd "M-x")                          'undefined)
+    (global-set-key (kbd "M-x")                          'helm-M-x)
+    (global-set-key (kbd "M-y")                          'helm-show-kill-ring)
+    (global-set-key (kbd "C-x C-f")                      'helm-find-files) 
+    (global-set-key (kbd "C-x b")                        'helm-mini)
+    (setq helm-buffers-fuzzy-matching t
+          helm-recentf-fuzzy-match    t)
+    (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
+    (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
+    (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
+    (setq helm-split-window-in-side-p           t ;open helm buffer inside current window, not occupy whole other window
+          helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
+          helm-ff-file-name-history-use-recentf t)
+    (helm-autoresize-mode 1)
+    )
+#+END_SRC
+: *** TODO Tune the hell out of [[file:~/Downloads/A%20Package%20in%20a%20league%20of%20its%20own:%20<code>Helm<_code>.html][helm]]
+** Smartparens
+#+BEGIN_SRC emacs-lisp
+  (use-package smartparens
+    :ensure t
+    :config
+    (smartparens-global-strict-mode t)
+    )
+#+END_SRC
+** Elfeed
+Elfeed is a cool Feedreader with which I'm playing right
+now. Unfortunately it doesn't work so well with evil mode.
+#+BEGIN_SRC emacs-lisp
+  (use-package elfeed
+    :ensure t
+    :config
+    (setq elfeed-use-curl t)
+    (push 'elfeed-search-mode evil-emacs-state-modes)
+    (push 'elfeed-show-mode evil-emacs-state-modes)
+    )
+#+END_SRC
 * Org-mode
 #+BEGIN_SRC emacs-lisp
 
@@ -283,83 +408,6 @@ reuired by org-presie
   (use-package eimp
     :ensure t)
 #+END_SRC
-* Evil-mode
-As much as I love Emacs I love having vim keybindings :)
-I added keybindings to switch buffers with C-xl and C-xh because arrow
-keys suck.
-#+BEGIN_SRC emacs-lisp
-
-  (use-package evil
-     :ensure t
-     :config 
-     (evil-mode 1)
-     (setq evil-insert-state-cursor '((bar . 3) "black"))
-     (define-key global-map "\C-xl" 'evil-next-buffer)
-     (define-key global-map "\C-xh" 'evil-prev-buffer)
-     (use-package evil-anzu
-       :ensure t
-       )
-      (use-package evil-annoying-arrows
-       :ensure nil
-       :config
-       (setq evil-annoying-arrows-super-annoying-mode nil)
-       )
-      (use-package evil-surround
-        :ensure t
-        :config
-        (global-evil-surround-mode 1)
-        )
-      (use-package powerline
-        :ensure t
-        :config
-        (set-face-foreground 'powerline-active1 "white")
-        (set-face-foreground 'powerline-active2 "white")
-        (set-face-foreground 'powerline-inactive1 "white")
-        (set-face-foreground 'powerline-inactive2 "white")
-        (use-package powerline-evil
-          :ensure t
-          :config
-          (powerline-evil-center-color-theme)
-          (set-face-foreground 'powerline-evil-normal-face "black")
-          )
-        )
-      (use-package evil-org
-        :ensure t )
-      (use-package linum-relative
-        :ensure t
-        :config
-        (linum-relative-global-mode)
-        )
-      )
-#+END_SRC
-I don't need Enter & Space as movement commands in motion state. But
-some modes want to use them.
-#+BEGIN_SRC emacs-lisp
-  ;;Source: https://www.emacswiki.org/emacs/Evil
-  (defun fb/move-key (keymap-from keymap-to key)
-       "Moves key binding from one keymap to another, deleting from the old location. "
-       (define-key keymap-to key (lookup-key keymap-from key))
-       (define-key keymap-from key nil))
-     (fb/move-key evil-motion-state-map evil-normal-state-map (kbd "RET"))
-     (fb/move-key evil-motion-state-map evil-normal-state-map " ")
-#+END_SRC 
-#+BEGIN_SRC emacs-lisp
-#+END_SRC
-* Helm
-#+BEGIN_SRC emacs-lisp
-(use-package helm
-  :ensure t
-  :config
-  (helm-mode 1)
-  (global-set-key (kbd "M-x")                          'undefined)
-  (global-set-key (kbd "M-x")                          'helm-M-x)
-  (global-set-key (kbd "M-y")                          'helm-show-kill-ring)
-  (global-set-key (kbd "C-x C-f")                      'helm-find-files) 
-  )
-#+END_SRC
-
-#+RESULTS:
-: t
 
 * Programming
 ** General
@@ -440,21 +488,6 @@ I don't want to mix tabs with spaces, so I'm going all spaces.
     :config
     (yas-global-mode 1))
 #+END_SRC
-* Styling
-#+BEGIN_SRC emacs-lisp
-  (global-hl-line-mode 0)
-  (if (display-graphic-p)
-      (load-theme 'dichromacy)
-    (load-theme 'tsdh-light))
-  (setq inhibit-startup-screen t)
-#+END_SRC
-** Highlighting parentheses 
-#+BEGIN_SRC emacs-lisp
-  (use-package highlight-parentheses
-    :ensure t
-    :config
-    (global-highlight-parentheses-mode t))
-#+END_SRC
 * Spelling
 ** Change Dictionaries
 I only use German and English dictionaries but I switch frequently so
@@ -473,21 +506,14 @@ I wrote a little shortcut for that.
   (define-key global-map "\C-cd" 'fb/switch_dict)
 #+END_SRC
 * Temp
-** Elfeed
-Elfeed is a cool Feedreader with which I'm playing right
-now. Unfortunately it doesn't work so well with evil mode.
+** PDF-tools
 #+BEGIN_SRC emacs-lisp
-  (use-package elfeed
+  (use-package pdf-tools
     :ensure t
     :config
-    (setq elfeed-feeds
-          '(("http://planet.emacsen.org/atom.xml" blog emacs tech))
-          )
-    (setq elfeed-use-curl t)
-    (push 'elfeed-search-mode evil-motion-state-modes)
-    (push 'elfeed-show-mode evil-motion-state-modes)
+    (pdf-tools-install)
     )
-#+END_SRC
 
+#+END_SRC
 
 
