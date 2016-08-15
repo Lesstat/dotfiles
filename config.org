@@ -579,9 +579,11 @@ I don't want to mix tabs with spaces, so I'm going all spaces.
   (use-package go-mode
     :ensure t
     :config
-  (add-hook 'before-save-hook 'gofmt-before-save))
+    (add-hook 'before-save-hook 'gofmt-before-save)
+    (use-package flymake-go
+      :ensure t)
+    )
 #+END_SRC
-*** TODO Add proper loading of rest of the Go packages
 ** Lua
 #+BEGIN_SRC emacs-lisp
 (setq auto-mode-alist (cons '("\.lua$" . lua-mode) auto-mode-alist))
