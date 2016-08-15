@@ -3,12 +3,29 @@
 
 ;;; Set up package
 (require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.org/packages/") t)
-(when (< emacs-major-version 24)
-  ;; For important compatibility libraries like cl-lib
-  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
-(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+
+(setq package-archives
+      '(("gnu"   . "https://elpa.gnu.org/packages/")
+       ("melpa" . "https://melpa.org/packages/")
+       ("org"   . "http://orgmode.org/elpa/"))
+      )
+
+;; Always check tls 
+;; Code and idea borrowed from https://glyph.twistedmatrix.com/2015/11/editor-malware.html
+(let ((trustfile
+       (replace-regexp-in-string
+        "\\\\" "/"
+        (replace-regexp-in-string
+         "\n" ""
+         (shell-command-to-string "python -m certifi")))))
+  (setq tls-checktrust t)
+  (setq tls-program
+        (list
+         (format "gnutls-cli%s --x509cafile %s -p %%p %%h"
+                 (if (eq window-system 'w32) ".exe" "") trustfile)))
+  (setq gnutls-verify-error t)
+  (setq gnutls-trustfiles (list trustfile)))
+
 (package-initialize)
 
 ;;; Bootstrap use-package
