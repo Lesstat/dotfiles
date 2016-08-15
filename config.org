@@ -193,6 +193,9 @@ now. Unfortunately it doesn't work so well with evil mode.
         (todo "IN-PROGRESS"
               ((org-agenda-skip-function
                 '(org-agenda-skip-entry-if 'scheduled))))
+        (todo "NEXT"
+              ((org-agenda-skip-function
+                '(org-agenda-skip-entry-if 'scheduled))))
         (todo "TODO"
               ((org-agenda-skip-function
                 '(org-agenda-skip-entry-if 'scheduled))))
