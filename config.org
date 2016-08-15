@@ -600,6 +600,12 @@ I don't want to mix tabs with spaces, so I'm going all spaces.
     (yas-global-mode 1))
 #+END_SRC
 * Spelling
+#+BEGIN_SRC emacs-lisp
+  (use-package flyspell
+    :ensure t
+    :config
+    (add-hook 'text-mode-hook (lambda () (flyspell-mode 1))))
+#+END_SRC
 ** Change Dictionaries
 I only use German and English dictionaries but I switch frequently so
 I wrote a little shortcut for that. 
