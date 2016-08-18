@@ -524,6 +524,15 @@ I don't want to mix tabs with spaces, so I'm going all spaces.
 #+BEGIN_SRC emacs-lisp
  (setq indent-tabs-mode nil)
 #+END_SRC
+** Dumb-Jump
+Dumb-Jump gives jump to definition functionality by searching instead
+of creating tags beforehand.
+#+BEGIN_SRC emacs-lisp
+  (use-package dumb-jump
+    :ensure t
+    :config
+    (dumb-jump-mode))
+#+END_SRC
 ** Magit
 #+BEGIN_SRC emacs-lisp
 (use-package magit
