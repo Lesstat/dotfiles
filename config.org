@@ -96,8 +96,22 @@ some modes want to use them.
      (fb/move-key evil-motion-state-map evil-normal-state-map (kbd "RET"))
      (fb/move-key evil-motion-state-map evil-normal-state-map " ")
 #+END_SRC 
+*** evil-snipe
+A more powerful way to move with evil mode. [[https://github.com/hlissner/evil-snipe][github]]
 #+BEGIN_SRC emacs-lisp
+  (use-package evil-snipe
+    :ensure t
+    :config
+    (evil-snipe-mode 1)
+    (evil-snipe-override-mode 1)
+    (setq
+     evil-snipe-scope 'buffer
+     evil-snipe-repeat-scope 'whole-buffer)
+    (add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode))
+
 #+END_SRC
+
+
 ** Helm
 #+BEGIN_SRC emacs-lisp
   (use-package helm
