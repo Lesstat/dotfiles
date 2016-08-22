@@ -155,13 +155,25 @@ now. Unfortunately it doesn't work so well with evil mode.
     (push 'elfeed-show-mode evil-emacs-state-modes)
     )
 #+END_SRC
+** Backup-files
+taken from [[https://www.emacswiki.org/emacs/BackupDirectory][emacswiki]] 
+#+BEGIN_SRC emacs-lisp
+  (setq
+     backup-by-copying t      ; don't clobber symlinks
+     backup-directory-alist
+      '(("." . "~/.saves"))    ; don't litter my fs tree
+     delete-old-versions t
+     kept-new-versions 6
+     kept-old-versions 2
+     version-control t)       ; use versioned backups
+#+END_SRC
 * Org-mode
 #+BEGIN_SRC emacs-lisp
 
-  (use-package org-plus-contrib
-    :ensure t )
   (setq org-modules
         '(org-bbdb org-bibtex org-docview org-gnus org-habit org-info org-irc org-mhe org-rmail org-w3m))
+  (use-package org-plus-contrib
+    :ensure t )
  (setq org-file-apps
     '((auto-mode . emacs)
      ("\\.mm\\'" . default)
