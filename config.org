@@ -571,15 +571,23 @@ of creating tags beforehand.
 #+END_SRC
 ** Company - Auto Completion
 #+BEGIN_SRC emacs-lisp
-(use-package company
-  :ensure t
-  :config
-  (use-package company-c-headers
-    :ensure t)
-  (use-package company-shell
-    :ensure t)
-  (add-hook 'after-init-hook 'global-company-mode)
-  )
+  (use-package company
+    :ensure t
+    :config
+    (use-package company-c-headers
+      :ensure t)
+    (use-package company-shell
+      :ensure t)
+    (use-package company-go
+      :ensure t)
+    (use-package company-jedi
+      :ensure t)
+    (use-package company-web
+      :ensure t)
+    (use-package company-php
+      :ensure t)
+    (add-hook 'after-init-hook 'global-company-mode)
+    )
 #+END_SRC
 ** Flycheck & Flymake
 #+BEGIN_SRC emacs-lisp
@@ -633,11 +641,14 @@ of creating tags beforehand.
 (autoload 'lua-mode "lua-mode" "Lua editing mode." t)
 #+END_SRC
 * Yasnippet
+Yasnippet provides great support for templates. But it destroys
+tab-completion in term, so I deactivated it for term. 
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
     :ensure t
     :config
-    (yas-global-mode 1))
+    (yas-global-mode 1)
+    (add-hook 'term-mode-hook (lambda () (yas-minor-mode -1)) ))
 #+END_SRC
 * Spelling
 #+BEGIN_SRC emacs-lisp
