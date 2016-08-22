@@ -674,19 +674,35 @@ I wrote a little shortcut for that.
   (define-key global-map "\C-cd" 'fb/switch_dict)
 #+END_SRC
 * Temp
-** PDF-tools
-#+BEGIN_SRC emacs-lisp
-  (use-package pdf-tools
-    :ensure t
-    :config
-    (pdf-tools-install)
-    )
-
-#+END_SRC
 ** Hyperbole
 #+BEGIN_SRC emacs-lisp
   (use-package hyperbole
-    :ensure t)
+    :ensure t
+    :config
+    (add-hook 'org-mode-hook (lambda () (define-key org-mode-map "\C-c." 'org-time-stamp) t))
+                               ;;Hyperbole stole this one
+    )
 #+END_SRC
-
-
+** imenu-list
+#+BEGIN_SRC emacs-lisp
+  (use-package imenu-list
+    :ensure t
+    :config
+    (global-set-key (kbd "C-M-o") #'imenu-list-minor-mode)
+    (setq imenu-list-auto-resize t)
+    (add-hook 'imenu-list-major-mode-hook 'evil-motion-state))
+#+END_SRC
+** Web-Mode
+Mode for editing all sorts of web stuff in a single file.
+#+BEGIN_SRC emacs-lisp
+  (use-package web-mode
+    :ensure t
+    :config
+    (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+    (setq web-mode-markup-indent-offset 2
+          web-mode-css-indent-offset 2
+          web-mode-code-indent-offset 2
+          web-mode-enable-auto-pairing t
+          web-mode-enable-css-colorization t
+          web-mode-enable-current-element-highlight t))
+#+END_SRC
