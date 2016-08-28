@@ -24,9 +24,9 @@ define a path for packages I manipulate myself.
 ** Styling
 #+BEGIN_SRC emacs-lisp
   (global-hl-line-mode 0)
-  (if (display-graphic-p)
+  ;;(if (display-graphic-p)
       (load-theme 'dichromacy)
-    (load-theme 'tsdh-light))
+  ;; (load-theme 'tsdh-light))
   (setq inhibit-startup-screen t)
 #+END_SRC
 *** Highlighting parentheses 
@@ -111,7 +111,6 @@ A more powerful way to move with evil mode. [[https://github.com/hlissner/evil-s
 
 #+END_SRC
 
-
 ** Helm
 #+BEGIN_SRC emacs-lisp
   (use-package helm
@@ -130,11 +129,19 @@ A more powerful way to move with evil mode. [[https://github.com/hlissner/evil-s
     (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
     (setq helm-split-window-in-side-p           t ;open helm buffer inside current window, not occupy whole other window
           helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
-          helm-ff-file-name-history-use-recentf t)
+          helm-ff-file-name-history-use-recentf t
+          helm-completion-mode-string           nil) ;don't show helm in mode-list
     (helm-autoresize-mode 1)
     )
 #+END_SRC
-: *** TODO Tune the hell out of [[file:~/Downloads/A%20Package%20in%20a%20league%20of%20its%20own:%20<code>Helm<_code>.html][helm]]
+*** helm-ag
+Lightning fast code search. Needs the [[https://github.com/ggreer/the_silver_searcher][silver searcher]] installed.
+#+BEGIN_SRC emacs-lisp
+  (use-package helm-ag
+    :ensure t
+    )
+#+END_SRC
+*** TODO Tune the hell out of [[file:~/Downloads/A%20Package%20in%20a%20league%20of%20its%20own:%20<code>Helm<_code>.html][helm]]
 ** Smartparens
 #+BEGIN_SRC emacs-lisp
   (use-package smartparens
@@ -167,11 +174,31 @@ taken from [[https://www.emacswiki.org/emacs/BackupDirectory][emacswiki]]
      kept-old-versions 2
      version-control t)       ; use versioned backups
 #+END_SRC
+** Useful stuff
+*** Hyperbole
+#+BEGIN_SRC emacs-lisp
+  (use-package hyperbole
+    :ensure t
+    :config
+    (add-hook 'org-mode-hook (lambda () (define-key org-mode-map "\C-c." 'org-time-stamp) t))
+                               ;;Hyperbole stole this one
+    )
+#+END_SRC
+*** imenu-list
+#+BEGIN_SRC emacs-lisp
+  (use-package imenu-list
+    :ensure t
+    :config
+    (global-set-key (kbd "C-M-o") #'imenu-list-minor-mode)
+    (setq imenu-list-auto-resize t)
+    (add-hook 'imenu-list-major-mode-hook 'evil-motion-state))
+#+END_SRC
 * Org-mode
 #+BEGIN_SRC emacs-lisp
 
   (setq org-modules
         '(org-bbdb org-bibtex org-docview org-gnus org-habit org-info org-irc org-mhe org-rmail org-w3m))
+   (load-library "org-habit") ;; For some reason putting it into org-modules does not load it.
   (use-package org-plus-contrib
     :ensure t )
  (setq org-file-apps
@@ -196,27 +223,54 @@ taken from [[https://www.emacswiki.org/emacs/BackupDirectory][emacswiki]]
   (setq org-todo-keywords
         '((sequence "TODO(t)" "NEXT(n)" "IN-PROGRESS(p)" "|" "DONE(d)")
           (sequence "WAITING(w)" "REFILE(r)" "|" "CANCELLED(c)")))
+  (setq
+   org-global-properties  '(("EFFORT_ALL" . "00:25 00:50 01:15 01:40 00:10"))
+   org-columns-default-format "%25ITEM %TODO %6EFFORT(Effort) %6CLOCKSUM(Clock) %TAGS")
   '(org-enforce-todo-dependencies t)
   (setq org-refile-targets
-        (quote( (org-agenda-files . (:maxlevel . 3))))
-        )
+        '( org-agenda-files . (:maxlevel . 3)))
+
   (setq org-capture-templates
         '(("t" "TODO" entry (file+headline org-default-notes-file "Tasks")
            "** REFILE  %?  
-         %t %a ")
+           %t %a ")
           ("r" "Reference" entry 
            (file+headline fb/org-references-file "Referenzen") ;; Variable is set in custom.el to differentiate between computers
            "%? %T %a %x")
           ("w" "Weekly Review" entry
            (file+datetree fb/org-diary-file)
            (file "/home/flo/.emacs.d/org-capture-template/weekly_review.org")
-           :jump-to-captured t)))
+           :jump-to-captured t)
+          ("d" "Diary entry" entry
+           (file+datetree fb/org-diary-file)
+           "* %?" :jump-to-captured t)))
 #+END_SRC
 I want know when i finished my Todos.
 #+BEGIN_SRC emacs-lisp
   (setq org-log-done (quote time))
 #+END_SRC
 
+**** Org-pomodoro
+Pomodoro Timer for Org-mode. I added a little buffer reminding me that
+a pomodoro is over when I need to mute my audio.
+#+BEGIN_SRC emacs-lisp
+  (defun fb/display-pomodoro-finished-buffer ()
+      (let (
+            (pomodoro-buffer (get-buffer-create "*pomodoro-message*"))
+            (oldbuf (current-buffer))
+            )
+        (pop-to-buffer pomodoro-buffer) 
+        (insert "Your pomodoro is finished. Now a break starts.")
+        )
+    )
+
+  (use-package org-pomodoro
+    :ensure t
+    :config
+    (add-hook 'org-pomodoro-finished-hook 'fb/display-pomodoro-finished-buffer)
+    (setq org-pomodoro-keep-killed-pomodoro-time t)
+    )
+#+END_SRC
 *** Agenda Stuff
 #+BEGIN_SRC emacs-lisp
   (setq org-agenda-custom-commands
@@ -588,18 +642,22 @@ of creating tags beforehand.
       :ensure t)
     (add-hook 'after-init-hook 'global-company-mode)
     )
+  (semantic-mode 1)
+  (global-semantic-idle-completions-mode t)
 #+END_SRC
+
 ** Flycheck & Flymake
 #+BEGIN_SRC emacs-lisp
-(use-package flycheck
-  :ensure t
-  :config ) 
-(use-package flymake-cppcheck
-  :ensure t)
-(add-hook 'org-mode-hook
-          (lambda ()
-            (org-set-local 'yas/trigger-key [tab])
-            (define-key yas/keymap [tab] 'yas/next-field-or-maybe-expand)))
+  (use-package flycheck
+    :ensure t
+    :config 
+    (global-flycheck-mode)) 
+  (use-package flymake-cppcheck
+    :ensure t)
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (org-set-local 'yas/trigger-key [tab])
+              (define-key yas/keymap [tab] 'yas/next-field-or-maybe-expand)))
 #+END_SRC
 ** Python
 #+BEGIN_SRC emacs-lisp
@@ -608,9 +666,12 @@ of creating tags beforehand.
     :init (elpy-enable)
     :config
     (if (file-exists-p "/usr/bin/ipython")
-        (elpy-use-ipython))
+        (progn
+          (elpy-use-ipython)
+          ;; The following helps againts ipython strange characters freezing emacs
+          (setq python-shell-interpreter "ipython3"
+                python-shell-interpreter-args "--simple-prompt --pprint"))) 
     (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-    (add-hook 'elpy-mode-hook 'flycheck-mode)
     (use-package ein
       :ensure t)
     (use-package py-autopep8
@@ -639,6 +700,32 @@ of creating tags beforehand.
 #+BEGIN_SRC emacs-lisp
 (setq auto-mode-alist (cons '("\.lua$" . lua-mode) auto-mode-alist))
 (autoload 'lua-mode "lua-mode" "Lua editing mode." t)
+#+END_SRC
+** Javascript
+#+BEGIN_SRC emacs-lisp
+  (use-package js2-mode
+    :ensure t
+    :config
+    (add-to-list 'auto-mode-alist '("\\.js?\\'" . js2-mode))
+    (use-package js2-refactor
+      :ensure t
+      :config
+      (add-hook 'js2-mode-hook 'js2-refactor-mode))
+    )
+#+END_SRC
+** Web-Mode
+Mode for editing all sorts of web stuff in a single file.
+#+BEGIN_SRC emacs-lisp
+  (use-package web-mode
+    :ensure t
+    :config
+    (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+    (setq web-mode-markup-indent-offset 2
+          web-mode-css-indent-offset 2
+          web-mode-code-indent-offset 2
+          web-mode-enable-auto-pairing t
+          web-mode-enable-css-colorization t
+          web-mode-enable-current-element-highlight t))
 #+END_SRC
 * Yasnippet
 Yasnippet provides great support for templates. But it destroys
@@ -674,35 +761,31 @@ I wrote a little shortcut for that.
   (define-key global-map "\C-cd" 'fb/switch_dict)
 #+END_SRC
 * Temp
-** Hyperbole
+** narrow to dwim
 #+BEGIN_SRC emacs-lisp
-  (use-package hyperbole
-    :ensure t
-    :config
-    (add-hook 'org-mode-hook (lambda () (define-key org-mode-map "\C-c." 'org-time-stamp) t))
-                               ;;Hyperbole stole this one
-    )
-#+END_SRC
-** imenu-list
-#+BEGIN_SRC emacs-lisp
-  (use-package imenu-list
-    :ensure t
-    :config
-    (global-set-key (kbd "C-M-o") #'imenu-list-minor-mode)
-    (setq imenu-list-auto-resize t)
-    (add-hook 'imenu-list-major-mode-hook 'evil-motion-state))
-#+END_SRC
-** Web-Mode
-Mode for editing all sorts of web stuff in a single file.
-#+BEGIN_SRC emacs-lisp
-  (use-package web-mode
-    :ensure t
-    :config
-    (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-    (setq web-mode-markup-indent-offset 2
-          web-mode-css-indent-offset 2
-          web-mode-code-indent-offset 2
-          web-mode-enable-auto-pairing t
-          web-mode-enable-css-colorization t
-          web-mode-enable-current-element-highlight t))
+  (defun narrow-or-widen-dwim (p)
+    "Widen if buffer is narrowed, narrow-dwim otherwise.
+  Dwim means: region, org-src-block, org-subtree, or
+  defun, whichever applies first. Narrowing to
+  org-src-block actually calls `org-edit-src-code'.
+
+  With prefix P, don't widen, just narrow even if buffer
+  is already narrowed."
+    (interactive "P")
+    (declare (interactive-only))
+    (cond ((and (buffer-narrowed-p) (not p)) (widen))
+          ((region-active-p)
+           (narrow-to-region (region-beginning)
+                             (region-end)))
+          ((derived-mode-p 'org-mode)
+           ;; `org-edit-src-code' is not a real narrowing
+           ;; command. Remove this first conditional if
+           ;; you don't want it.
+           (cond ((ignore-errors (org-edit-src-code) t)
+                  (delete-other-windows))
+                 ((ignore-errors (org-narrow-to-block) t))
+                 (t (org-narrow-to-subtree))))
+          ((derived-mode-p 'latex-mode)
+           (LaTeX-narrow-to-environment))
+          (t (narrow-to-defun))))
 #+END_SRC

@@ -41,4 +41,6 @@
 (require 'diminish)                ;; if you use :diminish
 (require 'bind-key)
 
+(setq vc-follow-symlinks t) ;; so emacs doesn't ask how to open config.org after every change
 (org-babel-load-file (concat user-emacs-directory "config.org"))
+(put 'narrow-to-region 'disabled nil)

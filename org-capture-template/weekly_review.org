@@ -9,6 +9,7 @@
 - [ ] Review Action Lists
 - [ ] Review Previous Calendar Data
 - [ ] Review Upcoming Calendar
+- [ ] Review diary of last week
 - [ ] Review Waiting For List
 - [ ] Review Project (and Larger Outcome) Lists
 - [ ] Review Any Relevant Checklist
