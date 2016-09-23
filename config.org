@@ -159,6 +159,7 @@ now. Unfortunately it doesn't work so well with evil mode.
     (setq elfeed-use-curl t)
     (push 'elfeed-search-mode evil-emacs-state-modes)
     (push 'elfeed-show-mode evil-emacs-state-modes)
+    (add-hook 'elfeed-update-hooks '(lambda (url) (elfeed-db-save)))
     )
 #+END_SRC
 ** Backup-files
