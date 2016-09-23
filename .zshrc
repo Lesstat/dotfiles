@@ -88,7 +88,7 @@ export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 alias ls='ls --color=auto'
 alias ll='ls -al'
-alias emacs='emacsclient -c -nw'
+alias emacs='emacsclient -c -nw --alternate-editor=""'
 alias sys=systemctl
 alias pacman='pacman --color always'
 
