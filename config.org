@@ -741,7 +741,9 @@ tab-completion in term, so I deactivated it for term.
   (use-package flyspell
     :ensure t
     :config
-    (add-hook 'text-mode-hook (lambda () (flyspell-mode 1))))
+    (add-hook 'text-mode-hook (lambda () (flyspell-mode 1)))
+    (setq flyspell-mode-line-string nil)
+    )
 #+END_SRC
 ** Change Dictionaries
 I only use German and English dictionaries but I switch frequently so
