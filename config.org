@@ -287,8 +287,16 @@ a pomodoro is over when I need to mute my audio.
     :ensure t
     :config
     (add-hook 'org-pomodoro-finished-hook 'fb/display-pomodoro-finished-buffer)
-    (setq org-pomodoro-keep-killed-pomodoro-time t)
+    (setq org-pomodoro-keep-killed-pomodoro-time t
+          org-pomodoro-format "%s")
+
     )
+#+END_SRC
+As I am already fiddling around with timers, I will automatically
+change the State to in progress when a timer is activated.
+#+BEGIN_SRC emacs-lisp
+  (setq org-clock-in-hook
+        '(lambda () (if (org-entry-is-todo-p) (org-todo  "IN-PROGRESS" ))))
 #+END_SRC
 *** Agenda Stuff
 #+BEGIN_SRC emacs-lisp
