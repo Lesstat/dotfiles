@@ -78,10 +78,10 @@ keys suck.
         )
       (use-package evil-org
         :ensure t )
-      (use-package linum-relative
+      (use-package nlinum-relative
         :ensure t
         :config
-        (linum-relative-global-mode)
+        (global-nlinum-relative-mode t)
         )
       )
 #+END_SRC
