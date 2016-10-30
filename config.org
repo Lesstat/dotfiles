@@ -20,6 +20,7 @@ define a path for packages I manipulate myself.
 * General
 #+BEGIN_SRC emacs-lisp
   (recentf-mode t)
+  (global-set-key (kbd "C-x k") 'kill-this-buffer)
 #+END_SRC
 ** Styling
 #+BEGIN_SRC emacs-lisp
