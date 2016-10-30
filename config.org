@@ -148,7 +148,12 @@ Lightning fast code search. Needs the [[https://github.com/ggreer/the_silver_sea
     :ensure t
     :config
     (smartparens-global-strict-mode t)
+    (use-package evil-smartparens
+      :ensure t
+      :config
+      (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode))
     )
+
 #+END_SRC
 ** Elfeed
 Elfeed is a cool Feedreader with which I'm playing right
