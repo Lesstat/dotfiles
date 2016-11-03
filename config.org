@@ -739,8 +739,12 @@ of creating tags beforehand.
 #+END_SRC
 ** Lua
 #+BEGIN_SRC emacs-lisp
-(setq auto-mode-alist (cons '("\.lua$" . lua-mode) auto-mode-alist))
-(autoload 'lua-mode "lua-mode" "Lua editing mode." t)
+  (use-package lua-mode
+    :ensure t
+    :config
+    (setq auto-mode-alist (cons '("\.lua$" . lua-mode) auto-mode-alist))
+    (autoload 'lua-mode "lua-mode" "Lua editing mode." t)
+  )
 #+END_SRC
 ** Javascript
 #+BEGIN_SRC emacs-lisp
@@ -910,11 +914,41 @@ Proudly stolen from [[http://www.giovannicarmantini.com/2015/07/putting-some-mak
     (4 (gsc/show-clozes-all))))
   (define-key org-mode-map (kbd "C-c s") 'gsc/hide-show-clozes)
 #+END_SRC
-**  calfw
+** calfw
 #+BEGIN_SRC emacs-lisp
   (use-package calfw
     :ensure t
     :config
     (require 'calfw-ical)
     (require 'calfw-org))
+#+END_SRC
+** Markdown
+#+BEGIN_SRC emacs-lisp
+  (use-package markdown-mode
+    :ensure t
+    :commands (markdown-mode gfm-mode)
+    :mode (("README\\.md\\'" . gfm-mode)
+           ("\\.md\\'" . markdown-mode)
+           ("\\.markdown\\'" . markdown-mode))
+    :init (setq markdown-command "multimarkdown"))
+#+END_SRC
+** notmuch
+#+BEGIN_SRC emacs-lisp
+  (use-package notmuch
+    :ensure t
+    :config
+    (setq notmuch-saved-searches
+     (quote
+      ((:name "inbox" :query "tag:inbox" :key "i")
+       (:name "unread" :query "tag:unread" :key "u")
+       (:name "flagged" :query "tag:flagged" :key "f")
+       (:name "sent" :query "tag:sent" :key "t")
+       (:name "drafts" :query "tag:draft" :key "d")
+       (:name "all mail" :query "*" :key "a")
+       (:name "gmx" :query "tag:gmx")
+       (:name "studi_mail" :query "tag:uni")
+       (:name "todo" :query "tag:todo")
+       (:name "reply" :query "tag:doReply")
+       )))
+    )
 #+END_SRC
