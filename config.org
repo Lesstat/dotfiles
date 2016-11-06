@@ -642,6 +642,52 @@ reuired by org-presie
     :ensure t)
 #+END_SRC
 
+** org-drill
+Proudly stolen from [[http://www.giovannicarmantini.com/2015/07/putting-some-make-up-on-my-org-mode-flashcards][Giovanni]]
+#+BEGIN_SRC emacs-lisp
+  (require 'org-drill)
+  (setq org-drill-left-cloze-delimiter "!|"
+        org-drill-right-cloze-delimiter "|!"
+        org-drill-sm5-initial-interval 2.0
+        org-drill-add-random-noise-to-intervals-p t
+        org-drill-scope 'agenda
+        org-drill-learn-fraction 0.45)
+
+  ;;(add-hook 'org-export-before-processing-hook 'gsc/drill-cloze-removal)
+
+  ;; hide clozes in text ;;
+  (defvar gsc/drill-groups-to-hide '(1 3 4) 
+  "Group 1 and 4 are the left and right delimiters respectively,
+  group 3 is the cloze hint.")
+
+  (setplist 'gsc/inv-cloze '(invisible t))
+
+  (defun gsc/hide-clozes-groups ()
+    (save-excursion
+      (goto-char (point-min))
+      (let ((cloze-regexp (gsc/drill-compute-cloze-regexp)))
+      (while (re-search-forward cloze-regexp nil t)
+        (loop for group in gsc/drill-groups-to-hide do
+              (overlay-put 
+               (make-overlay (match-beginning group) (match-end group))
+               'category 'gsc/inv-cloze))))))
+
+  (defun gsc/show-clozes-all ()
+    (save-excursion
+      (goto-char (point-min)) 
+      (while (re-search-forward (gsc/drill-compute-cloze-regexp) nil t)
+        (remove-overlays 
+         (match-beginning 1) (match-end 4) 'category 'gsc/inv-cloze))))
+
+  (defun gsc/hide-show-clozes (arg)
+  "If called with no argument, hides delimiters and hints for org-drill clozes.
+  If called with the C-u universal ARG, it shows them."
+  (interactive "p")
+  (case arg
+    (1 (gsc/hide-clozes-groups))
+    (4 (gsc/show-clozes-all))))
+  (define-key org-mode-map (kbd "C-c s") 'gsc/hide-show-clozes)
+#+END_SRC
 * Programming
 ** General
 I don't want to mix tabs with spaces, so I'm going all spaces.
@@ -772,6 +818,29 @@ Mode for editing all sorts of web stuff in a single file.
           web-mode-enable-css-colorization t
           web-mode-enable-current-element-highlight t))
 #+END_SRC
+** projectile
+#+BEGIN_SRC emacs-lisp
+  (use-package projectile
+    :ensure t
+    :config
+    (projectile-global-mode)
+    (setq projectile-mode-line nil)
+    (use-package counsel-projectile
+      :ensure t
+      :config
+      (counsel-projectile-on)))
+
+#+END_SRC
+** Markdown
+#+BEGIN_SRC emacs-lisp
+  (use-package markdown-mode
+    :ensure t
+    :commands (markdown-mode gfm-mode)
+    :mode (("README\\.md\\'" . gfm-mode)
+           ("\\.md\\'" . markdown-mode)
+           ("\\.markdown\\'" . markdown-mode))
+    :init (setq markdown-command "multimarkdown"))
+#+END_SRC
 * Yasnippet
 Yasnippet provides great support for templates. But it destroys
 tab-completion in term, so I deactivated it for term. 
@@ -855,65 +924,6 @@ I wrote a little shortcut for that.
 
     )
 #+END_SRC
-** projectile
-#+BEGIN_SRC emacs-lisp
-  (use-package projectile
-    :ensure t
-    :config
-    (projectile-global-mode)
-    (setq projectile-mode-line nil)
-    (use-package counsel-projectile
-      :ensure t
-      :config
-      (counsel-projectile-on)))
-
-#+END_SRC
-** org-drill
-Proudly stolen from [[http://www.giovannicarmantini.com/2015/07/putting-some-make-up-on-my-org-mode-flashcards][Giovanni]]
-#+BEGIN_SRC emacs-lisp
-  (require 'org-drill)
-  (setq org-drill-left-cloze-delimiter "!|"
-        org-drill-right-cloze-delimiter "|!"
-        org-drill-sm5-initial-interval 2.0
-        org-drill-add-random-noise-to-intervals-p t
-        org-drill-scope 'agenda
-        org-drill-learn-fraction 0.45)
-
-  ;;(add-hook 'org-export-before-processing-hook 'gsc/drill-cloze-removal)
-
-  ;; hide clozes in text ;;
-  (defvar gsc/drill-groups-to-hide '(1 3 4) 
-  "Group 1 and 4 are the left and right delimiters respectively,
-  group 3 is the cloze hint.")
-
-  (setplist 'gsc/inv-cloze '(invisible t))
-
-  (defun gsc/hide-clozes-groups ()
-    (save-excursion
-      (goto-char (point-min))
-      (let ((cloze-regexp (gsc/drill-compute-cloze-regexp)))
-      (while (re-search-forward cloze-regexp nil t)
-        (loop for group in gsc/drill-groups-to-hide do
-              (overlay-put 
-               (make-overlay (match-beginning group) (match-end group))
-               'category 'gsc/inv-cloze))))))
-
-  (defun gsc/show-clozes-all ()
-    (save-excursion
-      (goto-char (point-min)) 
-      (while (re-search-forward (gsc/drill-compute-cloze-regexp) nil t)
-        (remove-overlays 
-         (match-beginning 1) (match-end 4) 'category 'gsc/inv-cloze))))
-
-  (defun gsc/hide-show-clozes (arg)
-  "If called with no argument, hides delimiters and hints for org-drill clozes.
-  If called with the C-u universal ARG, it shows them."
-  (interactive "p")
-  (case arg
-    (1 (gsc/hide-clozes-groups))
-    (4 (gsc/show-clozes-all))))
-  (define-key org-mode-map (kbd "C-c s") 'gsc/hide-show-clozes)
-#+END_SRC
 ** calfw
 #+BEGIN_SRC emacs-lisp
   (use-package calfw
@@ -921,16 +931,6 @@ Proudly stolen from [[http://www.giovannicarmantini.com/2015/07/putting-some-mak
     :config
     (require 'calfw-ical)
     (require 'calfw-org))
-#+END_SRC
-** Markdown
-#+BEGIN_SRC emacs-lisp
-  (use-package markdown-mode
-    :ensure t
-    :commands (markdown-mode gfm-mode)
-    :mode (("README\\.md\\'" . gfm-mode)
-           ("\\.md\\'" . markdown-mode)
-           ("\\.markdown\\'" . markdown-mode))
-    :init (setq markdown-command "multimarkdown"))
 #+END_SRC
 ** notmuch
 #+BEGIN_SRC emacs-lisp
