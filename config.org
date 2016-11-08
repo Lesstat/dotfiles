@@ -915,6 +915,8 @@ I wrote a little shortcut for that.
     :config
     (use-package counsel
       :ensure t)
+    (use-package ivy-hydra
+      :ensure t)
     (ivy-mode 1)
     (setq ivy-use-virtual-buffers    t
           ivy-re-builders-alist      '(( t . ivy--regex-ignore-order))
