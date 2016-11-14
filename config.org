@@ -954,3 +954,19 @@ I wrote a little shortcut for that.
        )))
     )
 #+END_SRC
+** org-caldav
+#+BEGIN_SRC emacs-lisp
+  (use-package org-caldav
+    :ensure t)
+
+#+END_SRC
+** Auctex
+Auctex seems to be the greatest LaTeX package around. Setting
+Tex-master to nil makes Auctex ask for the master file to compile if
+the document consists of multiple files.
+#+BEGIN_SRC emacs-lisp
+  (use-package auctex
+    :ensure t
+    :config
+    (setq-default TeX-master nil))
+#+END_SRC
