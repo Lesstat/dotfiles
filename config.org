@@ -965,7 +965,8 @@ Auctex seems to be the greatest LaTeX package around. Setting
 Tex-master to nil makes Auctex ask for the master file to compile if
 the document consists of multiple files.
 #+BEGIN_SRC emacs-lisp
-  (use-package auctex
+  (load "auctex.el" nil t t)
+  (setq-default TeX-master nil)
     :ensure t
     :config
     (setq-default TeX-master nil))
