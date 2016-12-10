@@ -967,7 +967,41 @@ the document consists of multiple files.
 #+BEGIN_SRC emacs-lisp
   (load "auctex.el" nil t t)
   (setq-default TeX-master nil)
+#+END_SRC
+** Rust
+Configuration for the rust programming language adapted from
+http://emacsist.com/10425.  Note that a checkout of the rust src is
+needed and the environment variable RUST_SRC_PATH must point to it for
+racer to work.
+#+BEGIN_SRC emacs-lisp
+  (use-package rust-mode
     :ensure t
     :config
-    (setq-default TeX-master nil))
+    (use-package racer
+      :ensure t
+      :config
+      (setq racer-cmd "/usr/bin/racer")
+      (use-package company-racer
+	:ensure t)
+      )
+      (use-package flycheck-rust
+	:ensure t
+	)
+  
+
+    (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
+    (add-hook 'rust-mode-hook
+	    
+	      '(lambda ()
+		 ;; Enable racer
+		 (racer-activate)
+		 ;; Hook in racer with eldoc to provide documentation
+		 (racer-turn-on-eldoc)
+		 ;; Use flycheck-rust in rust-mode
+		 (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
+		 ;; Use company-racer in rust mode
+		 (set (make-local-variable 'company-backends) '(company-racer))
+		 ))
+    )
+
 #+END_SRC

@@ -100,3 +100,5 @@ if [[ ! -d $ZSH_CACHE_DIR ]]; then
 fi
 bindkey -v
 source $ZSH/oh-my-zsh.sh
+
+export RUST_SRC_PATH="/home/flo/workspaces/rust/rust/src/"
