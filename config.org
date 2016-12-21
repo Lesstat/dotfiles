@@ -365,6 +365,13 @@ Repeating Task should show only once.
 
 ** Export-Setting
 
+*** General
+I don't want broken links to stop myself from exporting (especially as
+it also stops org-caldav-sync)
+#+begin_src emacs-lisp
+  (setq org-export-with-broken-links t)
+#+end_src
+
 *** New Exporters
 #+BEGIN_SRC emacs-lisp
 
