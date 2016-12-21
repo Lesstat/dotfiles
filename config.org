@@ -307,6 +307,7 @@ change the State to in progress when a timer is activated.
 #+END_SRC
 *** Agenda Stuff
 #+BEGIN_SRC emacs-lisp
+  (setq org-agenda-span 'day)
   (setq org-agenda-custom-commands
     (quote
      (("y" "My Files"
