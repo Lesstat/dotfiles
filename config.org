@@ -960,6 +960,7 @@ I wrote a little shortcut for that.
        (:name "todo" :query "tag:todo")
        (:name "reply" :query "tag:doReply")
        )))
+    (setq notmuch-archive-tags '("-inbox" "-unread"))
     )
 #+END_SRC
 ** org-caldav
