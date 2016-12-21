@@ -239,8 +239,8 @@ taken from [[https://www.emacswiki.org/emacs/BackupDirectory][emacswiki]]
         '(("t" "TODO" entry (file+headline org-default-notes-file "Tasks")
            "** REFILE  %^{heading}  
   :PROPERTIES:
-  CREATION_DOC: %a 
-  CREATION_DATE: %T
+  :CREATION_DOC: %a 
+  :CREATION_DATE: %U
   :END:
   %?")
           ("r" "Reference" entry 
