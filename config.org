@@ -876,6 +876,8 @@ I wrote a little shortcut for that.
 #+BEGIN_SRC emacs-lisp
   (defvar fb/active_dict "german")
   (defvar fb/next_dict "english")
+  (make-variable-buffer-local 'fb/active_dict)
+  (make-variable-buffer-local 'fb/next_dict)
   (defun fb/switch_dict ()
     (interactive)
     (ispell-change-dictionary fb/next_dict)
