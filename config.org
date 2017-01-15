@@ -312,21 +312,23 @@ change the State to in progress when a timer is activated.
     (quote
      (("y" "My Files"
        ((agenda "" nil)
-        (todo "REFILE" nil)
-        (todo "IN-PROGRESS"
+	(todo "REFILE" nil)
+	(todo "IN-PROGRESS"
               ((org-agenda-skip-function
-                '(org-agenda-skip-entry-if 'scheduled))))
-        (todo "NEXT"
+		'(org-agenda-skip-entry-if 'scheduled))))
+	(todo "NEXT"
               ((org-agenda-skip-function
-                '(org-agenda-skip-entry-if 'scheduled))))
-        (todo "WAITING" nil))
+		'(org-agenda-skip-entry-if 'scheduled))))
+	(todo "WAITING" nil))
        ((org-agenda-tag-filter-preset
-                '("-drill")))
-                nil)
+		'("-drill")))
+		nil)
       ("n" "Agenda and all TODO's"
        ((agenda "" nil)
-        (alltodo "" nil))
-       nil))))
+	(alltodo "" nil))
+       nil)
+      ("c" "calfw calendar view" fb/cfw-org-my-agenda nil ((org-agenda-tag-filter-preset '("drill"))) nil)
+       )))
 #+END_SRC
 Repeating Task should show only once.
 #+BEGIN_SRC emacs-lisp
@@ -936,11 +938,21 @@ I wrote a little shortcut for that.
 #+END_SRC
 ** calfw
 #+BEGIN_SRC emacs-lisp
-  (use-package calfw
-    :ensure t
-    :config
-    (require 'calfw-ical)
-    (require 'calfw-org))
+    (use-package calfw
+      :ensure t
+      :config
+      (require 'calfw-ical)
+      (require 'calfw-org))
+
+  (defun fb/cfw-org-my-agenda (&rest ARGS)
+    "Open calfw-buffer without the org-drill items."
+    (interactive)
+    (let ((org-agenda-tag-filter-preset '("-drill")))
+      (cfw:open-org-calendar)
+      )
+    (set (make-variable-buffer-local 'org-agenda-tag-filter-preset) '("-drill"))
+    )
+
 #+END_SRC
 ** notmuch
 #+BEGIN_SRC emacs-lisp
