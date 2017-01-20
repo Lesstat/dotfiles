@@ -845,7 +845,8 @@ Mode for editing all sorts of web stuff in a single file.
     (use-package counsel-projectile
       :ensure t
       :config
-      (counsel-projectile-on)))
+      (counsel-projectile-on)
+      (setq projectile-switch-project-action 'projectile-vc)))
 
 #+END_SRC
 ** Markdown
