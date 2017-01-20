@@ -738,6 +738,7 @@ of creating tags beforehand.
     (use-package company-php
       :ensure t)
     (add-hook 'after-init-hook 'global-company-mode)
+    (define-key company-mode-map  (kbd "M-<tab>") 'company-complete)
     )
   (semantic-mode 1)
   (global-semantic-idle-completions-mode t)
