@@ -739,6 +739,12 @@ of creating tags beforehand.
       :ensure t)
     (add-hook 'after-init-hook 'global-company-mode)
     (define-key company-mode-map  (kbd "M-<tab>") 'company-complete)
+    (use-package company-quickhelp
+      :ensure t
+      :config
+      (company-quickhelp-mode 1)
+      (define-key company-active-map (kbd "M-h") #'company-quickhelp-manual-begin)
+      )
     )
   (semantic-mode 1)
   (global-semantic-idle-completions-mode t)
