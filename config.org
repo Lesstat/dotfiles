@@ -745,6 +745,20 @@ of creating tags beforehand.
       (company-quickhelp-mode 1)
       (define-key company-active-map (kbd "M-h") #'company-quickhelp-manual-begin)
       )
+    (use-package company-math
+      :ensure t
+      :config
+      (defun fb/company-math-setup ()
+	(setq-local company-backends
+		    (append
+		     '((company-math-symbols-latex company-latex-commands))
+		     company-backends    )))
+      (add-to-list 'company-backends 'company-math-symbols-unicode) 
+      (add-hook 'Tex-mode-hook  'fb/company-math-setup)
+      ;; In Org-mode I like to have the latex style for exporting.
+      (add-hook 'org-mode-hook  'fb/company-math-setup)
+      )
+
     )
   (semantic-mode 1)
   (global-semantic-idle-completions-mode t)
