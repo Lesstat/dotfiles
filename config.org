@@ -1047,6 +1047,7 @@ racer to work.
 		 ;; Use company-racer in rust mode
 		 (set (make-local-variable 'company-backends) '(company-racer))
 		 (rust-enable-format-on-save)
+		 (flyspell-prog-mode)
 		 ))
     )
 
