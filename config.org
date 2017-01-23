@@ -1052,3 +1052,13 @@ racer to work.
     )
 
 #+END_SRC
+** Projectile-git-autofetch
+#+BEGIN_SRC emacs-lisp
+  (use-package projectile-git-autofetch
+    :ensure t
+    :config
+    (projectile-git-autofetch-mode 1)
+    (setq projectile-git-autofetch-projects 'all
+	  projectile-git-autofetch-interval 1800
+	  projectile-git-autofetch-initial-delay 30))
+#+END_SRC
