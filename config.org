@@ -42,49 +42,66 @@ As much as I love Emacs I love having vim keybindings :)
 I added keybindings to switch buffers with C-xl and C-xh because arrow
 keys suck.
 #+BEGIN_SRC emacs-lisp
-
   (use-package evil
-     :ensure t
-     :config 
-     (evil-mode 1)
-     (setq evil-insert-state-cursor '((bar . 3) "black"))
-     (define-key global-map "\C-xl" 'evil-next-buffer)
-     (define-key global-map "\C-xh" 'evil-prev-buffer)
-     (use-package evil-anzu
-       :ensure t
-       )
-      (use-package evil-annoying-arrows
-       :ensure nil
-       :config
-       (setq evil-annoying-arrows-super-annoying-mode nil)
-       )
-      (use-package evil-surround
-        :ensure t
-        :config
-        (global-evil-surround-mode 1)
-        )
-      (use-package powerline
-        :ensure t
-        :config
-        (set-face-foreground 'powerline-active1 "white")
-        (set-face-foreground 'powerline-active2 "white")
-        (set-face-foreground 'powerline-inactive1 "white")
-        (set-face-foreground 'powerline-inactive2 "white")
-        (use-package powerline-evil
-          :ensure t
-          :config
-          (powerline-evil-center-color-theme)
-          (set-face-foreground 'powerline-evil-normal-face "black")
-          )
-        )
-      (use-package evil-org
-        :ensure t )
-      (use-package nlinum-relative
-        :ensure t
-        :config
-        (global-nlinum-relative-mode t)
-        )
+    :ensure t
+    :config
+    (global-evil-leader-mode)
+    (evil-mode 1)
+    (setq evil-insert-state-cursor '((bar . 3) "black"))
+    (define-key global-map (kbd "<f8>") 'evil-normal-state)
+    (use-package evil-anzu
+      :ensure t
       )
+    (use-package evil-surround
+      :ensure t
+      :config
+      (global-evil-surround-mode 1)
+      )
+
+    (use-package powerline
+      :ensure t
+      :config
+      (set-face-foreground 'powerline-active1 "white")
+      (set-face-foreground 'powerline-active2 "white")
+      (set-face-foreground 'powerline-inactive1 "white")
+      (set-face-foreground 'powerline-inactive2 "white")
+      (use-package powerline-evil
+	:ensure t
+	:config
+	(powerline-evil-center-color-theme)
+	(set-face-foreground 'powerline-evil-normal-face "black")
+	)
+      )
+    (use-package evil-org
+      :ensure t )
+    (use-package evil-leader
+      :ensure t
+      :config
+      (evil-leader/set-leader "SPC")
+      (evil-leader/set-key
+	"r" 'counsel-M-x
+	"o d" 'org-drill
+	"o s" 'org-caldav-sync
+	"n" 'narrow-or-widen-dwim
+	"s" 'swiper
+	"w n" 'other-window
+	"w h" 'split-window-horizontally
+	"w v" 'split-window-vertically
+	"w u" 'delete-other-windows
+	"b" 'ivy-switch-buffer
+	"e" 'save-buffer
+	"p" 'projectile-command-map)
+      (evil-leader/set-key-for-mode 'org-mode
+	"o s" 'org-caldav-sync
+	"o d" 'org-drill
+	)
+      )
+    (use-package nlinum-relative
+      :ensure t
+      :config
+      (global-nlinum-relative-mode t)
+      )
+    )
 #+END_SRC
 I don't need Enter & Space as movement commands in motion state. But
 some modes want to use them.
