@@ -97,14 +97,16 @@ alternative leader key for modes where evil is not active.
 	"e" 'save-buffer
 	"p" 'projectile-command-map
 	"k" 'kill-this-buffer
+	"h" help-map
+	"ä" 'fb/switch_dict
 	"q q" 'save-buffers-kill-emacs
-	)
       (evil-leader/set-key-for-mode 'org-mode
+	"o" nil
 	"o s" 'org-caldav-sync
 	"o d" 'org-drill
 	)
       (define-key global-map (kbd "<f5>") evil-leader--default-map)
-      )
+      ))
     (use-package nlinum-relative
       :ensure t
       :config
