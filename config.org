@@ -41,6 +41,10 @@ define a path for packages I manipulate myself.
 As much as I love Emacs I love having vim keybindings :)
 I added keybindings to switch buffers with C-xl and C-xh because arrow
 keys suck.
+
+As I was on the edge of RSI, I started using evil-leader to avoid
+having to press Ctrl and Meta all the time. "<f5>" is used as
+alternative leader key for modes where evil is not active.
 #+BEGIN_SRC emacs-lisp
   (use-package evil
     :ensure t
@@ -87,14 +91,19 @@ keys suck.
 	"w n" 'other-window
 	"w h" 'split-window-horizontally
 	"w v" 'split-window-vertically
+	"w k" 'delete-window
 	"w u" 'delete-other-windows
 	"b" 'ivy-switch-buffer
 	"e" 'save-buffer
-	"p" 'projectile-command-map)
+	"p" 'projectile-command-map
+	"k" 'kill-this-buffer
+	"q q" 'save-buffers-kill-emacs
+	)
       (evil-leader/set-key-for-mode 'org-mode
 	"o s" 'org-caldav-sync
 	"o d" 'org-drill
 	)
+      (define-key global-map (kbd "<f5>") evil-leader--default-map)
       )
     (use-package nlinum-relative
       :ensure t
