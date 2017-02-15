@@ -60,8 +60,6 @@ alternative leader key for modes where evil is not active.
   (use-package evil
     :ensure t
     :config
-    (global-evil-leader-mode)
-    (evil-mode 1)
     (setq evil-insert-state-cursor '((bar . 3) "black"))
     (define-key global-map (kbd "<f8>") 'evil-normal-state)
     (use-package evil-anzu
@@ -92,6 +90,7 @@ alternative leader key for modes where evil is not active.
     (use-package evil-leader
       :ensure t
       :config
+      (global-evil-leader-mode)
       (evil-leader/set-leader "SPC")
       (evil-leader/set-key
 	"r" 'counsel-M-x
@@ -123,6 +122,7 @@ alternative leader key for modes where evil is not active.
       :config
       (global-nlinum-relative-mode t)
       )
+      (evil-mode 1)
     )
 #+END_SRC
 I don't need Enter & Space as movement commands in motion state. But
