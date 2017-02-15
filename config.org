@@ -96,6 +96,7 @@ alternative leader key for modes where evil is not active.
 	"r" 'counsel-M-x
 	"o d" 'org-drill
 	"o s" 'org-caldav-sync
+	"o a" 'org-agenda
 	"n" 'narrow-or-widen-dwim
 	"s" 'swiper
 	"w n" 'other-window
@@ -108,21 +109,25 @@ alternative leader key for modes where evil is not active.
 	"p" 'projectile-command-map
 	"k" 'kill-this-buffer
 	"h" help-map
+	"f" 'counsel-find-file
+	"l" 'counsel-locate
 	"ä" 'fb/switch_dict
-	"q q" 'save-buffers-kill-emacs
-      (evil-leader/set-key-for-mode 'org-mode
-	"o" nil
-	"o s" 'org-caldav-sync
-	"o d" 'org-drill
+	"q q" 'save-buffers-kill-emacs )
+	(evil-leader/set-key-for-mode 'org-mode
+	  "o" nil
+	  "o s" 'org-caldav-sync
+	  "o d" 'org-drill
+	  "o a" 'org-agenda
+	  "l" 'counsel-locate
+	  )
+	(define-key global-map (kbd "<f5>") evil-leader--default-map)
 	)
-      (define-key global-map (kbd "<f5>") evil-leader--default-map)
-      ))
     (use-package nlinum-relative
       :ensure t
       :config
       (global-nlinum-relative-mode t)
       )
-      (evil-mode 1)
+    (evil-mode 1)
     )
 #+END_SRC
 I don't need Enter & Space as movement commands in motion state. But
