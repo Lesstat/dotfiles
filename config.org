@@ -8,6 +8,17 @@
       user-mail-address "florianbatrh@gmx.de")
 #+END_SRC
 
+* Auto-Compile
+Auto-Compile makes sure that I don't get errors from freshly updated
+(but not recompiled) packages.
+#+BEGIN_SRC emacs-lisp
+  (use-package auto-compile
+    :ensure t
+    :config
+    (auto-compile-on-load-mode)
+    (auto-compile-on-save-mode)
+    )
+#+END_SRC
 * Customization File
 I want to have a place where pc-specifc custom settings can go. I also
 define a path for packages I manipulate myself.
