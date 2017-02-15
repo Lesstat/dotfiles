@@ -401,7 +401,7 @@ Repeating Task should show only once.
      (emacs-lisp . t)
      (sh . t)
      (python . t)
-     (R . t)
+     ;;(R . t)
      (dot . t)
      ))
   (use-package ob-ipython
