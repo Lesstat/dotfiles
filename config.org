@@ -192,12 +192,18 @@ Lightning fast code search. Needs the [[https://github.com/ggreer/the_silver_sea
     :ensure t
     :config
     (smartparens-global-strict-mode t)
+    (sp-pair  "'" nil :unless '(fb/deactivate-for-lisp-and-rust))
+    (sp-local-pair 'rust-mode "{" nil :post-handlers '(("    |\n" "RET")))
     (use-package evil-smartparens
       :ensure t
       :config
       (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode))
     )
 
+  (defun fb/deactivate-for-lisp-and-rust  (id action context)
+    (or (eq major-mode 'emacs-lisp-mode)
+	(eq major-mode 'rust-mode)
+	(eq major-mode 'org-mode))) 
 #+END_SRC
 ** Elfeed
 Elfeed is a cool Feedreader with which I'm playing right
