@@ -40,6 +40,7 @@ define a path for packages I manipulate myself.
       (load-theme 'dichromacy)
   ;; (load-theme 'tsdh-light))
   (setq inhibit-startup-screen t)
+  (tool-bar-mode 0)
 #+END_SRC
 *** Highlighting parentheses 
 #+BEGIN_SRC emacs-lisp
