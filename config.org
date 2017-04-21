@@ -98,6 +98,7 @@ alternative leader key for modes where evil is not active.
 	"o d" 'org-drill
 	"o s" 'org-caldav-sync
 	"o a" 'org-agenda
+	"o c" 'org-capture
 	"n" 'narrow-or-widen-dwim
 	"s" 'swiper
 	"w n" 'other-window
@@ -113,7 +114,8 @@ alternative leader key for modes where evil is not active.
 	"f" 'counsel-find-file
 	"l" 'counsel-locate
 	"ä" 'fb/switch_dict
-	"q q" 'save-buffers-kill-emacs )
+	"q q" 'save-buffers-kill-emacs
+	"i" 'ivy-resume )
 	(evil-leader/set-key-for-mode 'org-mode
 	  "o" nil
 	  "o s" 'org-caldav-sync
@@ -1042,14 +1044,15 @@ I wrote a little shortcut for that.
        (:name "flagged" :query "tag:flagged" :key "f")
        (:name "sent" :query "tag:sent" :key "t")
        (:name "drafts" :query "tag:draft" :key "d")
-       (:name "all mail" :query "*" :key "a")
        (:name "gmx" :query "tag:gmx")
        (:name "studi_mail" :query "tag:uni")
        (:name "todo" :query "tag:todo")
        (:name "reply" :query "tag:doReply")
+       (:name "waiting" :query "tag:waiting")
        )))
     (setq notmuch-archive-tags '("-inbox" "-unread"))
-    )
+   )
+  
 #+END_SRC
 ** org-caldav
 #+BEGIN_SRC emacs-lisp
@@ -1112,4 +1115,12 @@ racer to work.
     (setq projectile-git-autofetch-projects 'all
 	  projectile-git-autofetch-interval 1800
 	  projectile-git-autofetch-initial-delay 30))
+#+END_SRC
+** Which-Key
+#+BEGIN_SRC emacs-lisp
+  (use-package which-key
+    :ensure t
+    :config
+    (which-key-mode))
+
 #+END_SRC
