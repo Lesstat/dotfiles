@@ -113,7 +113,8 @@ alternative leader key for modes where evil is not active.
 	"f" 'counsel-find-file
 	"l" 'counsel-locate
 	"ä" 'fb/switch_dict
-	"q q" 'save-buffers-kill-emacs )
+	"q q" 'save-buffers-kill-emacs
+	"i" 'ivy-resume )
 	(evil-leader/set-key-for-mode 'org-mode
 	  "o" nil
 	  "o s" 'org-caldav-sync
