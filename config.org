@@ -97,6 +97,7 @@ alternative leader key for modes where evil is not active.
 	"o d" 'org-drill
 	"o s" 'org-caldav-sync
 	"o a" 'org-agenda
+	"o c" 'org-capture
 	"n" 'narrow-or-widen-dwim
 	"s" 'swiper
 	"w n" 'other-window
@@ -1041,14 +1042,15 @@ I wrote a little shortcut for that.
        (:name "flagged" :query "tag:flagged" :key "f")
        (:name "sent" :query "tag:sent" :key "t")
        (:name "drafts" :query "tag:draft" :key "d")
-       (:name "all mail" :query "*" :key "a")
        (:name "gmx" :query "tag:gmx")
        (:name "studi_mail" :query "tag:uni")
        (:name "todo" :query "tag:todo")
        (:name "reply" :query "tag:doReply")
+       (:name "waiting" :query "tag:waiting")
        )))
     (setq notmuch-archive-tags '("-inbox" "-unread"))
-    )
+   )
+  
 #+END_SRC
 ** org-caldav
 #+BEGIN_SRC emacs-lisp
