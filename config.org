@@ -1112,3 +1112,11 @@ racer to work.
 	  projectile-git-autofetch-interval 1800
 	  projectile-git-autofetch-initial-delay 30))
 #+END_SRC
+** Which-Key
+#+BEGIN_SRC emacs-lisp
+  (use-package which-key
+    :ensure t
+    :config
+    (which-key-mode))
+
+#+END_SRC
