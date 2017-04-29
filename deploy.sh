@@ -12,3 +12,5 @@ ln -sf ${current_path}/.bashrc ~/.bashrc
 ln -sf ${current_path}/.zshrc ~/.zshrc
 ln -sf ${current_path}/.zlogin ~/.zlogin
 ln -sf ${current_path}/.zlogout ~/.zlogout
+ln -sf ${current_path}/i3 ~/.config/i3
+ln -sf ${current_path}/i3blocks ~/.config/i3blocks
