@@ -210,12 +210,15 @@ bindsym $mod+p exec "rofi -show drun -lines 7 -eh 2 -width 100 -padding 500 -bw 
 bindsym $mod+n exec emacsclient -c -a ""
 bindsym $mod+t exec $term -e htop
 bindsym $mod+m exec $term -e ncmpcpp
-bindsym XF86AudioNext exec mpc next
-bindsym XF86AudioPrev exec mpc prev
-bindsym XF86AudioStop exec mpc stop
-bindsym XF86AudioPlay exec mpc toggle
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound 
+
+# Audio
+bindsym XF86AudioNext         exec mpc next
+bindsym XF86AudioPrev         exec mpc prev
+bindsym XF86AudioStop         exec mpc stop
+bindsym XF86AudioPlay         exec mpc toggle
+bindsym XF86AudioRaiseVolume  exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
+bindsym XF86AudioLowerVolume  exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
+bindsym XF86AudioMute         exec --no-startup-id pactl set-sink-mute 0 toggle
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
