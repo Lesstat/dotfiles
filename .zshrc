@@ -102,3 +102,5 @@ bindkey -v
 source $ZSH/oh-my-zsh.sh
 
 export RUST_SRC_PATH="/home/flo/workspaces/rust/rust/src/"
+export GOPATH="/home/flo/workspaces/go"
+export PATH="${PATH}:${GOPATH}/bin"

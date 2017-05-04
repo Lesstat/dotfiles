@@ -863,6 +863,7 @@ of creating tags beforehand.
     :ensure t
     :config
     (add-hook 'before-save-hook 'gofmt-before-save)
+    (setq gofmt-command "goimports")
     (use-package flymake-go
       :ensure t)
     )
