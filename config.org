@@ -942,6 +942,7 @@ tab-completion in term, so I deactivated it for term.
   (use-package flyspell
     :ensure t
     :config
+    (setq flyspell-default-dictionary "english")
     (add-hook 'text-mode-hook (lambda () (flyspell-mode 1)))
     (setq flyspell-mode-line-string nil)
     )
@@ -950,8 +951,8 @@ tab-completion in term, so I deactivated it for term.
 I only use German and English dictionaries but I switch frequently so
 I wrote a little shortcut for that. 
 #+BEGIN_SRC emacs-lisp
-  (defvar fb/active_dict "german")
-  (defvar fb/next_dict "english")
+  (defvar fb/active_dict "english")
+  (defvar fb/next_dict "german")
   (make-variable-buffer-local 'fb/active_dict)
   (make-variable-buffer-local 'fb/next_dict)
   (defun fb/switch_dict ()
