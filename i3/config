@@ -38,9 +38,6 @@ floating_modifier $mod
 # start a terminal
 bindsym $mod+Return exec $term
 
-# kill focused window
-bindsym $mod+Shift+q exec shutdown now
-
 # start dmenu (a program launcher)
 #bindsym $mod+d exec dmenu_run
 # There also is the (new) i3-dmenu-desktop which only displays applications
@@ -207,6 +204,10 @@ bindsym $mod+a exec keepass --auto-type
 bindsym $mod+l exec ~/.config/i3/lock.sh
 bindsyn $mod+Shift+W exec wlan_starter
 bindsym $mod+p exec "rofi -show drun -lines 7 -eh 2 -width 100 -padding 500 -bw 0 -color-normal \\"$bg-color,$text-color,$bg-color,$bg-color,#9575cd\\" -color-window \\"$bg-color,$bg-color,$bg-color\\" -font \\"Monospace 18\\""
+
+bindsym $mod+Shift+q exec "i3-nagbar -t warning -m 'You pressed the shutdown shortcut. Do you really want to shutdown?' -b 'Yes, shutdown now' 'exec shutdown now'"
+
+
 bindsym $mod+n exec emacsclient -c -a ""
 bindsym $mod+t exec $term -e htop
 bindsym $mod+m exec $term -e ncmpcpp
