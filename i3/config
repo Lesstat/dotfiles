@@ -187,6 +187,13 @@ client.urgent 		$urgent-bg-color    $urgent-bg-color   $text-color 	    #00ff00
 
 hide_edge_borders both
 workspace_auto_back_and_forth yes
+ 
+####################################################################
+# Gaps
+####################################################################
+gaps inner 10
+smart_gaps on
+
 
 ####################################################################
 # Assignments
