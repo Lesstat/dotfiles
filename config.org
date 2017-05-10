@@ -1089,6 +1089,7 @@ racer to work.
       :ensure t
       :config
       (setq racer-cmd "/usr/bin/racer")
+      (push 'racer-help-mode evil-emacs-state-modes)
       (use-package company-racer
 	:ensure t)
       )
