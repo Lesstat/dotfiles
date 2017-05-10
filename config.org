@@ -785,6 +785,7 @@ of creating tags beforehand.
   (use-package company
     :ensure t
     :config
+    (setq company-tooltip-align-annotations t)
     (use-package company-c-headers
       :ensure t)
     (use-package company-shell
