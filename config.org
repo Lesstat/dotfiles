@@ -123,6 +123,12 @@ alternative leader key for modes where evil is not active.
 	  "o a" 'org-agenda
 	  "l" 'counsel-locate
 	  )
+	(evil-leader/set-key-for-mode 'rust-mode
+	  "g" 'racer-find-definition
+	  "d" 'racer-describe)
+	(evil-leader/set-key-for-mode 'go-mode
+	  "g" 'godef-jump
+	  "d" 'godoc-at-point)
 	(define-key global-map (kbd "<f5>") evil-leader--default-map)
 	)
     (use-package nlinum-relative
