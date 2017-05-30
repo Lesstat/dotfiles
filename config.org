@@ -875,11 +875,9 @@ of creating tags beforehand.
     (setenv "GOPATH" "/home/flo/workspaces/go")
     (add-hook 'go-mode-hook (lambda ()
                               (set (make-local-variable 'company-backends) '(company-go))
-                              (company-mode)))
+                              (company-mode)
+                              ))
     (setq company-go-show-annotation t)
-
-    (use-package flymake-go
-      :ensure t)
     )
 #+END_SRC
 ** Lua
