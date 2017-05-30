@@ -202,6 +202,7 @@ assign [class="Firefox"] $w1
 assign [class="Rambox"] $w3
 
 for_window [class="Tor"] floating enable
+for_window [class="^.*"] border pixel 1
 
 ####################################################################
 # Keybindings
