@@ -779,8 +779,10 @@ of creating tags beforehand.
 #+END_SRC
 ** Magit
 #+BEGIN_SRC emacs-lisp
-(use-package magit
-  :ensure t )
+  (use-package magit
+    :ensure t
+    :config
+    (define-key magit-status-mode-map (kbd "SPC") evil-leader--default-map))
 #+END_SRC
 ** Company - Auto Completion
 #+BEGIN_SRC emacs-lisp
