@@ -94,44 +94,46 @@ alternative leader key for modes where evil is not active.
       (global-evil-leader-mode)
       (evil-leader/set-leader "SPC")
       (evil-leader/set-key
-	"r" 'counsel-M-x
-	"o d" 'org-drill
-	"o s" 'org-caldav-sync
-	"o a" 'org-agenda
-	"o c" 'org-capture
-	"n" 'narrow-or-widen-dwim
-	"s" 'swiper
-	"w n" 'other-window
-	"w h" 'split-window-horizontally
-	"w v" 'split-window-vertically
-	"w k" 'delete-window
-	"w u" 'delete-other-windows
-	"b" 'ivy-switch-buffer
-	"e" 'save-buffer
-	"p" 'projectile-command-map
-	"k" 'kill-this-buffer
-	"h" help-map
-	"f" 'counsel-find-file
-	"l" 'counsel-locate
-	"ä" 'fb/switch_dict
-	"q q" 'save-buffers-kill-emacs
-	"i" 'ivy-resume
-	"c" 'flycheck-list-errors)
-	(evil-leader/set-key-for-mode 'org-mode
-	  "o" nil
-	  "o s" 'org-caldav-sync
-	  "o d" 'org-drill
-	  "o a" 'org-agenda
-	  "l" 'counsel-locate
-	  )
-	(evil-leader/set-key-for-mode 'rust-mode
-	  "g" 'racer-find-definition
-	  "d" 'racer-describe)
-	(evil-leader/set-key-for-mode 'go-mode
-	  "g" 'godef-jump
-	  "d" 'godoc-at-point)
-	(define-key global-map (kbd "<f5>") evil-leader--default-map)
-	)
+        "r" 'counsel-M-x
+        "o d" 'org-drill
+        "o s" 'org-caldav-sync
+        "o a" 'org-agenda
+        "o c" 'org-capture
+        "n" 'narrow-or-widen-dwim
+        "s" 'swiper
+        "w n" 'other-window
+        "w h" 'split-window-horizontally
+        "w v" 'split-window-vertically
+        "w k" 'delete-window
+        "w u" 'delete-other-windows
+        "w s" 'ivy-push-view
+        "w d" 'ivy-pop-view
+        "b" 'ivy-switch-buffer
+        "e" 'save-buffer
+        "p" 'projectile-command-map
+        "k" 'kill-this-buffer
+        "h" help-map
+        "f" 'counsel-find-file
+        "l" 'counsel-locate
+        "ä" 'fb/switch_dict
+        "q q" 'save-buffers-kill-emacs
+        "i" 'ivy-resume
+        "c" 'flycheck-list-errors)
+        (evil-leader/set-key-for-mode 'org-mode
+          "o" nil
+          "o s" 'org-caldav-sync
+          "o d" 'org-drill
+          "o a" 'org-agenda
+          "l" 'counsel-locate
+          )
+        (evil-leader/set-key-for-mode 'rust-mode
+          "g" 'racer-find-definition
+          "d" 'racer-describe)
+        (evil-leader/set-key-for-mode 'go-mode
+          "g" 'godef-jump
+          "d" 'godoc-at-point)
+        (define-key global-map (kbd "<f5>") evil-leader--default-map)
+        )
     (use-package nlinum-relative
       :ensure t
       :config
