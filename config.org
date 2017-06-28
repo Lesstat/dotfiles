@@ -261,6 +261,25 @@ taken from [[https://www.emacswiki.org/emacs/BackupDirectory][emacswiki]]
     (setq imenu-list-auto-resize t)
     (add-hook 'imenu-list-major-mode-hook 'evil-motion-state))
 #+END_SRC
+** Swiper
+#+BEGIN_SRC emacs-lisp
+  (use-package swiper
+    :ensure t
+    :config
+    (use-package counsel
+      :ensure t)
+    (use-package ivy-hydra
+      :ensure t)
+    (ivy-mode 1)
+    (setq ivy-use-virtual-buffers    t
+          ivy-re-builders-alist      '(( t . ivy--regex-ignore-order))
+          counsel-find-file-at-point t)
+    (global-set-key (kbd "M-x") 'counsel-M-x)
+    (global-set-key (kbd "C-s") 'swiper)
+    (global-set-key (kbd "C-x C-f") 'counsel-locate)
+
+    )
+#+END_SRC
 * Org-mode
 #+BEGIN_SRC emacs-lisp
 
@@ -988,6 +1007,49 @@ racer to work.
     )
 
 #+END_SRC
+** narrow to dwim
+#+BEGIN_SRC emacs-lisp
+  (defun narrow-or-widen-dwim (p)
+    "Widen if buffer is narrowed, narrow-dwim otherwise.
+  Dwim means: region, org-src-block, org-subtree, or
+  defun, whichever applies first. Narrowing to
+  org-src-block actually calls `org-edit-src-code'.
+
+  With prefix P, don't widen, just narrow even if buffer
+  is already narrowed."
+    (interactive "P")
+    (declare (interactive-only))
+    (cond ((and (buffer-narrowed-p) (not p)) (widen))
+          ((region-active-p)
+           (narrow-to-region (region-beginning)
+                             (region-end)))
+          ((derived-mode-p 'org-mode)
+           ;; `org-edit-src-code' is not a real narrowing
+           ;; command. Remove this first conditional if
+           ;; you don't want it.
+           (cond ((ignore-errors (org-edit-src-code) t)
+                  (delete-other-windows))
+                 ((ignore-errors (org-narrow-to-block) t))
+                 (t (org-narrow-to-subtree))))
+          ((derived-mode-p 'latex-mode)
+           (LaTeX-narrow-to-environment))
+          (t (narrow-to-defun))))
+
+  (global-set-key (kbd "C-c '"  ) 'narrow-or-widen-dwim)
+
+  #+END_SRC
+** Projectile-git-autofetch
+Really useful little minor mode that makes sure your git repos are
+always up to date.
+#+BEGIN_SRC emacs-lisp
+  (use-package projectile-git-autofetch
+    :ensure t
+    :config
+    (projectile-git-autofetch-mode 1)
+    (setq projectile-git-autofetch-projects 'all
+	  projectile-git-autofetch-interval 1800
+	  projectile-git-autofetch-initial-delay 30))
+#+END_SRC
 * Yasnippet
 Yasnippet provides great support for templates. But it destroys
 tab-completion in term, so I deactivated it for term. 
@@ -1027,56 +1089,6 @@ I wrote a little shortcut for that.
   (define-key global-map "\C-cd" 'fb/switch_dict)
 #+END_SRC
 * Temp
-** narrow to dwim
-#+BEGIN_SRC emacs-lisp
-  (defun narrow-or-widen-dwim (p)
-    "Widen if buffer is narrowed, narrow-dwim otherwise.
-  Dwim means: region, org-src-block, org-subtree, or
-  defun, whichever applies first. Narrowing to
-  org-src-block actually calls `org-edit-src-code'.
-
-  With prefix P, don't widen, just narrow even if buffer
-  is already narrowed."
-    (interactive "P")
-    (declare (interactive-only))
-    (cond ((and (buffer-narrowed-p) (not p)) (widen))
-          ((region-active-p)
-           (narrow-to-region (region-beginning)
-                             (region-end)))
-          ((derived-mode-p 'org-mode)
-           ;; `org-edit-src-code' is not a real narrowing
-           ;; command. Remove this first conditional if
-           ;; you don't want it.
-           (cond ((ignore-errors (org-edit-src-code) t)
-                  (delete-other-windows))
-                 ((ignore-errors (org-narrow-to-block) t))
-                 (t (org-narrow-to-subtree))))
-          ((derived-mode-p 'latex-mode)
-           (LaTeX-narrow-to-environment))
-          (t (narrow-to-defun))))
-
-  (global-set-key (kbd "C-c '"  ) 'narrow-or-widen-dwim)
-
-  #+END_SRC
-** Swiper
-#+BEGIN_SRC emacs-lisp
-  (use-package swiper
-    :ensure t
-    :config
-    (use-package counsel
-      :ensure t)
-    (use-package ivy-hydra
-      :ensure t)
-    (ivy-mode 1)
-    (setq ivy-use-virtual-buffers    t
-          ivy-re-builders-alist      '(( t . ivy--regex-ignore-order))
-          counsel-find-file-at-point t)
-    (global-set-key (kbd "M-x") 'counsel-M-x)
-    (global-set-key (kbd "C-s") 'swiper)
-    (global-set-key (kbd "C-x C-f") 'counsel-locate)
-
-    )
-#+END_SRC
 ** calfw
 #+BEGIN_SRC emacs-lisp
     (use-package calfw
@@ -1130,16 +1142,6 @@ the document consists of multiple files.
 #+BEGIN_SRC emacs-lisp
   (load "auctex.el" nil t t)
   (setq-default TeX-master nil)
-#+END_SRC
-** Projectile-git-autofetch
-#+BEGIN_SRC emacs-lisp
-  (use-package projectile-git-autofetch
-    :ensure t
-    :config
-    (projectile-git-autofetch-mode 1)
-    (setq projectile-git-autofetch-projects 'all
-	  projectile-git-autofetch-interval 1800
-	  projectile-git-autofetch-initial-delay 30))
 #+END_SRC
 ** Which-Key
 #+BEGIN_SRC emacs-lisp
