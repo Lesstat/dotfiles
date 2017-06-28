@@ -849,18 +849,21 @@ of creating tags beforehand.
     :init (elpy-enable)
     :config
     (if (file-exists-p "/usr/bin/ipython")
-        (progn
+	(progn
           (elpy-use-ipython)
           ;; The following helps againts ipython strange characters freezing emacs
           (setq python-shell-interpreter "ipython3"
-                python-shell-interpreter-args "--simple-prompt --pprint"))) 
+		python-shell-interpreter-args "--simple-prompt --pprint"))) 
     (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
     (use-package ein
       :ensure t)
     (use-package py-autopep8
       :ensure t
       :config
-      (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)))
+      (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
+
+    (add-hook 'elpy-mode-hook 'hs-minor-mode)
+    )
 #+END_SRC
 
 ** Haskell
@@ -880,6 +883,7 @@ of creating tags beforehand.
     (add-hook 'go-mode-hook (lambda ()
                               (set (make-local-variable 'company-backends) '(company-go))
                               (company-mode)
+			      (hs-minor-mode)
                               ))
     (setq company-go-show-annotation t)
     )
@@ -903,6 +907,7 @@ of creating tags beforehand.
       :ensure t
       :config
       (add-hook 'js2-mode-hook 'js2-refactor-mode))
+    (add-hook 'js2-mode-hook 'hs-minor-mode)
     )
 #+END_SRC
 ** Web-Mode
@@ -942,6 +947,46 @@ Mode for editing all sorts of web stuff in a single file.
            ("\\.md\\'" . markdown-mode)
            ("\\.markdown\\'" . markdown-mode))
     :init (setq markdown-command "multimarkdown"))
+#+END_SRC
+** Rust
+Configuration for the rust programming language adapted from
+http://emacsist.com/10425.  Note that a checkout of the rust src is
+needed and the environment variable RUST_SRC_PATH must point to it for
+racer to work.
+#+BEGIN_SRC emacs-lisp
+  (use-package rust-mode
+    :ensure t
+    :config
+    (use-package racer
+      :ensure t
+      :config
+      (setq racer-cmd "/usr/bin/racer")
+      (push 'racer-help-mode evil-emacs-state-modes)
+      (use-package company-racer
+	:ensure t)
+      )
+      (use-package flycheck-rust
+	:ensure t
+	)
+
+    (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
+    (add-hook 'rust-mode-hook
+
+	      '(lambda ()
+		 ;; Enable racer
+		 (racer-activate)
+		 ;; Hook in racer with eldoc to provide documentation
+		 (racer-turn-on-eldoc)
+		 ;; Use flycheck-rust in rust-mode
+		 (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
+		 ;; Use company-racer in rust mode
+		 (set (make-local-variable 'company-backends) '(company-racer))
+		 (rust-enable-format-on-save)
+		 (flyspell-prog-mode)
+		 (hs-minor-mode)
+		 ))
+    )
+
 #+END_SRC
 * Yasnippet
 Yasnippet provides great support for templates. But it destroys
@@ -1085,45 +1130,6 @@ the document consists of multiple files.
 #+BEGIN_SRC emacs-lisp
   (load "auctex.el" nil t t)
   (setq-default TeX-master nil)
-#+END_SRC
-** Rust
-Configuration for the rust programming language adapted from
-http://emacsist.com/10425.  Note that a checkout of the rust src is
-needed and the environment variable RUST_SRC_PATH must point to it for
-racer to work.
-#+BEGIN_SRC emacs-lisp
-  (use-package rust-mode
-    :ensure t
-    :config
-    (use-package racer
-      :ensure t
-      :config
-      (setq racer-cmd "/usr/bin/racer")
-      (push 'racer-help-mode evil-emacs-state-modes)
-      (use-package company-racer
-	:ensure t)
-      )
-      (use-package flycheck-rust
-	:ensure t
-	)
-
-    (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
-    (add-hook 'rust-mode-hook
-
-	      '(lambda ()
-		 ;; Enable racer
-		 (racer-activate)
-		 ;; Hook in racer with eldoc to provide documentation
-		 (racer-turn-on-eldoc)
-		 ;; Use flycheck-rust in rust-mode
-		 (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
-		 ;; Use company-racer in rust mode
-		 (set (make-local-variable 'company-backends) '(company-racer))
-		 (rust-enable-format-on-save)
-		 (flyspell-prog-mode)
-		 ))
-    )
-
 #+END_SRC
 ** Projectile-git-autofetch
 #+BEGIN_SRC emacs-lisp
