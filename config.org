@@ -1125,9 +1125,18 @@ I wrote a little shortcut for that.
        (:name "reply" :query "tag:doReply")
        (:name "waiting" :query "tag:waiting")
        )))
-    (setq notmuch-archive-tags '("-inbox" "-unread"))
+    (setq notmuch-archive-tags '("-inbox" "-unread")
+	  message-kill-buffer-on-exit t
+	  notmuch-search-oldest-first nil
+	  mail-specify-envelope-from t
+	  message-sendmail-extra-arguments '("--read-envelope-from")
+	  message-sendmail-envelope-from "header" 
+	  mail-envelope-from "header"
+	  sendmail-program "/usr/bin/msmtp"
+	  message-sendmail-f-is-evil t
+	  ) 
    )
-  
+
 #+END_SRC
 ** org-caldav
 #+BEGIN_SRC emacs-lisp
