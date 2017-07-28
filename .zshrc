@@ -108,3 +108,6 @@ export MPD_HOST="/home/flo/.mpd/socket"
 export EDITOR='emacsclient -c -nw --alternate-editor=""'
 
 alias emacs=$EDITOR
+
+# Enable using gem installed with rubys gem command 
+PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
