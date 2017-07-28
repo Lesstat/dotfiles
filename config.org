@@ -1007,6 +1007,27 @@ racer to work.
     )
 
 #+END_SRC
+** Cpp
+#+BEGIN_SRC emacs-lisp
+  (use-package cc-mode
+    :ensure t
+    :config
+    (use-package company-rtags
+      :ensure t
+      :config
+      (setq rtags-autostart-diagnostics t
+            rtags-completions-enabled t
+            rtags-display-result-backend 'ivy)
+      )
+
+    (use-package cmake-mode
+      :ensure t)
+    (use-package cmake-ide
+      :ensure t
+      :config
+      (cmake-ide-setup))
+    )
+#+END_SRC
 ** narrow to dwim
 #+BEGIN_SRC emacs-lisp
   (defun narrow-or-widen-dwim (p)
