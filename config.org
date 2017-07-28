@@ -844,8 +844,6 @@ of creating tags beforehand.
       )
 
     )
-  (semantic-mode 1)
-  (global-semantic-idle-completions-mode t)
 #+END_SRC
 
 ** Flycheck & Flymake
