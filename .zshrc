@@ -86,9 +86,9 @@ export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 [[ -d /opt/fsl/lib ]] && export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/opt/fsl/lib"
 
+
 alias ls='ls --color=auto'
 alias ll='ls -al'
-alias emacs='emacsclient -c -nw --alternate-editor=""'
 alias sys=systemctl
 alias pacman='pacman --color always'
 
@@ -105,3 +105,6 @@ export RUST_SRC_PATH="/home/flo/workspaces/rust/rust/src/"
 export GOPATH="/home/flo/workspaces/go"
 export PATH="${PATH}:${GOPATH}/bin"
 export MPD_HOST="/home/flo/.mpd/socket"
+export EDITOR='emacsclient -c -nw --alternate-editor=""'
+
+alias emacs=$EDITOR
