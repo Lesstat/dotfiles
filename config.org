@@ -1179,3 +1179,21 @@ the document consists of multiple files.
     (which-key-mode))
 
 #+END_SRC
+** Ruby
+#+BEGIN_SRC emacs-lisp
+  (use-package enh-ruby-mode
+    :ensure t
+    :config
+  (add-to-list 'auto-mode-alist
+               '("\\(?:\\.rb\\|ru\\|rake\\|thor\\|jbuilder\\|gemspec\\|podspec\\|/\\(?:Gem\\|Rake\\|Cap\\|Thor\\|Vagrant\\|Guard\\|Pod\\)file\\)\\'" . enh-ruby-mode))
+    (use-package robe
+      :ensure t
+      :config
+      (add-hook 'enh-ruby-mode-hook 'robe-mode)
+      (push 'company-robe company-backends)
+      (evil-leader/set-key-for-mode 'enh-ruby-mode
+        "g" 'robe-jump 
+        "d" 'robe-doc )
+      ))
+
+#+END_SRC
