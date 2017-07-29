@@ -1153,6 +1153,7 @@ I wrote a little shortcut for that.
 	  mail-envelope-from "header"
 	  sendmail-program "/usr/bin/msmtp"
 	  message-sendmail-f-is-evil t
+	  message-send-mail-function 'message-send-mail-with-sendmail
 	  ) 
    )
 
