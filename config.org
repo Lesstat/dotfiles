@@ -1,7 +1,6 @@
 #+Title: Emacs Configuration
 #+Author: Florian Barth
 
-
 * Personal Information
 #+BEGIN_SRC emacs-lisp
 (setq user-full-name "Florian Barth"
@@ -1024,6 +1023,11 @@ racer to work.
       :ensure t
       :config
       (cmake-ide-setup))
+    (use-package clang-format
+      :ensure t
+      :config
+      (add-hook 'c++-mode-hook '(lambda ()
+                                  (add-hook 'before-save-hook 'clang-format-buffer nil t))))
     )
 #+END_SRC
 ** narrow to dwim
