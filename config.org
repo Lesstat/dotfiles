@@ -1208,3 +1208,17 @@ the document consists of multiple files.
     :ensure t
     )
 #+END_SRC
+** HLedger
+Ledger (or its deviant hledger) is a plain-text command line
+accounting tool. With hledger-mode you can comfortably edit the
+transactions. 
+#+BEGIN_SRC emacs-lisp
+  (use-package hledger-mode
+    :ensure t
+    :config
+    (add-to-list 'auto-mode-alist '("\\.journal\\'" . hledger-mode))
+    (add-to-list 'company-backends 'hledger-company)
+
+    (setq hledger-currency-string "€")
+    )
+#+END_SRC
