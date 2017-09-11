@@ -1222,3 +1222,12 @@ transactions.
     (setq hledger-currency-string "€")
     )
 #+END_SRC
+** Solidity
+Solidity is the language in which smart contracts are written for the
+ethereum block chain.
+#+BEGIN_SRC emacs-lisp
+  (use-package solidity-mode
+    :ensure t
+    :config
+  )
+#+END_SRC
