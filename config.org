@@ -131,6 +131,10 @@ alternative leader key for modes where evil is not active.
         (evil-leader/set-key-for-mode 'go-mode
           "g" 'godef-jump
           "d" 'godoc-at-point)
+        (evil-leader/set-key-for-mode 'hledger-mode
+          "x" 'hledger-toggle-star
+          "v" 'fb/hleder-view-mode-in-new-buffer
+          )
         (define-key global-map (kbd "<f5>") evil-leader--default-map)
         )
     (use-package nlinum-relative
@@ -1206,8 +1210,12 @@ transactions.
     :config
     (add-to-list 'auto-mode-alist '("\\.journal\\'" . hledger-mode))
     (add-to-list 'company-backends 'hledger-company)
-
+    (push 'hledger-view-mode evil-emacs-state-modes)
     (setq hledger-currency-string "€")
+    (defun fb/hledger-view-mode-in-new-buffer ()
+      (interactive)
+      (switch-to-buffer (clone-indirect-buffer "*hledger-view-mode*" nil))
+      (hledger-view-mode))
     )
 #+END_SRC
 ** Solidity
