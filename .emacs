@@ -1,6 +1,12 @@
 (setq inhibit-startup-message t)
 (setq initial-scratch-message "")
 
+;;; Fix against MIME vulnerability
+  (eval-after-load "enriched"
+    '(defun enriched-decode-display-prop (start end &optional param)
+       (list start end)))
+;;; Fix end
+
 ;;; Set up package
 (require 'package)
 
