@@ -1061,18 +1061,6 @@ racer to work.
   (global-set-key (kbd "C-c '"  ) 'narrow-or-widen-dwim)
 
   #+END_SRC
-** Projectile-git-autofetch
-Really useful little minor mode that makes sure your git repos are
-always up to date.
-#+BEGIN_SRC emacs-lisp
-  (use-package projectile-git-autofetch
-    :ensure t
-    :config
-    (projectile-git-autofetch-mode 1)
-    (setq projectile-git-autofetch-projects 'all
-	  projectile-git-autofetch-interval 1800
-	  projectile-git-autofetch-initial-delay 30))
-#+END_SRC
 * Yasnippet
 Yasnippet provides great support for templates. But it destroys
 tab-completion in term, so I deactivated it for term. 
