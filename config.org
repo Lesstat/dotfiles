@@ -1109,8 +1109,10 @@ I wrote a little shortcut for that.
     (use-package calfw
       :ensure t
       :config
-      (require 'calfw-ical)
-      (require 'calfw-org))
+      (use-package calfw-ical
+        :ensure t)
+      (use-package calfw-org
+        :ensure t))
 
   (defun fb/cfw-org-my-agenda (&rest ARGS)
     "Open calfw-buffer without the org-drill items."
