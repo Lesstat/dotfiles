@@ -35,9 +35,7 @@ define a path for packages I manipulate myself.
 ** Styling
 #+BEGIN_SRC emacs-lisp
   (global-hl-line-mode 0)
-  ;;(if (display-graphic-p)
-      (load-theme 'dichromacy)
-  ;; (load-theme 'tsdh-light))
+  (load-theme 'wombat)
   (setq inhibit-startup-screen t)
   (tool-bar-mode 0)
 #+END_SRC
@@ -60,7 +58,7 @@ alternative leader key for modes where evil is not active.
   (use-package evil
     :ensure t
     :config
-    (setq evil-insert-state-cursor '((bar . 3) "black"))
+    (setq evil-insert-state-cursor '((bar . 3)))
     (define-key global-map (kbd "<f8>") 'evil-normal-state)
     (use-package evil-anzu
       :ensure t
