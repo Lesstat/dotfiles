@@ -1229,3 +1229,8 @@ ethereum block chain.
     :config
   )
 #+END_SRC
+** Compilation Mode
+#+BEGIN_SRC emacs-lisp
+(add-hook 'compilation-filter-hook
+  (lambda () (ansi-color-apply-on-region (point-min) (point-max))))
+#+END_SRC
