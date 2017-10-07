@@ -221,6 +221,8 @@ Lightning fast code search. Needs the [[https://github.com/ggreer/the_silver_sea
 ** Elfeed
 Elfeed is a cool Feedreader with which I'm playing right
 now. Unfortunately it doesn't work so well with evil mode.
+Sometimes it shows ^M when the downloaded html contains line endings
+in multiple styles. Thats why I have the remove-dos-eol from [[https://stackoverflow.com/questions/730751/hiding-m-in-emacs#750933][here]].
 #+BEGIN_SRC emacs-lisp
   (use-package elfeed
     :ensure t
@@ -229,7 +231,13 @@ now. Unfortunately it doesn't work so well with evil mode.
     (push 'elfeed-search-mode evil-emacs-state-modes)
     (push 'elfeed-show-mode evil-emacs-state-modes)
     (add-hook 'elfeed-update-hooks '(lambda (url) (elfeed-db-save)))
-    )
+
+  (defun fb/remove-dos-eol ()
+    "Do not show ^M in files containing mixed UNIX and DOS line endings."
+    (interactive)
+    (setq buffer-display-table (make-display-table))
+    (aset buffer-display-table ?\^M []))
+  )
 #+END_SRC
 ** Backup-files
 taken from [[https://www.emacswiki.org/emacs/BackupDirectory][emacswiki]] 
