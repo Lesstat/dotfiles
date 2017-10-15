@@ -133,6 +133,8 @@ alternative leader key for modes where evil is not active.
           "x" 'hledger-toggle-star
           "v" 'fb/hleder-view-mode-in-new-buffer
           )
+        (evil-leader/set-key-for-mode 'c++-mode
+          "g" 'rtags-find-symbol-at-point)
         (define-key global-map (kbd "<f5>") evil-leader--default-map)
         )
     (use-package nlinum-relative
