@@ -401,26 +401,28 @@ change the State to in progress when a timer is activated.
 #+BEGIN_SRC emacs-lisp
   (setq org-agenda-span 'day)
   (setq org-agenda-custom-commands
-    (quote
-     (("y" "My Files"
-       ((agenda "" nil)
-	(todo "REFILE" nil)
-	(todo "IN-PROGRESS"
-              ((org-agenda-skip-function
-		'(org-agenda-skip-entry-if 'scheduled))))
-	(todo "NEXT"
-              ((org-agenda-skip-function
-		'(org-agenda-skip-entry-if 'scheduled))))
-	(todo "WAITING" nil))
-       ((org-agenda-tag-filter-preset
-		'("-drill")))
-		nil)
-      ("n" "Agenda and all TODO's"
-       ((agenda "" nil)
-	(alltodo "" nil))
-       nil)
-      ("c" "calfw calendar view" fb/cfw-org-my-agenda nil ((org-agenda-tag-filter-preset '("drill"))) nil)
-       )))
+     (quote
+      (("y" "My Files"
+        ((agenda "" nil)
+         (todo "REFILE" nil)
+         (todo "IN-PROGRESS"
+               ((org-agenda-skip-function
+                 '(org-agenda-skip-entry-if 'scheduled))))
+         (todo "NEXT"
+               ((org-agenda-sorting-strategy
+                 '(tag-up))
+                (org-agenda-skip-function
+                 '(org-agenda-skip-entry-if 'scheduled))))
+         (todo "WAITING" nil))
+        ((org-agenda-tag-filter-preset
+          '("-drill")))
+        nil)
+       ("n" "Agenda and all TODO's"
+        ((agenda "" nil)
+         (alltodo "" nil))
+        nil)
+       ("c" "calfw calendar view" fb/cfw-org-my-agenda nil ((org-agenda-tag-filter-preset '("drill"))) nil)
+        )))
 #+END_SRC
 Repeating Task should show only once.
 #+BEGIN_SRC emacs-lisp
