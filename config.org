@@ -1176,6 +1176,7 @@ I wrote a little shortcut for that.
        (:name "flagged" :query "tag:flagged" :key "f")
        (:name "sent" :query "tag:sent" :key "t")
        (:name "drafts" :query "tag:draft" :key "d")
+       (:name "spam" :query "tag:spam AND tag:unread" :key "s")
        (:name "gmx" :query "tag:gmx")
        (:name "studi_mail" :query "tag:uni")
        (:name "todo" :query "tag:todo")
