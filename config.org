@@ -77,14 +77,20 @@ alternative leader key for modes where evil is not active.
       (set-face-foreground 'powerline-inactive1 "white")
       (set-face-foreground 'powerline-inactive2 "white")
       (use-package powerline-evil
-	:ensure t
-	:config
-	(powerline-evil-center-color-theme)
-	(set-face-foreground 'powerline-evil-normal-face "black")
-	)
+        :ensure t
+        :config
+        (powerline-evil-center-color-theme)
+        (set-face-foreground 'powerline-evil-normal-face "black")
+        )
       )
     (use-package evil-org
-      :ensure t )
+      :ensure t
+      :after org
+      :config
+      (add-hook 'org-mode-hook 'evil-org-mode)
+      (add-hook 'evil-org-mode-hook
+                (lambda ()
+                  (evil-org-set-key-theme))))
     (use-package evil-leader
       :ensure t
       :config
