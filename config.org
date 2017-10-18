@@ -1171,10 +1171,13 @@ I wrote a little shortcut for that.
 
 #+END_SRC
 ** notmuch
+I require org-notmuch for org-mode links to mails. Org-notmuch is
+provided as org-contrib package.
 #+BEGIN_SRC emacs-lisp
   (use-package notmuch
     :ensure t
     :config
+    (require 'org-notmuch)
     (setq notmuch-saved-searches
      (quote
       ((:name "inbox" :query "tag:inbox" :key "i")
