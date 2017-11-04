@@ -234,6 +234,9 @@ bindsym XF86MonBrightnessUp   exec xbacklight -inc 5
 
 bindsym $mod+f exec $term -e ranger
 
+# Keyboard layout
+bindsym $mod+x exec setxkbmap de
+bindsym $mod+q exec setxkbmap de neo
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
