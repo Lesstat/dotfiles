@@ -469,6 +469,7 @@ it also stops org-caldav-sync)
     :config
     (if (f-exists?  "/home/flo/workspaces/js/reveal.js") 
     (setq org-reveal-root "/home/flo/workspaces/js/reveal.js"))
+    (setq org-reveal-title-slide "<h1>%t</h1><h2>%a</h2><p>%e</p>")
     )
 #+END_SRC
 
