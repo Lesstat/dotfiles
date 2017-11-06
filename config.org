@@ -105,6 +105,7 @@ alternative leader key for modes where evil is not active.
         "n" 'narrow-or-widen-dwim
         "s" 'swiper
         "w n" 'other-window
+        "w f" 'other-frame
         "w h" 'split-window-horizontally
         "w v" 'split-window-vertically
         "w k" 'delete-window
