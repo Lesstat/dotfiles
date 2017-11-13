@@ -104,8 +104,7 @@ alternative leader key for modes where evil is not active.
         "o c" 'org-capture
         "n" 'narrow-or-widen-dwim
         "s" 'swiper
-        "w n" 'other-window
-        "w f" 'other-frame
+        "w n" 'ace-window
         "w h" 'split-window-horizontally
         "w v" 'split-window-vertically
         "w k" 'delete-window
@@ -251,7 +250,6 @@ in multiple styles. Thats why I have the remove-dos-eol from [[https://stackover
   (defun fb/elfeed-update ()
     "Opens elfeed and directly update the feeds.
   Can be used with emacsclient -e \"(fb/elfeed-update)\" -n (For example in a cron script)."
-    (elfeed)
     (elfeed-search-fetch nil)
     )
 #+END_SRC
@@ -1269,4 +1267,13 @@ ethereum block chain.
 #+BEGIN_SRC emacs-lisp
 (add-hook 'compilation-filter-hook
   (lambda () (ansi-color-apply-on-region (point-min) (point-max))))
+#+END_SRC
+** Ace-window
+#+BEGIN_SRC emacs-lisp
+  (use-package ace-window
+    :ensure t
+    :config
+    ;; set aw-keys to the home-row of the neo layout (minus pinkys)
+    (setq aw-keys '(?i ?a ?e ?o ?s ?n ?r))
+    )
 #+END_SRC
