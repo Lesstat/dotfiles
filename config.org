@@ -443,9 +443,12 @@ Repeating Task should show only once.
      ;;(R . t)
      (dot . t)
      ))
-  (use-package ob-ipython
-    :ensure t
-    )
+  ;; ob-ipython has currently a bug which prevents it and more
+  ;; importantly some org-mode funcitons from working see here:
+  ;; https://github.com/gregsexton/ob-ipython/issues/135
+
+  ;;(use-package ob-ipython
+  ;;:ensure t )
 #+END_SRC
 
 ** Export-Setting
@@ -721,19 +724,6 @@ presentations / papers. Activation by uncommenting the add-hook call.
 
 ;;(add-hook 'org-export-before-pro-hook
 ;;          'fb/org-use-comma-in-exported-tables)
-#+END_SRC
-** Org-presie
-Downloaded from https://github.com/nicferrier/org-presie
-#+BEGIN_SRC emacs-lisp
-    (autoload 'org-presie "org-presie" nil t)
-    (use-package org-presie
-      :ensure nil)
-#+END_SRC
-*** EIMP 
-reuired by org-presie
-#+BEGIN_SRC emacs-lisp
-  (use-package eimp
-    :ensure t)
 #+END_SRC
 
 ** org-drill
