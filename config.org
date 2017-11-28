@@ -361,7 +361,6 @@ taken from [[https://www.emacswiki.org/emacs/BackupDirectory][emacswiki]]
 I want know when i finished my Todos or reschedule something.
 #+BEGIN_SRC emacs-lisp
   (setq org-log-done (quote time)
-        org-log-reschedule 'note
         org-log-into-drawer t)
 #+END_SRC
 Identifying stuck projects is an important part of GTD. But I only
@@ -420,10 +419,12 @@ Repeating Task should show only once.
 
 ** In Buffer Styling
 #+BEGIN_SRC emacs-lisp
-(use-package org-bullets
-   :ensure t
-   :init (add-hook 'org-mode-hook 'org-bullets-mode))
-(add-hook 'org-mode-hook 'org-indent-mode )
+  (use-package org-bullets
+     :ensure t
+     :config
+     (add-hook 'org-mode-hook 'org-bullets-mode)
+     )
+  (add-hook 'org-mode-hook 'org-indent-mode )
 #+END_SRC
 ** Global Org mode keybindings
 #+BEGIN_SRC emacs-lisp
@@ -1132,7 +1133,9 @@ I wrote a little shortcut for that.
       (use-package calfw-ical
         :ensure t)
       (use-package calfw-org
-        :ensure t))
+        :ensure t)
+      (setq calendar-week-start-day 1)
+      )
 
   (defun fb/cfw-org-my-agenda (&rest ARGS)
     "Open calfw-buffer without the org-drill items."
