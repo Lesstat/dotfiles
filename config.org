@@ -1258,8 +1258,9 @@ ethereum block chain.
 #+END_SRC
 ** Compilation Mode
 #+BEGIN_SRC emacs-lisp
-(add-hook 'compilation-filter-hook
-  (lambda () (ansi-color-apply-on-region (point-min) (point-max))))
+  (setq compilation-scroll-output 'first-error)
+  (add-hook 'compilation-filter-hook
+    (lambda () (ansi-color-apply-on-region (point-min) (point-max))))
 #+END_SRC
 ** Ace-window
 #+BEGIN_SRC emacs-lisp
@@ -1275,11 +1276,34 @@ ethereum block chain.
   (use-package window-purpose
     :ensure t
     :config
+    (setq pop-up-frames t)
     (purpose-mode)
+    (purpose-x-magit-single-on)
+
     (add-to-list 'purpose-user-mode-purposes '(c++-mode . code))
     (add-to-list 'purpose-user-mode-purposes '(flycheck-error-list-mode . errors))
     (add-to-list 'purpose-user-mode-purposes '(compilation-mode . compilation))
     (add-to-list 'purpose-user-mode-purposes '(shell-mode . shell))
+    (add-to-list 'purpose-user-name-purposes '("COMMIT_EDITMSG" . commit))
     (purpose-compile-user-configuration)
+
+
+    (add-to-list 'purpose-special-action-sequences
+                 '(compilation
+                   purpose-display-reuse-window-buffer-other-frame
+                   purpose-display-reuse-window-purpose-other-frame
+                   purpose-display-reuse-window-buffer
+                   purpose-display-reuse-window-purpose
+                   ))
+    (add-to-list 'purpose-special-action-sequences
+                '(code
+                  purpose-display-maybe-same-window
+                  purpose-display-reuse-window-purpose
+                  purpose-display-reuse-window-buffer
+                  ))
+
+    (add-to-list 'purpose-special-action-sequences
+                 '(commit
+                   purpose-display-maybe-pop-up-frame))
     )
 #+END_SRC
