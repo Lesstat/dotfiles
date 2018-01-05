@@ -304,6 +304,97 @@ taken from [[https://www.emacswiki.org/emacs/BackupDirectory][emacswiki]]
 
     )
 #+END_SRC
+** Which-Key
+Which key displays the possible keys and the function they are bound
+to in a key sequence. 
+#+BEGIN_SRC emacs-lisp
+  (use-package which-key
+    :ensure t
+    :config
+    (which-key-mode))
+
+#+END_SRC
+** Email - Notmuch
+I require org-notmuch for org-mode links to mails. Org-notmuch is
+provided as org-contrib package.
+#+BEGIN_SRC emacs-lisp
+  (use-package notmuch
+    :ensure t
+    :config
+    (require 'org-notmuch)
+    (setq notmuch-saved-searches
+     (quote
+      ((:name "inbox" :query "tag:inbox" :key "i")
+       (:name "unread" :query "tag:unread" :key "u")
+       (:name "flagged" :query "tag:flagged" :key "f")
+       (:name "sent" :query "tag:sent" :key "t")
+       (:name "drafts" :query "tag:draft" :key "d")
+       (:name "spam" :query "tag:spam AND tag:unread" :key "s")
+       (:name "gmx" :query "tag:gmx")
+       (:name "studi_mail" :query "tag:uni")
+       (:name "todo" :query "tag:todo")
+       (:name "reply" :query "tag:doReply")
+       (:name "waiting" :query "tag:waiting")
+       )))
+    (setq notmuch-archive-tags '("-inbox" "-unread")
+	  message-kill-buffer-on-exit t
+	  notmuch-search-oldest-first nil
+	  mail-specify-envelope-from t
+	  message-sendmail-extra-arguments '("--read-envelope-from")
+	  message-sendmail-envelope-from "header" 
+	  mail-envelope-from "header"
+	  sendmail-program "/usr/bin/msmtp"
+	  message-sendmail-f-is-evil t
+	  message-send-mail-function 'message-send-mail-with-sendmail
+	  ) 
+   )
+
+#+END_SRC
+** Ace-window
+#+BEGIN_SRC emacs-lisp
+  (use-package ace-window
+    :ensure t
+    :config
+    ;; set aw-keys to the home-row of the neo layout (minus pinkys)
+    (setq aw-keys '(?i ?a ?e ?o ?s ?n ?r))
+    )
+#+END_SRC
+** purpose
+#+BEGIN_SRC emacs-lisp
+  (use-package window-purpose
+    :ensure t
+    :config
+    (setq pop-up-frames t)
+    (purpose-mode)
+    (purpose-x-magit-single-on)
+
+    (add-to-list 'purpose-user-mode-purposes '(c++-mode . code))
+    (add-to-list 'purpose-user-mode-purposes '(flycheck-error-list-mode . errors))
+    (add-to-list 'purpose-user-mode-purposes '(compilation-mode . compilation))
+    (add-to-list 'purpose-user-mode-purposes '(shell-mode . shell))
+    (add-to-list 'purpose-user-name-purposes '("COMMIT_EDITMSG" . commit))
+    (purpose-compile-user-configuration)
+
+
+    (add-to-list 'purpose-special-action-sequences
+                 '(compilation
+                   purpose-display-reuse-window-buffer-other-frame
+                   purpose-display-reuse-window-purpose-other-frame
+                   purpose-display-reuse-window-buffer
+                   purpose-display-reuse-window-purpose
+                   ))
+    (add-to-list 'purpose-special-action-sequences
+                '(code
+                  purpose-display-maybe-same-window
+                  purpose-display-reuse-window-purpose
+                  purpose-display-reuse-window-buffer
+                  ))
+
+    (add-to-list 'purpose-special-action-sequences
+                 '(commit
+                   purpose-display-maybe-pop-up-frame))
+    )
+#+END_SRC
 * Org-mode
 #+BEGIN_SRC emacs-lisp
 
@@ -802,6 +893,28 @@ Proudly stolen from [[http://www.giovannicarmantini.com/2015/07/putting-some-mak
       (4 (gsc/show-clozes-all))))
   (define-key org-mode-map (kbd "C-c s") 'gsc/hide-show-clozes)
 #+END_SRC
+** calfw
+#+BEGIN_SRC emacs-lisp
+    (use-package calfw
+      :ensure t
+      :config
+      (use-package calfw-ical
+        :ensure t)
+      (use-package calfw-org
+        :ensure t)
+      (setq calendar-week-start-day 1)
+      )
+
+  (defun fb/cfw-org-my-agenda (&rest ARGS)
+    "Open calfw-buffer without the org-drill items."
+    (interactive)
+    (let ((org-agenda-tag-filter-preset '("-drill")))
+      (cfw:open-org-calendar)
+      )
+    (set (make-variable-buffer-local 'org-agenda-tag-filter-preset) '("-drill"))
+    )
+
+#+END_SRC
 * Programming
 ** General
 I don't want to mix tabs with spaces, so I'm going all spaces.
@@ -871,10 +984,15 @@ of creating tags beforehand.
 
 ** Flycheck & Flymake
 #+BEGIN_SRC emacs-lisp
-  (use-package flycheck
-    :ensure t
-    :config 
-    (global-flycheck-mode)) 
+    (use-package flycheck
+      :ensure t
+      :config 
+      (global-flycheck-mode)
+      (use-package flycheck-clang-tidy
+        :ensure t
+        :config
+        (add-hook 'flycheck-mode-hook #'flycheck-clang-tidy-setup))
+      ) 
   (use-package flymake-cppcheck
     :ensure t)
   (add-hook 'org-mode-hook
@@ -1094,6 +1212,12 @@ racer to work.
   (global-set-key (kbd "C-c '"  ) 'narrow-or-widen-dwim)
 
   #+END_SRC
+** Compilation Mode
+#+BEGIN_SRC emacs-lisp
+  (setq compilation-scroll-output 'first-error)
+  (add-hook 'compilation-filter-hook
+    (lambda () (ansi-color-apply-on-region (point-min) (point-max))))
+#+END_SRC
 * Yasnippet
 Yasnippet provides great support for templates. But it destroys
 tab-completion in term, so I deactivated it for term. 
@@ -1133,64 +1257,6 @@ I wrote a little shortcut for that.
   (define-key global-map "\C-cd" 'fb/switch_dict)
 #+END_SRC
 * Temp
-** calfw
-#+BEGIN_SRC emacs-lisp
-    (use-package calfw
-      :ensure t
-      :config
-      (use-package calfw-ical
-        :ensure t)
-      (use-package calfw-org
-        :ensure t)
-      (setq calendar-week-start-day 1)
-      )
-
-  (defun fb/cfw-org-my-agenda (&rest ARGS)
-    "Open calfw-buffer without the org-drill items."
-    (interactive)
-    (let ((org-agenda-tag-filter-preset '("-drill")))
-      (cfw:open-org-calendar)
-      )
-    (set (make-variable-buffer-local 'org-agenda-tag-filter-preset) '("-drill"))
-    )
-
-#+END_SRC
-** notmuch
-I require org-notmuch for org-mode links to mails. Org-notmuch is
-provided as org-contrib package.
-#+BEGIN_SRC emacs-lisp
-  (use-package notmuch
-    :ensure t
-    :config
-    (require 'org-notmuch)
-    (setq notmuch-saved-searches
-     (quote
-      ((:name "inbox" :query "tag:inbox" :key "i")
-       (:name "unread" :query "tag:unread" :key "u")
-       (:name "flagged" :query "tag:flagged" :key "f")
-       (:name "sent" :query "tag:sent" :key "t")
-       (:name "drafts" :query "tag:draft" :key "d")
-       (:name "spam" :query "tag:spam AND tag:unread" :key "s")
-       (:name "gmx" :query "tag:gmx")
-       (:name "studi_mail" :query "tag:uni")
-       (:name "todo" :query "tag:todo")
-       (:name "reply" :query "tag:doReply")
-       (:name "waiting" :query "tag:waiting")
-       )))
-    (setq notmuch-archive-tags '("-inbox" "-unread")
-	  message-kill-buffer-on-exit t
-	  notmuch-search-oldest-first nil
-	  mail-specify-envelope-from t
-	  message-sendmail-extra-arguments '("--read-envelope-from")
-	  message-sendmail-envelope-from "header" 
-	  mail-envelope-from "header"
-	  sendmail-program "/usr/bin/msmtp"
-	  message-sendmail-f-is-evil t
-	  message-send-mail-function 'message-send-mail-with-sendmail
-	  ) 
-   )
-
-#+END_SRC
 ** org-caldav
 #+BEGIN_SRC emacs-lisp
   (use-package org-caldav
@@ -1204,14 +1270,6 @@ the document consists of multiple files.
 #+BEGIN_SRC emacs-lisp
   (load "auctex.el" nil t t)
   (setq-default TeX-master nil)
-#+END_SRC
-** Which-Key
-#+BEGIN_SRC emacs-lisp
-  (use-package which-key
-    :ensure t
-    :config
-    (which-key-mode))
-
 #+END_SRC
 ** Ruby
 #+BEGIN_SRC emacs-lisp
@@ -1237,24 +1295,6 @@ the document consists of multiple files.
     :ensure t
     )
 #+END_SRC
-** HLedger
-Ledger (or its deviant hledger) is a plain-text command line
-accounting tool. With hledger-mode you can comfortably edit the
-transactions. 
-#+BEGIN_SRC emacs-lisp
-  (use-package hledger-mode
-    :ensure t
-    :config
-    (add-to-list 'auto-mode-alist '("\\.journal\\'" . hledger-mode))
-    (add-to-list 'company-backends 'hledger-company)
-    (push 'hledger-view-mode evil-emacs-state-modes)
-    (setq hledger-currency-string "€")
-    (defun fb/hledger-view-mode-in-new-buffer ()
-      (interactive)
-      (switch-to-buffer (clone-indirect-buffer "*hledger-view-mode*" nil))
-      (hledger-view-mode))
-    )
-#+END_SRC
 ** Solidity
 Solidity is the language in which smart contracts are written for the
 ethereum block chain.
@@ -1264,54 +1304,9 @@ ethereum block chain.
     :config
   )
 #+END_SRC
-** Compilation Mode
+** wgrep
 #+BEGIN_SRC emacs-lisp
-  (setq compilation-scroll-output 'first-error)
-  (add-hook 'compilation-filter-hook
-    (lambda () (ansi-color-apply-on-region (point-min) (point-max))))
-#+END_SRC
-** Ace-window
-#+BEGIN_SRC emacs-lisp
-  (use-package ace-window
-    :ensure t
-    :config
-    ;; set aw-keys to the home-row of the neo layout (minus pinkys)
-    (setq aw-keys '(?i ?a ?e ?o ?s ?n ?r))
-    )
-#+END_SRC
-** purpose
-#+BEGIN_SRC emacs-lisp
-  (use-package window-purpose
-    :ensure t
-    :config
-    (setq pop-up-frames t)
-    (purpose-mode)
-    (purpose-x-magit-single-on)
+  (use-package wgrep
+    :ensure t)
 
-    (add-to-list 'purpose-user-mode-purposes '(c++-mode . code))
-    (add-to-list 'purpose-user-mode-purposes '(flycheck-error-list-mode . errors))
-    (add-to-list 'purpose-user-mode-purposes '(compilation-mode . compilation))
-    (add-to-list 'purpose-user-mode-purposes '(shell-mode . shell))
-    (add-to-list 'purpose-user-name-purposes '("COMMIT_EDITMSG" . commit))
-    (purpose-compile-user-configuration)
-
-
-    (add-to-list 'purpose-special-action-sequences
-                 '(compilation
-                   purpose-display-reuse-window-buffer-other-frame
-                   purpose-display-reuse-window-purpose-other-frame
-                   purpose-display-reuse-window-buffer
-                   purpose-display-reuse-window-purpose
-                   ))
-    (add-to-list 'purpose-special-action-sequences
-                '(code
-                  purpose-display-maybe-same-window
-                  purpose-display-reuse-window-purpose
-                  purpose-display-reuse-window-buffer
-                  ))
-
-    (add-to-list 'purpose-special-action-sequences
-                 '(commit
-                   purpose-display-maybe-pop-up-frame))
-    )
 #+END_SRC
