@@ -210,6 +210,7 @@ for_window [class="^.*"] border pixel 1
 
 bindsym $mod+a exec keepass --auto-type 
 bindsym $mod+l exec ~/.config/i3/lock.sh
+bindsym $mod+Shift+l exec ~/.config/i3/lock.sh -h
 bindsym $mod+p exec "rofi -show drun -lines 7 -eh 2 -width 100 -padding 500 -bw 0 -color-normal \\"$bg-color,$text-color,$bg-color,$bg-color,#9575cd\\" -color-window \\"$bg-color,$bg-color,$bg-color\\" -font \\"Monospace 18\\""
 
 bindsym $mod+Shift+q exec "i3-nagbar -t warning -m 'You pressed the shutdown shortcut. Do you really want to shutdown?' -b 'Yes, shutdown now' 'exec shutdown now'"
