@@ -87,12 +87,8 @@ export PATH=$HOME/bin:/usr/local/bin:$PATH
 [[ -d /opt/fsl/lib ]] && export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/opt/fsl/lib"
 
 
-alias ls='ls --color=auto'
-alias ll='ls -al'
 alias sys=systemctl
 alias pacman='pacman --color always'
-
-
 
 ZSH_CACHE_DIR=$HOME/.oh-my-zsh-cache
 if [[ ! -d $ZSH_CACHE_DIR ]]; then
@@ -100,12 +96,17 @@ if [[ ! -d $ZSH_CACHE_DIR ]]; then
 fi
 bindkey -v
 source $ZSH/oh-my-zsh.sh
+unalias ls
+alias ls='exa --git'
 
 export RUST_SRC_PATH="/home/flo/workspaces/rust/rust/src/"
 export GOPATH="/home/flo/workspaces/go"
 export PATH="${PATH}:${GOPATH}/bin"
 export MPD_HOST="/home/flo/.mpd/socket"
 export EDITOR='emacsclient -c -nw --alternate-editor=""'
+export CC="clang"
+export CXX="clang++"
+export GRB_LICENSE_FILE="/home/flo/.config/gurobi.lic"
 
 alias emacs=$EDITOR
 
