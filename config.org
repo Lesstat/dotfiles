@@ -1172,7 +1172,7 @@ racer to work.
       :config
       (add-hook 'c++-mode-hook '(lambda ()
                                   (add-hook 'before-save-hook 'clang-format-buffer nil t)
-                                  (semantic-mode 1)
+                                  (semantic-mode 0)
                                   )))
     (use-package srefactor
       :ensure t
@@ -1309,4 +1309,29 @@ ethereum block chain.
   (use-package wgrep
     :ensure t)
 
+#+END_SRC
+** prettier-js
+#+BEGIN_SRC emacs-lisp
+  (use-package prettier-js
+    :ensure t
+    :config
+    (add-hook 'js2-mode-hook 'prettier-js-mode))
+#+END_SRC
+** Editorconfig
+#+BEGIN_SRC emacs-lisp
+  (use-package editorconfig
+    :ensure t
+    :config
+    (editorconfig-mode 1))
+#+END_SRC
+** wal config
+#+BEGIN_SRC emacs-lisp
+  (defun fb/load-wal-theme ()
+    (interactive)
+    (use-package xresources-theme
+      :ensure t
+      :config
+      (load-theme 'xresources)
+      )
+    )
 #+END_SRC
