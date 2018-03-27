@@ -109,6 +109,3 @@ export CXX="clang++"
 export GRB_LICENSE_FILE="/home/flo/.config/gurobi.lic"
 
 alias emacs=$EDITOR
-
-# Enable using gem installed with rubys gem command 
-PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
