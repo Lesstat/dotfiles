@@ -26,17 +26,17 @@ font pango:DejaVu Sans Mono 10
 
 # use these keys for focus, movement, and resize directions when reaching for
 # the arrows is not convenient
-set $up β
+set $up comma
 set $down k
 set $left j
 set $right semicolon
 set $mod Mod4
-set $term terminator
+set $term st
 # use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec $term
+bindsym $mod+Return exec $term -e tmux
 
 # start dmenu (a program launcher)
 #bindsym $mod+d exec dmenu_run
@@ -176,13 +176,14 @@ set_from_resource $fg i3wm.color7 #f0f0f0
 set_from_resource $bg i3wm.color2 #f0f0f0
 set_from_resource $bg-active i3wm.color5 #f0f0f0
 set_from_resource $fg-active i3wm.color9 #f0f0f0
+set_from_resource $bg-urgent i3wm.color1 #f0f0f0
 
-# class                 border  backgr. text indicator child_border
-client.focused          $bg     $bg     $fg  $bg       $bg
-client.focused_inactive $bg     $bg     $fg  $bg       $bg
-client.unfocused        $bg     $bg     $fg  $bg       $bg
-client.urgent           $bg     $bg     $fg  $bg       $bg
-client.placeholder      $bg     $bg     $fg  $bg       $bg
+# class                 border  	 backgr.	text indicator	child_border
+client.focused          $bg     	 $bg     	$fg  $bg       	$bg
+client.focused_inactive $bg     	 $bg     	$fg  $bg       	$bg
+client.unfocused        $bg     	 $bg     	$fg  $bg       	$bg
+client.urgent           $bg-urgent	 $bg-urgent     $fg  $bg-urgent	$bg-urgent
+client.placeholder      $bg     	 $bg     	$fg  $bg       	$bg
 
 client.background       $bg
 
@@ -193,7 +194,7 @@ workspace_auto_back_and_forth yes
 ####################################################################
 # Gaps
 ####################################################################
-gaps inner 10
+gaps inner 8
 smart_gaps on
 
 
@@ -220,7 +221,7 @@ bindsym $mod+Shift+q exec "i3-nagbar -t warning -m 'You pressed the shutdown sho
 
 bindsym $mod+n exec emacsclient -c -a ""
 bindsym $mod+t exec $term -e htop
-bindsym $mod+m exec $term -e ncmpcpp
+bindsym $mod+m exec $term -e tmux new-session ncmpcpp
 
 # Audio
 bindsym XF86AudioNext         exec mpc next
@@ -235,32 +236,19 @@ bindsym XF86AudioMute         exec --no-startup-id pactl set-sink-mute 0 toggle
 bindsym XF86MonBrightnessDown exec xbacklight -dec 5
 bindsym XF86MonBrightnessUp   exec xbacklight -inc 5
 
-bindsym $mod+f exec $term -e ranger
+bindsym $mod+f exec $term -e tmux new-session ranger
 
 # Keyboard layout
-bindsym $mod+x exec setxkbmap de
-bindsym $mod+q exec setxkbmap de neo
+bindsym $mod+x exec changeKeyboard.sh
+bindsym $mod+q exec changeKeyboard.sh
 
 # Change Background
 bindsym $mod+b exec wal -g -o wal-set -i ~/Desktop/
 bindsym $mod+Shift+b exec wal -l -g -o wal-set -i ~/Desktop/
 
-
-bar {
-	position top
-        status_command i3blocks
-	colors {
-		background $bg
-	    	separator $fg
-		#                  border             background         text
-		focused_workspace  $bg-active	      $bg-active	 $fg-active
-		inactive_workspace $bg		      $bg		 $fg
-		urgent_workspace   $bg		      $bg		 $fg
-}
-}
-
 ###################################################################
 ## Autostarts
 ###################################################################
 
+exec_always --no-startup-id startPolybar.sh
 exec ~/.autostart.sh

@@ -106,6 +106,23 @@ export MPD_HOST="/home/flo/.mpd/socket"
 export EDITOR='emacsclient -c -nw --alternate-editor=""'
 export CC="clang"
 export CXX="clang++"
-export GRB_LICENSE_FILE="/home/flo/.config/gurobi.lic"
 
 alias emacs=$EDITOR
+
+
+case $TERM in
+	screen*)
+		precmd(){
+			# Restore tmux-title to 'zsh'
+			printf "\033kzsh\033\\"
+			# Restore st-title to 'zsh'
+			print -Pn "\e]2;zsh:%~\a"
+		}
+		preexec(){
+			# set tmux-title to running program
+			printf "\033k$(echo "$1")\033\\"
+			# set st-title to running program
+			print -Pn "\e]2;$(echo "$1")\a"
+                }
+                ;;
+esac

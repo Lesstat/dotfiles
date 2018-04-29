@@ -1,0 +1,289 @@
+;=====================================================
+;
+;   To learn more about how to configure Polybar
+;   go to https://github.com/jaagr/polybar
+;
+;   The README contains alot of information
+;
+;=====================================================
+
+[colors]
+bg-active =  ${xrdb:color5:#f0f0f0} 
+fg-active =  ${xrdb:color9:#f0f0f0} 
+bg-urgent =  ${xrdb:color1:#f0f0f0} 
+background = ${xrdb:color2:#222}
+foreground = ${xrdb:color7:#222}
+col1 = ${xrdb:color3:#f0f0f0}
+col2 = ${xrdb:color4:#f0f0f0}
+col3 = ${xrdb:color6:#f0f0f0}
+col4 = ${xrdb:color8:#f0f0f0}
+
+
+[bar/main]
+width = 100%
+height = 23
+radius = 2.0
+fixed-center = false
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+line-size = 3
+line-color = #f00
+
+border-top-size = 4
+border-bottom-size = 0
+
+wm-restack = i3
+
+padding-left = 0
+padding-right = 2
+
+module-margin-left = 1
+module-margin-right = 2
+
+font-0 = DejaVuSansMono Nerd Font:pixelsize=10
+
+modules-left = i3
+modules-center = mpd title
+modules-right = volume keyboard memory cpu wlan eth battery date 
+
+tray-position = right
+tray-padding = 2
+
+enable-ipc = true
+
+cursor-click = pointer
+cursor-scroll = ns-resize
+
+[module/xwindow]
+type = internal/xwindow
+label = %title:0:30:...%
+
+
+[module/keyboard]
+type = custom/ipc
+hook-0 = currentKeyboard.sh
+initial = 1
+click-left = changeKeyboard.sh
+
+format-prefix = " "
+format-underline = ${colors.col3}
+
+
+
+[module/filesystem]
+type = internal/fs
+interval = 25
+
+mount-0 = /
+
+label-mounted = %{F#0a81f5}%mountpoint%%{F-}: %percentage_used%%
+label-unmounted = %mountpoint% not mounted
+;;label-unmounted-foreground = ${colors.foreground-alt}
+
+
+[module/i3]
+type = internal/i3
+format = <label-state> <label-mode>
+index-sort = true
+wrapping-scroll = false
+
+padding = 1
+
+; focused = Active workspace on focused monitor
+label-focused = %name%
+label-focused-background = ${colors.bg-active}
+label-focused-underline = ${colors.fg-active}
+label-focused-padding = ${self.padding}
+
+; unfocused = Inactive workspace on any monitor
+label-unfocused = %name%
+label-unfocused-padding = ${self.padding}
+
+; visible = Active workspace on unfocused monitor
+label-visible = %name%
+label-visible-background = ${colors.background}
+label-visible-underline = ${colors.foreground}
+label-visible-padding = ${self.padding}
+
+; urgent = Workspace with urgency hint set
+label-urgent = %name%
+label-urgent-background = ${colors.bg-urgent}
+label-urgent-padding = ${self.padding}
+
+
+[module/mpd]
+type = internal/mpd
+format-online = <label-song>  <icon-prev> <icon-stop> <toggle> <icon-next>
+format-online-underline = ${colors.col3}
+
+icon-prev = 玲
+icon-stop = 栗
+icon-play = 
+icon-pause = 
+icon-next = 怜
+
+label-song-maxlen = 25
+label-song-ellipsis = true
+label-song = %title%
+
+[module/xbacklight]
+type = internal/xbacklight
+
+format = <label> <bar>
+label = BL
+
+bar-width = 10
+bar-indicator = |
+bar-indicator-foreground = #ff
+bar-indicator-font = 2
+bar-fill = ─
+bar-fill-font = 2
+bar-fill-foreground = #9f78e1
+bar-empty = ─
+bar-empty-font = 2
+;bar-empty-foreground = ${colors.foreground-alt}
+
+[module/backlight-acpi]
+inherit = module/xbacklight
+type = internal/backlight
+card = intel_backlight
+
+[module/cpu]
+type = internal/cpu
+interval = 2
+format-prefix = " "
+;format-prefix-foreground = ${colors.foreground-alt}
+format-underline = ${colors.col3}
+label = %percentage:2%%
+
+[module/memory]
+type = internal/memory
+interval = 2
+format-prefix = "ﴖ "
+format-underline = ${colors.col3}
+label = %percentage_used%%
+
+[module/wlan]
+type = internal/network
+interface = net1
+interval = 3.0
+
+format-connected =  <label-connected>
+format-connected-underline = ${colors.col3}
+label-connected = 旅 %essid%
+
+format-disconnected = ""
+;format-disconnected = <label-disconnected>
+;format-disconnected-underline = ${self.format-connected-underline}
+;label-disconnected = %ifname% disconnected
+;;label-disconnected-foreground = ${colors.foreground-alt}
+
+;ramp-signal-foreground = ${colors.foreground-alt}
+
+[module/eth]
+type = internal/network
+interface = enp0s31f6
+interval = 3.0
+
+format-connected-underline = ${colors.col3}
+format-connected-prefix = "旅 "
+;format-connected-prefix-foreground = ${colors.foreground-alt}
+label-connected = %local_ip%
+
+format-disconnected =
+;format-disconnected = <label-disconnected>
+;format-disconnected-underline = ${self.format-connected-underline}
+;label-disconnected = %ifname% disconnected
+;label-disconnected-foreground = ${colors.foreground-alt}
+
+[module/date]
+type = internal/date
+interval = 5
+
+date =
+date-alt = " %Y-%m-%d"
+
+time = %H:%M
+time-alt = %H:%M:%S
+
+format-prefix = 
+;format-prefix-foreground = ${colors.foreground-alt}
+format-underline = ${colors.col3}
+
+label = %date% %time%
+
+[module/volume]
+type = internal/volume
+
+format-volume = <label-volume> <bar-volume>
+format-underline = ${colors.col3}
+label-volume = VOL
+label-volume-foreground = ${root.foreground}
+
+format-muted-prefix = "ﱝ "
+;format-muted-foreground = ${colors.foreground-alt}
+label-muted = mute
+
+bar-volume-width = 10
+bar-volume-foreground-0 = #55aa55
+bar-volume-foreground-1 = #55aa55
+bar-volume-foreground-2 = #55aa55
+bar-volume-foreground-3 = #55aa55
+bar-volume-foreground-4 = #55aa55
+bar-volume-foreground-5 = #f5a70a
+bar-volume-foreground-6 = #ff5555
+bar-volume-gradient = false
+bar-volume-indicator = |
+bar-volume-indicator-font = 2
+bar-volume-fill = ─
+bar-volume-fill-font = 2
+bar-volume-empty = ─
+bar-volume-empty-font = 2
+;bar-volume-empty-foreground = ${colors.foreground-alt}
+
+[module/battery]
+type = internal/battery
+battery = BAT0
+adapter = ADP1
+full-at = 98
+
+format-charging = <animation-charging> <label-charging>
+format-charging-underline = #ffb52a
+
+format-discharging = <ramp-capacity> <label-discharging>
+format-discharging-underline = ${self.format-charging-underline}
+
+format-full-prefix = " "
+;format-full-prefix-foreground = ${colors.foreground-alt}
+format-full-underline = ${self.format-charging-underline}
+
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
+;ramp-capacity-foreground = ${colors.foreground-alt}
+
+animation-charging-0 = 
+animation-charging-1 = 
+animation-charging-2 = 
+;animation-charging-foreground = ${colors.foreground-alt}
+animation-charging-framerate = 750
+
+[settings]
+screenchange-reload = true
+;compositing-background = xor
+;compositing-background = screen
+;compositing-foreground = source
+;compositing-border = over
+
+[global/wm]
+margin-top = 5
+margin-bottom = 5
+
+
+[module/title]
+type = internal/xwindow
+label-maxlen = 50
+format-underline = ${colors.col3}
+; vim:ft=dosini

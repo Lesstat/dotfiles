@@ -1,16 +1,29 @@
 #!/bin/bash
 current_path=$(pwd)
-ln -sf ${current_path}/.emacs ~/.emacs
-ln -sf ${current_path}/config.org ~/.emacs.d/config.org
-ln -sf ${current_path}/org-capture-template ~/.emacs.d/org-capture-template
+
+# Deploy emacs config
+ln -sf "$current_path"/config.org ~/.emacs.d/config.org
+ln -sf "$current_path"/org-capture-template ~/.emacs.d/.
 touch ~/.emacs.d/custom.el #File needs to be existing for emacs config to work
-ln -sf ${current_path}/.bashrc ~/.bashrc
-ln -sf ${current_path}/.bash_login ~/.bash_login
-ln -sf ${current_path}/.bash_logout ~/.bash_logout
-ln -sf ${current_path}/.bash_profile ~/.bash_profile
-ln -sf ${current_path}/.bashrc ~/.bashrc
-ln -sf ${current_path}/.zshrc ~/.zshrc
-ln -sf ${current_path}/.zlogin ~/.zlogin
-ln -sf ${current_path}/.zlogout ~/.zlogout
-ln -sf ${current_path}/i3 ~/.config/i3
-ln -sf ${current_path}/i3blocks ~/.config/i3blocks
+
+pushd dotfiles
+for dotfile in .*
+do
+    echo "ln -sf $(pwd)/$dotfile ~/$dotfile"
+    ln -sf "$(pwd)"/"$dotfile" ~/"$dotfile"
+done
+popd
+
+pushd config
+for conf in *
+do
+    ln -sf "$(pwd)"/"$conf" ~/.config/.
+done
+popd
+
+pushd scripts
+for script in *
+do
+    ln -sf "$(pwd)"/"$script" ~/bin/"$script"
+done
+popd

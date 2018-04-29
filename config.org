@@ -55,102 +55,154 @@ As I was on the edge of RSI, I started using evil-leader to avoid
 having to press Ctrl and Meta all the time. "<f5>" is used as
 alternative leader key for modes where evil is not active.
 #+BEGIN_SRC emacs-lisp
-  (use-package evil
-    :ensure t
-    :config
-    (setq evil-insert-state-cursor '((bar . 3)))
-    (define-key global-map (kbd "<f8>") 'evil-normal-state)
-    (use-package evil-anzu
-      :ensure t
-      )
-    (use-package evil-surround
+    (use-package evil
       :ensure t
       :config
-      (global-evil-surround-mode 1)
-      )
-
-    (use-package powerline
-      :ensure t
-      :config
-      (set-face-foreground 'powerline-active1 "white")
-      (set-face-foreground 'powerline-active2 "white")
-      (set-face-foreground 'powerline-inactive1 "white")
-      (set-face-foreground 'powerline-inactive2 "white")
-      (use-package powerline-evil
+      (setq evil-insert-state-cursor '((bar . 3)))
+      (define-key global-map (kbd "<f8>") 'evil-normal-state)
+      (use-package evil-anzu
+        :ensure t
+        )
+      (use-package evil-surround
         :ensure t
         :config
-        (powerline-evil-center-color-theme)
-        (set-face-foreground 'powerline-evil-normal-face "black")
+        (global-evil-surround-mode 1)
         )
-      )
-    (use-package evil-org
-      :ensure t
-      :after org
-      :config
-      (add-hook 'org-mode-hook 'evil-org-mode)
-      (add-hook 'evil-org-mode-hook
-                (lambda ()
-                  (evil-org-set-key-theme))))
-    (use-package evil-leader
-      :ensure t
-      :config
-      (global-evil-leader-mode)
-      (evil-leader/set-leader "SPC")
-      (evil-leader/set-key
-        "r" 'counsel-M-x
-        "o d" 'org-drill
-        "o s" 'org-caldav-sync
-        "o a" 'org-agenda
-        "o c" 'org-capture
-        "n" 'narrow-or-widen-dwim
-        "s" 'swiper
-        "w n" 'ace-window
-        "w h" 'split-window-horizontally
-        "w v" 'split-window-vertically
-        "w k" 'delete-window
-        "w u" 'delete-other-windows
-        "w s" 'ivy-push-view
-        "w d" 'ivy-pop-view
-        "b" 'ivy-switch-buffer
-        "e" 'save-buffer
-        "p" 'projectile-command-map
-        "k" 'kill-this-buffer
-        "h" help-map
-        "f" 'counsel-find-file
-        "l" 'counsel-locate
-        "ä" 'fb/switch_dict
-        "q q" 'save-buffers-kill-emacs
-        "i" 'ivy-resume
-        "c" 'flycheck-list-errors)
-        (evil-leader/set-key-for-mode 'org-mode
-          "o" nil
-          "o s" 'org-caldav-sync
+
+      (use-package powerline
+        :ensure t
+        :config
+        (use-package powerline-evil
+          :ensure t
+          :config
+        
+          (defun fb/powerline-evil-center-color-theme-no-minor-modes ()
+            "Powerline's center-evil theme with the evil state in color but without minor modes."
+            (interactive)
+            (setq-default mode-line-format
+                          '("%e"
+                            (:eval
+                             (let* ((active (powerline-selected-window-active))
+                                    (mode-line (if active 'mode-line 'mode-line-inactive))
+                                    (face1 (if active 'powerline-active1 'powerline-inactive1))
+                                    (face2 (if active 'powerline-active2 'powerline-inactive2))
+                                    (separator-left (intern (format "powerline-%s-%s"
+                                                                    (powerline-current-separator)
+                                                                    (car powerline-default-separator-dir))))
+                                    (separator-right (intern (format "powerline-%s-%s"
+                                                                     (powerline-current-separator)
+                                                                     (cdr powerline-default-separator-dir))))
+                                    (lhs (list (powerline-raw "%*" nil 'l)
+                                               (powerline-buffer-size nil 'l)
+                                               (powerline-buffer-id nil 'l)
+                                               (powerline-raw " ")
+                                               (funcall separator-left mode-line face1)
+                                               (powerline-narrow face1 'l)
+                                               (powerline-vc face1)))
+                                    (rhs (list (powerline-raw global-mode-string face1 'r)
+                                               (powerline-raw "%4l" face1 'r)
+                                               (powerline-raw ":" face1)
+                                               (powerline-raw "%3c" face1 'r)
+                                               (funcall separator-right face1 mode-line)
+                                               (powerline-raw " ")
+                                               (powerline-raw "%6p" nil 'r)
+                                               (powerline-hud face2 face1)))
+                                    (center (append (list (powerline-raw " " face1)
+                                                          (funcall separator-left face1 face2)
+                                                          (when (boundp 'erc-modified-channels-object)
+                                                            (powerline-raw erc-modified-channels-object face2 'l))
+                                                          (powerline-major-mode face2 'l)
+                                                          (powerline-process face2)
+                                                          (powerline-raw " " face2))
+                                                    (let ((evil-face (powerline-evil-face)))
+                                                      (if (split-string (format-mode-line minor-mode-alist))
+                                                          (append (if evil-mode
+                                                                      (list (funcall separator-right face2 evil-face)
+                                                                            (powerline-raw (powerline-evil-tag) evil-face 'l)
+                                                                            (powerline-raw " " evil-face)
+                                                                            (funcall separator-left evil-face face2)))
+                                                                  (list ;(powerline-minor-modes face2 'l)
+                                                                   (powerline-raw " " face2)
+                                                                   (funcall separator-right face2 face1)))
+                                                        (list (powerline-raw (powerline-evil-tag) evil-face)
+                                                              (funcall separator-right evil-face face1)))))))
+                               (concat (powerline-render lhs)
+                                       (powerline-fill-center face1 (/ (powerline-width center) 2.0))
+                                       (powerline-render center)
+                                       (powerline-fill face1 (powerline-width rhs))
+                                       (powerline-render rhs)))))))
+
+          (fb/powerline-evil-center-color-theme-no-minor-modes)
+          )
+        )
+      (use-package evil-org
+        :ensure t
+        :after org
+        :config
+        (add-hook 'org-mode-hook 'evil-org-mode)
+        (add-hook 'evil-org-mode-hook
+                  (lambda ()
+                    (evil-org-set-key-theme))))
+      (use-package evil-leader
+        :ensure t
+        :config
+        (global-evil-leader-mode)
+        (evil-leader/set-leader "SPC")
+        (evil-leader/set-key
+          "r" 'counsel-M-x
           "o d" 'org-drill
+          "o s" 'org-caldav-sync
           "o a" 'org-agenda
+          "o c" 'org-capture
+          "n" 'narrow-or-widen-dwim
+          "s" 'swiper
+          "w n" 'ace-window
+          "w h" 'split-window-horizontally
+          "w v" 'split-window-vertically
+          "w k" 'delete-window
+          "w u" 'delete-other-windows
+          "w s" 'ivy-push-view
+          "w d" 'ivy-pop-view
+          "b" 'ivy-switch-buffer
+          "e" 'save-buffer
+          "p" 'projectile-command-map
+          "k" 'kill-this-buffer
+          "h" help-map
+          "f" 'counsel-find-file
           "l" 'counsel-locate
+          "ä" 'fb/switch_dict
+          "q q" 'save-buffers-kill-emacs
+          "i" 'ivy-resume
+          "c" 'flycheck-list-errors)
+          (evil-leader/set-key-for-mode 'org-mode
+            "o" nil
+            "o s" 'org-caldav-sync
+            "o d" 'org-drill
+            "o a" 'org-agenda
+            "l" 'counsel-locate
+            )
+          (evil-leader/set-key-for-mode 'rust-mode
+            "g" 'racer-find-definition
+            "d" 'racer-describe)
+          (evil-leader/set-key-for-mode 'go-mode
+            "g" 'godef-jump
+            "d" 'godoc-at-point)
+          (evil-leader/set-key-for-mode 'hledger-mode
+            "x" 'hledger-toggle-star
+            "v" 'fb/hleder-view-mode-in-new-buffer
+            )
+          (evil-leader/set-key-for-mode 'c++-mode
+            "g" 'rtags-find-symbol-at-point
+            "ä" 'srefactor-refactor-at-point)
+          (define-key global-map (kbd "<f5>") evil-leader--default-map)
           )
-        (evil-leader/set-key-for-mode 'rust-mode
-          "g" 'racer-find-definition
-          "d" 'racer-describe)
-        (evil-leader/set-key-for-mode 'go-mode
-          "g" 'godef-jump
-          "d" 'godoc-at-point)
-        (evil-leader/set-key-for-mode 'hledger-mode
-          "x" 'hledger-toggle-star
-          "v" 'fb/hleder-view-mode-in-new-buffer
-          )
-        (evil-leader/set-key-for-mode 'c++-mode
-          "g" 'rtags-find-symbol-at-point
-          "ä" 'srefactor-refactor-at-point)
-        (define-key global-map (kbd "<f5>") evil-leader--default-map)
+      (use-package nlinum-relative
+        :ensure t
+        :config
+        (global-nlinum-relative-mode t)
         )
-    (use-package nlinum-relative
-      :ensure t
-      :config
-      (global-nlinum-relative-mode t)
+      (evil-mode 1)
       )
-    (evil-mode 1)
-    )
 #+END_SRC
 I don't need Enter & Space as movement commands in motion state. But
 some modes want to use them.
@@ -237,6 +289,7 @@ in multiple styles. Thats why I have the remove-dos-eol from [[https://stackover
       :ensure t
       :config
       (setq elfeed-use-curl t)
+      (setq elfeed-enclosure-default-dir "~/Downloads")
       (push 'elfeed-search-mode evil-emacs-state-modes)
       (push 'elfeed-show-mode evil-emacs-state-modes)
       (add-hook 'elfeed-update-hooks '(lambda (url) (elfeed-db-save)))
@@ -1035,7 +1088,6 @@ of creating tags beforehand.
   (use-package go-mode
     :ensure t
     :config
-    (add-hook 'before-save-hook 'gofmt-before-save)
     (setq gofmt-command "goimports")
     (setenv "GOPATH" "/home/flo/workspaces/go")
     (add-hook 'go-mode-hook (lambda ()
@@ -1044,6 +1096,7 @@ of creating tags beforehand.
                               (hs-minor-mode)
                               (setq tab-width 2)
                               (setq indent-tabs-mode nil)
+                              (add-hook 'before-save-hook 'gofmt-before-save nil t)
                               ))
     (setq company-go-show-annotation t)
     )
@@ -1270,6 +1323,9 @@ the document consists of multiple files.
 #+BEGIN_SRC emacs-lisp
   (load "auctex.el" nil t t)
   (setq-default TeX-master nil)
+  (add-hook 'LaTeX-mode-hook
+            (lambda ()
+              (add-hook 'before-save-hook 'LaTeX-fill-buffer nil t)))
 #+END_SRC
 ** Ruby
 #+BEGIN_SRC emacs-lisp
