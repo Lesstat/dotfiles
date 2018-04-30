@@ -9,7 +9,6 @@ touch ~/.emacs.d/custom.el #File needs to be existing for emacs config to work
 pushd dotfiles
 for dotfile in .*
 do
-    echo "ln -sf $(pwd)/$dotfile ~/$dotfile"
     ln -sf "$(pwd)"/"$dotfile" ~/"$dotfile"
 done
 popd
