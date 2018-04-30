@@ -44,7 +44,6 @@
 ;; From use-package README
 (eval-when-compile
   (require 'use-package))
-(require 'diminish)                ;; if you use :diminish
 (require 'bind-key)
 
 (setq vc-follow-symlinks t) ;; so emacs doesn't ask how to open config.org after every change

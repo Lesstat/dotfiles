@@ -46,7 +46,7 @@ font-0 = DejaVuSansMono Nerd Font:pixelsize=10
 
 modules-left = i3
 modules-center = mpd title
-modules-right = volume keyboard memory cpu wlan eth battery date 
+modules-right = volume keyboard memory cpu eth battery1 battery2 date 
 
 tray-position = right
 tray-padding = 2
@@ -165,23 +165,6 @@ format-prefix = "ﴖ "
 format-underline = ${colors.col3}
 label = %percentage_used%%
 
-[module/wlan]
-type = internal/network
-interface = net1
-interval = 3.0
-
-format-connected =  <label-connected>
-format-connected-underline = ${colors.col3}
-label-connected = 旅 %essid%
-
-format-disconnected = ""
-;format-disconnected = <label-disconnected>
-;format-disconnected-underline = ${self.format-connected-underline}
-;label-disconnected = %ifname% disconnected
-;;label-disconnected-foreground = ${colors.foreground-alt}
-
-;ramp-signal-foreground = ${colors.foreground-alt}
-
 [module/eth]
 type = internal/network
 interface = enp0s31f6
@@ -189,14 +172,9 @@ interval = 3.0
 
 format-connected-underline = ${colors.col3}
 format-connected-prefix = "旅 "
-;format-connected-prefix-foreground = ${colors.foreground-alt}
 label-connected = %local_ip%
 
 format-disconnected =
-;format-disconnected = <label-disconnected>
-;format-disconnected-underline = ${self.format-connected-underline}
-;label-disconnected = %ifname% disconnected
-;label-disconnected-foreground = ${colors.foreground-alt}
 
 [module/date]
 type = internal/date
@@ -243,32 +221,39 @@ bar-volume-empty = ─
 bar-volume-empty-font = 2
 ;bar-volume-empty-foreground = ${colors.foreground-alt}
 
-[module/battery]
+[module/battery1]
 type = internal/battery
 battery = BAT0
 adapter = ADP1
-full-at = 98
+full-at = 90
 
 format-charging = <animation-charging> <label-charging>
-format-charging-underline = #ffb52a
+format-charging-underline = ${colors.col3}
 
 format-discharging = <ramp-capacity> <label-discharging>
 format-discharging-underline = ${self.format-charging-underline}
 
-format-full-prefix = " "
+format-full-prefix = " "
 ;format-full-prefix-foreground = ${colors.foreground-alt}
 format-full-underline = ${self.format-charging-underline}
 
-ramp-capacity-0 = 
-ramp-capacity-1 = 
-ramp-capacity-2 = 
-;ramp-capacity-foreground = ${colors.foreground-alt}
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
 
-animation-charging-0 = 
-animation-charging-1 = 
-animation-charging-2 = 
-;animation-charging-foreground = ${colors.foreground-alt}
+animation-charging-0 = 
+animation-charging-1 = 
+animation-charging-2 = 
+animation-charging-3 = 
+animation-charging-4 = 
+animation-charging-5 = 
+animation-charging-6 = 
+
 animation-charging-framerate = 750
+
+[module/battery2]
+inherit = module/battery1
+battery = BAT1
 
 [settings]
 screenchange-reload = true
