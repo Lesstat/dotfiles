@@ -46,7 +46,7 @@ font-0 = DejaVuSansMono Nerd Font:pixelsize=10
 
 modules-left = i3
 modules-center = mpd title
-modules-right = volume keyboard memory cpu eth battery1 battery2 date 
+modules-right = mail volume keyboard memory cpu eth battery1 battery2 date 
 
 tray-position = right
 tray-padding = 2
@@ -72,6 +72,13 @@ click-left = changeKeyboard.sh
 format-prefix = " "
 format-underline = ${colors.col3}
 
+[module/mail]
+type = custom/ipc
+hook-0 = notmuchWidget.sh
+initial = 1
+click-left = emacsclient -e "(notmuch)"
+click-right = mail_sync.sh &
+format-underline = ${colors.col3}
 
 
 [module/filesystem]
