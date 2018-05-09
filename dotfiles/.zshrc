@@ -1,5 +1,10 @@
 # Path to your oh-my-zsh installation.
-ZSH=/usr/share/oh-my-zsh/
+if [[ -d /usr/share/oh-my-zsh ]]; then
+	ZSH=/usr/share/oh-my-zsh/
+else
+	ZSH=~/.oh-my-zsh/
+fi
+
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -96,16 +101,20 @@ if [[ ! -d $ZSH_CACHE_DIR ]]; then
 fi
 bindkey -v
 source $ZSH/oh-my-zsh.sh
-unalias ls
-alias ls='exa --git'
+if hash exa 2> /dev/null; then
+	unalias ls
+	alias ls='exa --git'
+fi
 
 export RUST_SRC_PATH="/home/flo/workspaces/rust/rust/src/"
 export GOPATH="/home/flo/workspaces/go"
 export PATH="${PATH}:${GOPATH}/bin"
 export MPD_HOST="/home/flo/.mpd/socket"
 export EDITOR='emacsclient -c -nw --alternate-editor=""'
-export CC="clang"
-export CXX="clang++"
+if hash clang 2> /dev/null; then
+	export CC="clang"
+	export CXX="clang++"
+fi
 
 alias emacs=$EDITOR
 

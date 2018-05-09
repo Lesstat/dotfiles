@@ -2,6 +2,7 @@
 current_path=$(pwd)
 
 # Deploy emacs config
+mkdir -p ~/.emacs.d
 ln -sf "$current_path"/config.org ~/.emacs.d/config.org
 ln -sf "$current_path"/org-capture-template ~/.emacs.d/.
 touch ~/.emacs.d/custom.el #File needs to be existing for emacs config to work
@@ -20,6 +21,7 @@ do
 done
 popd
 
+mkdir -p ~/bin
 pushd scripts
 for script in *
 do
