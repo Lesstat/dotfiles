@@ -101,26 +101,37 @@ wrapping-scroll = false
 padding = 1
 
 ; focused = Active workspace on focused monitor
-label-focused = %name%
+label-focused = %icon%
 label-focused-background = ${colors.bg-active}
 label-focused-underline = ${colors.fg-active}
 label-focused-padding = ${self.padding}
 
 ; unfocused = Inactive workspace on any monitor
-label-unfocused = %name%
+label-unfocused = %icon%
 label-unfocused-padding = ${self.padding}
 
 ; visible = Active workspace on unfocused monitor
-label-visible = %name%
+label-visible = %icon%
 label-visible-background = ${colors.background}
 label-visible-underline = ${colors.foreground}
 label-visible-padding = ${self.padding}
 
 ; urgent = Workspace with urgency hint set
-label-urgent = %name%
+label-urgent = %icon%
 label-urgent-background = ${colors.bg-urgent}
 label-urgent-padding = ${self.padding}
 
+ws-icon-0 = 1;
+ws-icon-1 = 2;
+ws-icon-2 = 3;
+ws-icon-3 = 4;
+ws-icon-4 = 5;
+ws-icon-5 = 6;
+ws-icon-6 = 7;
+ws-icon-7 = 8;
+ws-icon-8 = 9;
+ws-icon-9 = 10;
+ws-icon-default = 
 
 [module/mpd]
 type = internal/mpd
