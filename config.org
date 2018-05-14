@@ -1213,7 +1213,18 @@ racer to work.
             rtags-completions-enabled t
             rtags-display-result-backend 'ivy)
       )
-
+    (use-package flycheck-rtags
+      :ensure t
+      :config
+      (defun fb/flycheck-rtags-setup ()
+        (flycheck-select-checker 'rtags)
+        (setq-local flycheck-highlighting-mode nil) ;; RTags creates more accurate overlays.
+        (setq-local flycheck-check-syntax-automatically nil))
+      (add-hook 'c-mode-hook #'fb/flycheck-rtags-setup)
+      (add-hook 'c++-mode-hook #'fb/flycheck-rtags-setup)
+      (add-hook 'objc-mode-hook #'fb/flycheck-rtags-setup)
+      )
+  
     (use-package cmake-mode
       :ensure t)
     (use-package cmake-ide
