@@ -454,8 +454,8 @@ provided as org-contrib package.
   (setq org-modules
         '(org-bbdb org-bibtex org-docview org-gnus org-habit org-info org-irc org-mhe org-rmail org-w3m org-drill))
    (load-library "org-habit") ;; For some reason putting it into org-modules does not load it.
-  (use-package org-plus-contrib
-    :ensure t )
+  (use-package org
+    :ensure org-plus-contrib )
  (setq org-file-apps
     '((auto-mode . emacs)
      ("\\.mm\\'" . default)
@@ -1147,7 +1147,7 @@ Mode for editing all sorts of web stuff in a single file.
     (use-package counsel-projectile
       :ensure t
       :config
-      (counsel-projectile-on)
+      (counsel-projectile-mode)
       (setq projectile-switch-project-action 'projectile-vc)))
 
 #+END_SRC
@@ -1321,11 +1321,12 @@ Auctex seems to be the greatest LaTeX package around. Setting
 Tex-master to nil makes Auctex ask for the master file to compile if
 the document consists of multiple files.
 #+BEGIN_SRC emacs-lisp
-  (load "auctex.el" nil t t)
-  (setq-default TeX-master nil)
-  (add-hook 'LaTeX-mode-hook
-            (lambda ()
-              (add-hook 'before-save-hook 'LaTeX-fill-buffer nil t)))
+  (use-package tex
+    :defer t
+    :ensure auctex
+    :config
+    (setq-default TeX-master nil)
+    )
 #+END_SRC
 ** Ruby
 #+BEGIN_SRC emacs-lisp
