@@ -16,18 +16,9 @@ reload_dunst() {
         -bf "${color15:-#000000}" \
         -cf "${color15:-#000000}" \
         -nf "${color15:-#000000}" \
-        -fn "DejaVu Sans Mono 12" \
+        -fn "DejaVuSansMono Nerd Font 10" \
         -geometry "600x40-80+100" &
 }
-
-reload_bar() {
-    pkill bar
-    # bar "$color0" "$color15" &
-    # sleep 1
-    # xdo lower -a bar
-    i3blocks &
-}
-
 
 main() {
     reload_dunst &
