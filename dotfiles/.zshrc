@@ -107,8 +107,14 @@ if hash exa 2> /dev/null; then
 fi
 
 export RUST_SRC_PATH="/home/flo/workspaces/rust/rust/src/"
-export GOPATH="/home/flo/workspaces/go"
-export PATH="${PATH}:${GOPATH}/bin"
+if [[ -d "$HOME/workspaces/go" ]]; then
+    export GOPATH="$HOME/workspaces/go"
+    export PATH="${PATH}:${GOPATH}/bin"
+fi
+if [[ -d "$HOME/.cargo/bin" ]]; then
+    export PATH="$HOME/.cargo/bin:$PATH"
+fi
+
 export MPD_HOST="/home/flo/.mpd/socket"
 export EDITOR='emacsclient -c -nw --alternate-editor=""'
 if hash clang 2> /dev/null; then
