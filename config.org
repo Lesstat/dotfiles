@@ -1224,7 +1224,11 @@ racer to work.
       (add-hook 'c++-mode-hook #'fb/flycheck-rtags-setup)
       (add-hook 'objc-mode-hook #'fb/flycheck-rtags-setup)
       )
-  
+    (use-package ivy-rtags
+      :ensure t
+      :config
+      (setq rtags-display-result-backend 'ivy))
+
     (use-package cmake-mode
       :ensure t)
     (use-package cmake-ide
