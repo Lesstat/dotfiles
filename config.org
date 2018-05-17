@@ -1337,6 +1337,9 @@ the document consists of multiple files.
     :ensure auctex
     :config
     (setq-default TeX-master nil)
+    (defun fb/latexhook ()
+      (TeX-fold-mode))
+    (add-hook 'LaTeX-mode-hook 'fb/latexhook)
     )
 #+END_SRC
 ** Ruby
