@@ -211,7 +211,6 @@ for_window [class="^.*"] border pixel 1
 # Keybindings
 ####################################################################
 
-bindsym $mod+a exec keepass --auto-type 
 bindsym $mod+l exec ~/.config/i3/lock.sh
 bindsym $mod+Shift+l exec ~/.config/i3/lock.sh -h
 bindsym $mod+p exec "rofi -auto-select -show drun -lines 12 -eh 1 -width 50 -bw 0 -font \\"DejaVuSansMono 12\\""
@@ -251,4 +250,4 @@ bindsym $mod+Shift+b exec wal -l -g -o wal-set -i ~/Desktop/
 ###################################################################
 
 exec_always --no-startup-id startPolybar.sh
-exec ~/.autostart.sh
+exec --no-startup-id ~/.autostart.sh
