@@ -136,7 +136,7 @@ bindsym $mod+Shift+9 move container to workspace $w9
 bindsym $mod+Shift+0 move container to workspace $w10
 
 # reload the configuration file
-bindsym Control+q kill
+bindsym $mod+q kill
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
@@ -202,7 +202,9 @@ smart_gaps on
 # Assignments
 ####################################################################
 assign [class="Firefox"] $w1
-assign [class="Rambox"] $w3
+assign [class="kontact"] $w4
+assign [class="Pidgin"] $w4
+assign [class="TelegramDesktop"] $w4
 
 for_window [class="Tor"] floating enable
 for_window [class="^.*"] border pixel 1
@@ -219,8 +221,8 @@ bindsym $mod+Shift+q exec "i3-nagbar -t warning -m 'You pressed the shutdown sho
 
 
 bindsym $mod+n exec emacsclient -c -a ""
-bindsym $mod+c exec emacsclient -c -n -e "(org-capture)"
-bindsym $mod+o exec emacsclient -c -n -e "(org-agenda)"
+bindsym $mod+c exec execInEmacs.sh "(org-capture)"
+bindsym $mod+o exec execInEmacs.sh "(org-agenda)"
 bindsym $mod+t exec $term -e htop
 bindsym $mod+m exec $term -e tmux new-session ncmpcpp
 bindsym $mod+f exec $term -e tmux new-session ranger
@@ -237,11 +239,6 @@ bindsym XF86AudioMute         exec --no-startup-id pactl set-sink-mute 0 toggle
 # Backlight
 bindsym XF86MonBrightnessDown exec xbacklight -dec 5
 bindsym XF86MonBrightnessUp   exec xbacklight -inc 5
-
-
-# Keyboard layout
-bindsym $mod+x exec changeKeyboard.sh
-bindsym $mod+q exec changeKeyboard.sh
 
 # Change Background
 bindsym $mod+b exec wal -g -o wal-set -i ~/Desktop/
