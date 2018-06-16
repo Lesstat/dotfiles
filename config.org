@@ -462,7 +462,8 @@ provided as org-contrib package.
         '(org-bbdb org-bibtex org-docview org-gnus org-habit org-info org-irc org-mhe org-rmail org-w3m org-drill))
    (load-library "org-habit") ;; For some reason putting it into org-modules does not load it.
   (use-package org
-    :ensure org-plus-contrib )
+    :ensure org-plus-contrib 
+    :defer t)
  (setq org-file-apps
     '((auto-mode . emacs)
      ("\\.mm\\'" . default)
@@ -591,7 +592,7 @@ Repeating Task should show only once.
    'org-babel-load-languages
    '(
      (emacs-lisp . t)
-     (sh . t)
+     ;;(sh . t)
      (python . t)
      ;;(R . t)
      (dot . t)
@@ -1075,7 +1076,6 @@ of creating tags beforehand.
     :config
     (if (file-exists-p "/usr/bin/ipython")
 	(progn
-          (elpy-use-ipython)
           ;; The following helps againts ipython strange characters freezing emacs
           (setq python-shell-interpreter "ipython3"
 		python-shell-interpreter-args "--simple-prompt --pprint"))) 
@@ -1156,13 +1156,35 @@ Mode for editing all sorts of web stuff in a single file.
   (use-package projectile
     :ensure t
     :config
-    (projectile-global-mode)
+    (projectile-mode)
     (setq projectile-mode-line nil)
     (use-package counsel-projectile
       :ensure t
       :config
       (counsel-projectile-mode)
-      (setq projectile-switch-project-action 'projectile-vc)))
+      (setq projectile-switch-project-action 'projectile-vc)
+      (setq counsel-projectile-switch-project-action
+            '(12
+             ("o" counsel-projectile-switch-project-action "jump to a project buffer or file")
+             ("f" counsel-projectile-switch-project-action-find-file "jump to a project file")
+             ("d" counsel-projectile-switch-project-action-find-dir "jump to a project directory")
+             ("b" counsel-projectile-switch-project-action-switch-to-buffer "jump to a project buffer")
+             ("m" counsel-projectile-switch-project-action-find-file-manually "find file manually from project root")
+             ("S" counsel-projectile-switch-project-action-save-all-buffers "save all project buffers")
+             ("k" counsel-projectile-switch-project-action-kill-buffers "kill all project buffers")
+             ("K" counsel-projectile-switch-project-action-remove-known-project "remove project from known projects")
+             ("c" counsel-projectile-switch-project-action-compile "run project compilation command")
+             ("C" counsel-projectile-switch-project-action-configure "run project configure command")
+             ("E" counsel-projectile-switch-project-action-edit-dir-locals "edit project dir-locals")
+             ("v" counsel-projectile-switch-project-action-vc "open project in vc-dir / magit / monky")
+             ("sg" counsel-projectile-switch-project-action-grep "search project with grep")
+             ("ss" counsel-projectile-switch-project-action-ag "search project with ag")
+             ("sr" counsel-projectile-switch-project-action-rg "search project with rg")
+             ("xs" counsel-projectile-switch-project-action-run-shell "invoke shell from project root")
+             ("xe" counsel-projectile-switch-project-action-run-eshell "invoke eshell from project root")
+             ("xt" counsel-projectile-switch-project-action-run-term "invoke term from project root")
+             ("O" counsel-projectile-switch-project-action-org-capture "org-capture into project")))
+      ))
 
 #+END_SRC
 ** Markdown
@@ -1429,3 +1451,15 @@ ethereum block chain.
       )
     )
 #+END_SRC
+** latexmk for auctex
+#+BEGIN_SRC emacs-lisp
+  (use-package auctex-latexmk
+    :ensure t
+    :config
+    (auctex-latexmk-setup)
+    (setq auctex-latexmk-inherit-TeX-PDF-mode t)
+    (add-to-list 'TeX-output-view-style
+                 '("^pdf$" "." "okular %o %(outpage)"))
+    )
+#+END_SRC
+
