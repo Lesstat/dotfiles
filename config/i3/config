@@ -244,6 +244,9 @@ bindsym XF86MonBrightnessUp   exec xbacklight -inc 5
 bindsym $mod+b exec wal -g -o wal-set -i ~/Desktop/
 bindsym $mod+Shift+b exec wal -l -g -o wal-set -i ~/Desktop/
 
+# Take Screenshot
+bindsym Print exec scrot -e 'mv $f ~/Downloads'
+bindsym --release Shift+Print exec scrot -s -e 'mv $f ~/Downloads'
 ###################################################################
 ## Autostarts
 ###################################################################
