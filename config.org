@@ -1,12 +1,6 @@
 #+Title: Emacs Configuration
 #+Author: Florian Barth
 
-* Personal Information
-#+BEGIN_SRC emacs-lisp
-(setq user-full-name "Florian Barth"
-      user-mail-address "florianbatrh@gmx.de")
-#+END_SRC
-
 * Auto-Compile
 Auto-Compile makes sure that I don't get errors from freshly updated
 (but not recompiled) packages.
