@@ -224,36 +224,6 @@ A more powerful way to move with evil mode. [[https://github.com/hlissner/evil-s
 
 #+END_SRC
 
-** Helm
-#+BEGIN_SRC emacs-lisp
-  (use-package helm
-    :ensure t
-    :config
-    ;;(helm-mode 1)
-    ;;(global-set-key (kbd "M-x")                          'undefined)
-    ;;(global-set-key (kbd "M-x")                          'helm-M-x)
-    (global-set-key (kbd "M-y")                          'helm-show-kill-ring)
-    ;;(global-set-key (kbd "C-x C-f")                      'helm-for-files) 
-    (global-set-key (kbd "C-x b")                        'helm-mini)
-    (setq helm-buffers-fuzzy-matching t
-          helm-recentf-fuzzy-match    t)
-    (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
-    (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
-    (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
-    (setq helm-split-window-in-side-p           t ;open helm buffer inside current window, not occupy whole other window
-          helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
-          helm-ff-file-name-history-use-recentf t
-          helm-completion-mode-string           nil) ;don't show helm in mode-list
-    (helm-autoresize-mode 1)
-    )
-#+END_SRC
-*** helm-ag
-Lightning fast code search. Needs the [[https://github.com/ggreer/the_silver_searcher][silver searcher]] installed.
-#+BEGIN_SRC emacs-lisp
-  (use-package helm-ag
-    :ensure t
-    )
-#+END_SRC
 ** Smartparens
 #+BEGIN_SRC emacs-lisp
   (use-package smartparens
@@ -314,15 +284,6 @@ taken from [[https://www.emacswiki.org/emacs/BackupDirectory][emacswiki]]
      version-control t)       ; use versioned backups
 #+END_SRC
 ** Useful stuff
-*** Hyperbole
-#+BEGIN_SRC emacs-lisp
-  (use-package hyperbole
-    :ensure t
-    :config
-    (add-hook 'org-mode-hook (lambda () (define-key org-mode-map "\C-c." 'org-time-stamp) t))
-                               ;;Hyperbole stole this one
-    )
-#+END_SRC
 *** imenu-list
 #+BEGIN_SRC emacs-lisp
   (use-package imenu-list
@@ -454,25 +415,29 @@ provided as org-contrib package.
 * Org-mode
 #+BEGIN_SRC emacs-lisp
 
-  (setq org-modules
-        '(org-bbdb org-bibtex org-docview org-gnus org-habit org-info org-irc org-mhe org-rmail org-w3m org-drill))
-   (load-library "org-habit") ;; For some reason putting it into org-modules does not load it.
-  (use-package org
-    :ensure org-plus-contrib 
-    :defer t)
- (setq org-file-apps
-    '((auto-mode . emacs)
-     ("\\.mm\\'" . default)
-     ("\\.x?html?\\'" . default)
-     ("\\.pdf\\'" . "evince %s")))
+   (setq org-modules
+         '(org-bbdb org-bibtex org-docview org-habit org-info org-mhe org-rmail org-w3m org-drill))
+    (load-library "org-habit") ;; For some reason putting it into org-modules does not load it.
+   (use-package org
+     :ensure org-plus-contrib 
+     :defer t)
+  (setq org-file-apps
+     '((auto-mode . emacs)
+      ("\\.mm\\'" . default)
+      ("\\.x?html?\\'" . default)
+      ("\\.pdf\\'" . "evince %s")))
 
-  (use-package org-ref
-    :ensure t)
+   (use-package org-ref
+     :ensure t)
 
-  (dolist (hook '(org-mode-hook))
-    (add-hook hook (lambda () (flyspell-mode 1)))
-    (add-hook hook (lambda () (auto-fill-mode 1)))
-    )
+   (dolist (hook '(org-mode-hook))
+     (add-hook hook (lambda () (flyspell-mode 1)))
+     (add-hook hook (lambda () (auto-fill-mode 1)))
+     (add-hook 'org-mode-hook
+               (lambda ()
+                 (setq-local yas/trigger-key [tab])
+                 (define-key yas/keymap [tab] 'yas/next-field-or-maybe-expand))
+               ))
 
 #+END_SRC
 
@@ -588,17 +553,7 @@ Repeating Task should show only once.
    'org-babel-load-languages
    '(
      (emacs-lisp . t)
-     ;;(sh . t)
-     (python . t)
-     ;;(R . t)
-     (dot . t)
      ))
-  ;; ob-ipython has currently a bug which prevents it and more
-  ;; importantly some org-mode funcitons from working see here:
-  ;; https://github.com/gregsexton/ob-ipython/issues/135
-
-  ;;(use-package ob-ipython
-  ;;:ensure t )
 #+END_SRC
 
 ** Export-Setting
@@ -609,21 +564,6 @@ it also stops org-caldav-sync)
 #+begin_src emacs-lisp
   (setq org-export-with-broken-links t)
 #+end_src
-
-*** New Exporters
-#+BEGIN_SRC emacs-lisp
-
-  (use-package ox-ioslide
-    :ensure t
-    )
-  (use-package ox-reveal
-    :ensure t
-    :config
-    (if (f-exists?  "/home/flo/workspaces/js/reveal.js") 
-    (setq org-reveal-root "/home/flo/workspaces/js/reveal.js"))
-    (setq org-reveal-title-slide "<p>%t</p><p>%a</p><p>%e</p>")
-    )
-#+END_SRC
 
 *** Exporting Source code
 #+BEGIN_SRC emacs-lisp
@@ -1012,8 +952,6 @@ of creating tags beforehand.
       :ensure t)
     (use-package company-web
       :ensure t)
-    (use-package company-php
-      :ensure t)
     (add-hook 'after-init-hook 'global-company-mode)
     (define-key company-mode-map  (kbd "M-<tab>") 'company-complete)
     (use-package company-quickhelp
@@ -1046,7 +984,7 @@ of creating tags beforehand.
     )
 #+END_SRC
 
-** Flycheck & Flymake
+** Flycheck 
 #+BEGIN_SRC emacs-lisp
     (use-package flycheck
       :ensure t
@@ -1057,12 +995,7 @@ of creating tags beforehand.
         :config
         (add-hook 'flycheck-mode-hook #'flycheck-clang-tidy-setup))
       ) 
-  (use-package flymake-cppcheck
-    :ensure t)
-  (add-hook 'org-mode-hook
-            (lambda ()
-              (setq-local yas/trigger-key [tab])
-              (define-key yas/keymap [tab] 'yas/next-field-or-maybe-expand)))
+
 #+END_SRC
 ** Python
 #+BEGIN_SRC emacs-lisp
@@ -1082,11 +1015,9 @@ of creating tags beforehand.
       :ensure t
       :config
       (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
-
     (add-hook 'elpy-mode-hook 'hs-minor-mode)
     )
 #+END_SRC
-
 ** Haskell
 #+BEGIN_SRC emacs-lisp
 (use-package haskell-mode
@@ -1110,15 +1041,6 @@ of creating tags beforehand.
                               ))
     (setq company-go-show-annotation t)
     )
-#+END_SRC
-** Lua
-#+BEGIN_SRC emacs-lisp
-  (use-package lua-mode
-    :ensure t
-    :config
-    (setq auto-mode-alist (cons '("\.lua$" . lua-mode) auto-mode-alist))
-    (autoload 'lua-mode "lua-mode" "Lua editing mode." t)
-  )
 #+END_SRC
 ** Javascript
 #+BEGIN_SRC emacs-lisp
@@ -1382,39 +1304,6 @@ the document consists of multiple files.
       "v" 'reftex-label
       "V" 'reftex-reference)
     )
-#+END_SRC
-** Ruby
-#+BEGIN_SRC emacs-lisp
-  (use-package enh-ruby-mode
-    :ensure t
-    :config
-  (add-to-list 'auto-mode-alist
-               '("\\(?:\\.rb\\|ru\\|rake\\|thor\\|jbuilder\\|gemspec\\|podspec\\|/\\(?:Gem\\|Rake\\|Cap\\|Thor\\|Vagrant\\|Guard\\|Pod\\)file\\)\\'" . enh-ruby-mode))
-    (use-package robe
-      :ensure t
-      :config
-      (add-hook 'enh-ruby-mode-hook 'robe-mode)
-      (push 'company-robe company-backends)
-      (evil-leader/set-key-for-mode 'enh-ruby-mode
-        "g" 'robe-jump 
-        "d" 'robe-doc )
-      ))
-
-#+END_SRC
-** Coffee-Script 
-#+BEGIN_SRC emacs-lisp
-  (use-package coffee-mode
-    :ensure t
-    )
-#+END_SRC
-** Solidity
-Solidity is the language in which smart contracts are written for the
-ethereum block chain.
-#+BEGIN_SRC emacs-lisp
-  (use-package solidity-mode
-    :ensure t
-    :config
-  )
 #+END_SRC
 ** wgrep
 #+BEGIN_SRC emacs-lisp
