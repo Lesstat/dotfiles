@@ -125,6 +125,31 @@ fi
 alias emacs=$EDITOR
 export QT_AUTO_SCREEN_SCALE_FACTOR=0
 
+#Taskwarrior stuff
+alias t=task
+alias td='task done'
+alias ta='task add'
+
+function process_task_inbox(){
+    uuids=$(task -TAGGED and +PENDING uuids)
+    if [[ -z "${uuids}" ]]; then
+	echo "Inbox is empty";
+	return
+    fi
+
+    tmux split-window -h
+    for uuid in $uuids; do
+	task $uuid information
+	read irrelevant
+    done
+
+    count=$(task -TAGGED and +PENDING count)
+    echo "Inbox has now ${count} elements"
+}
+
+alias tin='process_task_inbox'
+
+
 
 case $TERM in
 	screen*)
