@@ -129,6 +129,8 @@ export QT_AUTO_SCREEN_SCALE_FACTOR=0
 alias t=task
 alias td='task done'
 alias ta='task add'
+alias tm='task modify'
+alias ttt='task modify wait:+1d'
 
 function process_task_inbox(){
     uuids=$(task -TAGGED and +PENDING uuids)
