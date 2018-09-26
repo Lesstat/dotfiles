@@ -130,7 +130,7 @@ alias t=task
 alias td='task done'
 alias ta='task add'
 alias tm='task modify'
-alias ttt='task modify wait:+1d'
+alias ttt='task modify wait:tomorrow'
 
 function process_task_inbox(){
     uuids=$(task -TAGGED and +PENDING uuids)
@@ -140,7 +140,7 @@ function process_task_inbox(){
     fi
 
     tmux split-window -h
-    for uuid in $uuids; do
+    for uuid in ${=uuids}; do
 	task $uuid information
 	read irrelevant
     done
