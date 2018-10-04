@@ -1004,10 +1004,10 @@ of creating tags beforehand.
     :init (elpy-enable)
     :config
     (if (file-exists-p "/usr/bin/ipython")
-	(progn
+        (progn
           ;; The following helps againts ipython strange characters freezing emacs
           (setq python-shell-interpreter "ipython3"
-		python-shell-interpreter-args "--simple-prompt --pprint"))) 
+                python-shell-interpreter-args "--simple-prompt --pprint"))) 
     (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
     (use-package ein
       :ensure t)
@@ -1016,6 +1016,7 @@ of creating tags beforehand.
       :config
       (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
     (add-hook 'elpy-mode-hook 'hs-minor-mode)
+    (setq flycheck-python-pycompile-executable "python3")
     )
 #+END_SRC
 ** Haskell
