@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
-from pathlib import Path
-from git import Repo, GitCommandError
-from sys import argv
 from contextlib import suppress
+from pathlib import Path
+from sys import argv
+
+from git import Repo, GitCommandError, InvalidGitRepositoryError
 
 
 def find_repositories_in(path):
@@ -14,7 +15,8 @@ def find_repositories_in(path):
         for dir in subdirs(p):
             try:
                 yield Repo(str(dir))
-            except:
+            except InvalidGitRepositoryError:
+                print('appending', dir)
                 dirs.append(dir)
 
 
@@ -34,9 +36,11 @@ def fetch(repos):
 def update(repos):
     """Does fast forward merge for every repo where this is possible"""
     for repo in repos:
-        remote_branch = repo.active_branch.tracking_branch()
-        if remote_branch:
-            repo.git.merge(f'{remote_branch.remote_name}/{remote_branch.remote_head}', '--ff-only')
+        branch = repo.active_branch.tracking_branch()
+        if branch:
+            with suppress(GitCommandError):
+                repo.git.merge(
+                    f'{branch.remote_name}/{branch.remote_head}', '--ff-only')
 
 
 def subdirs(paths):
