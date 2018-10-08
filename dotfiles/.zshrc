@@ -151,7 +151,32 @@ function process_task_inbox(){
 
 alias tin='process_task_inbox'
 
+function open_projects_file() {
+   twpath=$(task _get rc.data.location) 
+   if [[ -z $1 ]]; then
+       emacsclient -c -n -a "" "${twpath}/projects"
+   else
+       pro=$1
+       emacsclient -c -n -a "" "${twpath}/projects/${pro}.org"
+   fi
+}
+alias tpro='open_projects_file'
 
+# Python stuff
+
+if [[ -f /usr/share/virtualenvwrapper/virtualenvwrapper.sh ]]; then
+    venvwrapper="/usr/share/virtualenvwrapper/virtualenvwrapper.sh"
+elif [[ -f /usr/bin/virtualenvwrapper.sh ]]; then
+    venvwrapper="/usr/bin/virtualenvwrapper.sh"
+fi
+
+if [[ -n "$venvwrapper" ]]; then
+   export WORKON_HOME=~/.virtualenvs
+   export VIRTUAL_ENV_DISABLE_PROMPT=1
+   source $venvwrapper
+   source ~/.virtualenvs/scripting/bin/activate
+fi
+   
 
 case $TERM in
 	screen*)
