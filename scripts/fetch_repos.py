@@ -16,7 +16,6 @@ def find_repositories_in(path):
             try:
                 yield Repo(str(dir))
             except InvalidGitRepositoryError:
-                print('appending', dir)
                 dirs.append(dir)
 
 
