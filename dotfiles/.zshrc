@@ -38,7 +38,7 @@ if hash exa 2> /dev/null; then
 fi
 
 
-export RUST_SRC_PATH="/home/flo/workspaces/rust/rust/src/"
+export RUST_SRC_PATH="$HOME/workspaces/rust/rust/src/"
 
 if [[ -d "$HOME/workspaces/go" ]]; then
     export GOPATH="$HOME/workspaces/go"
@@ -50,7 +50,7 @@ fi
 
 export MPD_HOST="$HOME/.mpd/socket"
 
-export EDITOR='eframe'
+export EDITOR='emacsclient --alternate-editor "" --create-frame'
 
 if hash clang 2> /dev/null; then
 	export CC="clang"
@@ -105,11 +105,12 @@ elif [[ -f /usr/bin/virtualenvwrapper.sh ]]; then
 fi
 
 if [[ -n "$venvwrapper" ]]; then
+
    export WORKON_HOME=~/.virtualenvs
    export VIRTUAL_ENV_DISABLE_PROMPT=1
    export VIRTUALENVWRAPPER_PYTHON="/usr/bin/python3"
    source $venvwrapper
-   workon scripting
+   workon scripting  
 fi
    
 
