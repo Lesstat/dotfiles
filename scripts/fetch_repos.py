@@ -35,11 +35,14 @@ def fetch(repos):
 def update(repos):
     """Does fast forward merge for every repo where this is possible"""
     for repo in repos:
-        branch = repo.active_branch.tracking_branch()
-        if branch:
-            with suppress(GitCommandError):
-                repo.git.merge(
-                    f'{branch.remote_name}/{branch.remote_head}', '--ff-only')
+        try:
+            branch = repo.active_branch.tracking_branch()
+            if branch:
+                with suppress(GitCommandError):
+                    repo.git.merge(
+                        f'{branch.remote_name}/{branch.remote_head}', '--ff-only')
+        except TypeError as e:
+            print(f'got error {e} for repo {repo}')
 
 
 def subdirs(paths):
