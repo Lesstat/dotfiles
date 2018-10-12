@@ -96,23 +96,13 @@ function open_projects_file() {
 }
 alias tpro='open_projects_file'
 
-# Python stuff
-
-if [[ -f /usr/share/virtualenvwrapper/virtualenvwrapper.sh ]]; then
-    venvwrapper="/usr/share/virtualenvwrapper/virtualenvwrapper.sh"
-elif [[ -f /usr/bin/virtualenvwrapper.sh ]]; then
-    venvwrapper="/usr/bin/virtualenvwrapper.sh"
+# Pyenv
+if [[ -d "$HOME/.pyenv/bin" ]]; then
+    export PATH="$HOME/.pyenv/bin:$PATH"
+    eval "$(pyenv init -)"
+    # eval "$(pyenv virtualenv-init -)"
 fi
 
-if [[ -n "$venvwrapper" ]]; then
-
-   export WORKON_HOME=~/.virtualenvs
-   export VIRTUAL_ENV_DISABLE_PROMPT=1
-   export VIRTUALENVWRAPPER_PYTHON="/usr/bin/python3"
-   source $venvwrapper
-   workon scripting  
-fi
-   
 
 case $TERM in
 	screen*)
