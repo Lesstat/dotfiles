@@ -942,6 +942,7 @@ of creating tags beforehand.
     :ensure t
     :config
     (setq company-tooltip-align-annotations t)
+    (setq company-async-timeout 5)
     (use-package company-c-headers
       :ensure t)
     (use-package company-shell
