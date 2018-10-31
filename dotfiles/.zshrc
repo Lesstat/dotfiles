@@ -32,7 +32,7 @@ if [[ ! -d $ZSH_CACHE_DIR ]]; then
 fi
 bindkey -v
 source $ZSH/oh-my-zsh.sh
-if hash exa 2> /dev/null; then
+if (($+commands[exa])) ; then
 	unalias ls
 	alias ls='exa --git'
 fi
@@ -52,7 +52,7 @@ export MPD_HOST="$HOME/.mpd/socket"
 
 export EDITOR='emacsclient --alternate-editor "" --create-frame'
 
-if hash clang 2> /dev/null; then
+if (( $+commands[clang] )); then
 	export CC="clang"
 	export CXX="clang++"
 fi
