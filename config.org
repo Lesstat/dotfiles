@@ -987,15 +987,19 @@ of creating tags beforehand.
 
 ** Flycheck 
 #+BEGIN_SRC emacs-lisp
-    (use-package flycheck
+  (use-package flycheck
+    :ensure t
+    :config 
+    (global-flycheck-mode)
+    (use-package flycheck-clang-tidy
       :ensure t
-      :config 
-      (global-flycheck-mode)
-      (use-package flycheck-clang-tidy
-        :ensure t
-        :config
-        (add-hook 'flycheck-mode-hook #'flycheck-clang-tidy-setup))
-      ) 
+      :config
+      (add-hook 'flycheck-mode-hook #'flycheck-clang-tidy-setup))
+    (use-package flycheck-inline
+      :ensure t
+      :config
+      (flycheck-inline-mode))
+    ) 
 
 #+END_SRC
 ** Python
