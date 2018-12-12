@@ -12,7 +12,7 @@ DISABLE_AUTO_UPDATE="true"
 ENABLE_CORRECTION="true"
 
 
-plugins=(git emacs)
+plugins=(git emacs z)
 
 # User configuration
 
