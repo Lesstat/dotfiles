@@ -46,7 +46,7 @@ font-0 = DejaVuSansMono Nerd Font:pixelsize=10
 
 modules-left = i3
 modules-center = mpd title
-modules-right = mail volume keyboard memory cpu eth battery1 battery2 date 
+modules-right = mail calendar volume keyboard memory cpu eth battery1 battery2 date 
 
 tray-position = right
 tray-padding = 2
@@ -79,6 +79,13 @@ initial = 1
 click-left = emacsclient -e "(notmuch)"
 click-right = mail_sync.sh &
 format-underline = ${colors.col3}
+
+[module/calendar]
+type = custom/script
+exec = next_khal_date.sh
+interval = 60
+format-underline = ${colors.col3}
+click-left = display_todays_agenda.sh
 
 
 [module/filesystem]
