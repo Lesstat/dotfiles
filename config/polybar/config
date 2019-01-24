@@ -84,6 +84,7 @@ format-underline = ${colors.col3}
 type = custom/script
 exec = next_khal_date.sh
 interval = 60
+format-prefix = " "
 format-underline = ${colors.col3}
 click-left = display_todays_agenda.sh
 

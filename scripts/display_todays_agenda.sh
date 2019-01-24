@@ -1,3 +1,3 @@
 #!/bin/bash
 
-notify-send  "$(khal list today today )"
+notify-send  "$(khal list today today)"
