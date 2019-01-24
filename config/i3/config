@@ -241,8 +241,8 @@ bindsym XF86MonBrightnessDown exec xbacklight -dec 5
 bindsym XF86MonBrightnessUp   exec xbacklight -inc 5
 
 # Change Background
-bindsym $mod+b exec wal -g -o wal-set -i ~/Desktop/
-bindsym $mod+Shift+b exec wal -l -g -o wal-set -i ~/Desktop/
+bindsym $mod+b exec wal -o wal-set -i ~/Desktop/
+bindsym $mod+Shift+b exec wal -l -o wal-set -i ~/Desktop/
 
 # Take Screenshot
 bindsym Print exec scrot -e 'mv $f ~/Downloads'
