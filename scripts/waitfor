@@ -1,0 +1,11 @@
+#!/bin/bash
+
+prog=$1
+sleeptime=$2
+if [[ -z "${sleeptime}" ]]; then
+    sleeptime=10
+fi
+while pgrep ${prog} &> /dev/null; do
+    sleep ${sleeptime}
+done
+echo "finished waiting at $(date)"
