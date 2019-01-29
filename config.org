@@ -1363,4 +1363,8 @@ the document consists of multiple files.
                  '("^pdf$" "." "okular %o %(outpage)"))
     )
 #+END_SRC
-
+** jinja2
+#+BEGIN_SRC emacs-lisp
+  (use-package jinja2-mode
+    :ensure t)
+#+END_SRC
