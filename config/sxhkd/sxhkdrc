@@ -1,0 +1,134 @@
+super + Return 
+      st -e tmux
+super + shift + Return 
+      st 
+super + l 
+      ~/.config/i3/lock.sh
+super + shift + l 
+      ~/.config/i3/lock.sh -h
+super + p
+      rofi -auto-select -show drun -lines 12 -eh 1 -width 50 -bw 0 -font "DejaVuSansMono 12"
+
+super + shift + q 
+      i3-nagbar -t warning -m 'You pressed the shutdown shortcut. Do you really want to shutdown?' -b 'Yes, shutdown now' 'exec shutdown now'
+
+
+super + n 
+      emacsclient -c -a ""
+super + c 
+      execInEmacs.sh "(org-capture)"
+super + o 
+      execInEmacs.sh "(org-agenda)"
+super + t 
+      st -e htop
+super + m 
+      st -e tmux new-session ncmpcpp
+super + f 
+      st -e tmux new-session ranger
+
+# Audio
+XF86AudioNext         
+      mpc next
+XF86AudioPrev         
+      mpc prev
+XF86AudioStop         
+      mpc stop
+XF86AudioPlay         
+      mpc toggle
+XF86AudioRaiseVolume  
+      --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
+XF86AudioLowerVolume  
+      --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
+XF86AudioMute         
+      --no-startup-id pactl set-sink-mute 0 toggle
+
+# Backlight
+XF86MonBrightnessDown 
+      xbacklight -dec 5
+XF86MonBrightnessUp   
+      xbacklight -inc 5
+
+# Change Background
+super + b 
+      wal -o wal-set -i ~/Desktop/
+super + shift + b 
+      wal -l -o wal-set -i ~/Desktop/
+
+# Take Screenshot
+Print 
+      scrot -e 'mv $f ~/Downloads'
+shift + Print 
+      scrot -s -e 'mv $f ~/Downloads'
+
+
+##########################################
+# WM Keybindings
+##########################################
+# change focus
+# super + $left focus left
+# super + $down focus down
+# super + $up focus up
+# super + $right focus right
+
+# alternatively, you can use the cursor keys:
+super + { Left, Right, Up, Down }
+      i3 focus { left, right, up ,down }
+
+# move focused window
+# super + shift + $left move left
+# super + shift + $down move down
+# super + shift + $up move up
+# super + shift + $right move right
+
+# alternatively, you can use the cursor keys:
+super + shift + { Left, Right, Up, Down }
+      i3 move {left, right, up ,down}
+
+# resize
+alt + {Left, Right}
+    i3 resize {shrink, grow} width 10 px or 10 ppt
+
+alt + {Up, Down}
+    i3 resize {shrink, grow} height 10 px or 10 ppt
+
+# split orientation
+super + {h, v}
+      i3 split {h,v}
+
+# enter fullscreen mode for the focused container
+F11
+	i3 fullscreen toggle
+
+# change container layout (stacked, tabbed, toggle split)
+super + s
+      i3 layout stacking
+super + w
+      i3 layout tabbed
+super + e
+      i3 layout toggle split
+
+# toggle tiling / floating
+super + shift + space
+      i3 floating toggle
+
+# change focus between tiling / floating windows
+super + space
+      i3 focus mode_toggle
+
+# switch to workspace
+super + {1-9}
+      i3 workspace {1-9}
+
+# move focused container to workspace
+super + shift + {1-9}
+      i3 move container to workspace {1-9}
+
+# reload the configuration file
+super + q
+      i3 kill
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+super + shift + r
+      i3 restart
+# exit i3 (logs you out of your X session)
+super + shift + e 
+	i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'
