@@ -555,6 +555,8 @@ Repeating Task should show only once.
    'org-babel-load-languages
    '(
      (emacs-lisp . t)
+     (shell . t)
+     (python . t)
      ))
 #+END_SRC
 
