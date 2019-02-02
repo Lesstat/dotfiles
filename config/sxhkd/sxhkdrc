@@ -116,8 +116,8 @@ super + space
       i3 focus mode_toggle
 
 # switch to workspace
-super + {1-9}
-      i3 workspace {1-9}
+super + {0-9}
+      i3 workspace {10,1-9}
 
 # move focused container to workspace
 super + shift + {1-9}
