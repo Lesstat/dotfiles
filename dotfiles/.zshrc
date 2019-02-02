@@ -96,13 +96,6 @@ function open_projects_file() {
 }
 alias tpro='open_projects_file'
 
-# Pyenv
-if [[ -d "$HOME/.pyenv/bin" ]]; then
-    export PATH="$HOME/.pyenv/bin:$PATH"
-    eval "$(pyenv init -)"
-    # eval "$(pyenv virtualenv-init -)"
-fi
-
 
 case $TERM in
 	screen*)
