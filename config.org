@@ -157,7 +157,7 @@ alternative leader key for modes where evil is not active.
         "w u" 'delete-other-windows
         "w s" 'ivy-push-view
         "w d" 'ivy-pop-view
-        "b" 'switch-buffer-without-purpose
+        "b" 'ivy-switch-buffer
         "e" 'save-buffer
         "p" 'projectile-command-map
         "k" 'kill-this-buffer
@@ -381,6 +381,7 @@ provided as org-contrib package.
     (purpose-x-magit-single-on)
 
     (add-to-list 'purpose-user-mode-purposes '(c++-mode . code))
+    (add-to-list 'purpose-user-mode-purposes '(rust-mode . code))
     (add-to-list 'purpose-user-mode-purposes '(flycheck-error-list-mode . errors))
     (add-to-list 'purpose-user-mode-purposes '(compilation-mode . compilation))
     (add-to-list 'purpose-user-mode-purposes '(shell-mode . shell))
@@ -392,17 +393,17 @@ provided as org-contrib package.
                  '(compilation
                    purpose-display-reuse-window-buffer-other-frame
                    purpose-display-reuse-window-purpose-other-frame
-                   purpose-display-maybe-pop-up-frame
                    purpose-display-reuse-window-buffer
                    purpose-display-reuse-window-purpose
+                   purpose-display-maybe-pop-up-frame
                    ))
     (add-to-list 'purpose-special-action-sequences
                  '(errors
                    purpose-display-reuse-window-buffer-other-frame
                    purpose-display-reuse-window-purpose-other-frame
-                   purpose-display-maybe-pop-up-frame
                    purpose-display-reuse-window-buffer
                    purpose-display-reuse-window-purpose
+                   purpose-display-maybe-pop-up-frame
                    ))
     (add-to-list 'purpose-special-action-sequences
                 '(code
