@@ -50,6 +50,7 @@ fi
 
 export MPD_HOST="$HOME/.mpd/socket"
 
+export TERMINAL='st'
 export EDITOR='emacsclient --alternate-editor "" --create-frame'
 
 if (( $+commands[clang] )); then
