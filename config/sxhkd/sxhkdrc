@@ -1,3 +1,7 @@
+# Reload shortcuts
+super + Escape
+      pkill -USR1 sxhkd
+
 super + Return 
       st -e tmux
 super + shift + Return 
