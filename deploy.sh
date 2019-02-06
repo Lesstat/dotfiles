@@ -1,30 +1,17 @@
 #!/bin/bash
-current_path=$(pwd)
 
-# Deploy emacs config
-mkdir -p ~/.emacs.d
-ln -sf "$current_path"/config.org ~/.emacs.d/config.org
-ln -sf "$current_path"/org-capture-template ~/.emacs.d/.
+if ! which stow &> /dev/null; then
+    echo "This script depends on stow"
+    echo "On archlinux it can be installed by"
+    echo "   sudo pacman -S stow"
+    exit 1
+fi 
+
+if ! which fd &> /dev/null; then
+    echo "This script depends on fd"
+    echo "On archlinux it can be installed by"
+    echo "   sudo pacman -S fd"
+    exit 1
+fi 
 touch ~/.emacs.d/custom.el #File needs to be existing for emacs config to work
-
-pushd dotfiles
-for dotfile in .*
-do
-    ln -sf "$(pwd)"/"$dotfile" ~/"$dotfile"
-done
-popd
-
-pushd config
-for conf in *
-do
-    ln -sf "$(pwd)"/"$conf" ~/.config/.
-done
-popd
-
-mkdir -p ~/bin
-pushd scripts
-for script in *
-do
-    ln -sf "$(pwd)"/"$script" ~/bin/"$script"
-done
-popd
+fd -t d -d 1 -x stow -t ~ {} 

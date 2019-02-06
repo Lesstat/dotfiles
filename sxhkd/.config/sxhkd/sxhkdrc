@@ -7,9 +7,9 @@ super + Return
 super + shift + Return 
       st 
 super + l 
-      ~/.config/i3/lock.sh
+      lock.sh
 super + shift + l 
-      ~/.config/i3/lock.sh -h
+      lock.sh -h
 super + p
       rofi -auto-select -show drun -lines 12 -eh 1 -width 50 -bw 0 -font "DejaVuSansMono 12"
 
