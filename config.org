@@ -31,7 +31,7 @@ define a path for packages I manipulate myself.
   (global-hl-line-mode 0)
   (setq inhibit-startup-screen t)
   (tool-bar-mode 0)
-  (setq default-frame-alist '((font . "DejaVuSansMono Nerd Font-10")))
+  (setq default-frame-alist '((font . "Fira Code-10")))
 #+END_SRC
 *** Highlighting parentheses 
 #+BEGIN_SRC emacs-lisp
@@ -39,6 +39,10 @@ define a path for packages I manipulate myself.
     :ensure t
     :config
     (global-highlight-parentheses-mode t))
+#+END_SRC
+*** Spacemacs Theme
+#+BEGIN_SRC emacs-lisp 
+  (load-theme 'spacemacs-dark)
 #+END_SRC
 ** Evil-mode
 As much as I love Emacs I love having vim keybindings :)
