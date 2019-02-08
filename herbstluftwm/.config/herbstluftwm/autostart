@@ -16,7 +16,10 @@ hc keyunbind --all
 # keybindings
 Mod=Mod4    # Use super as the main modifier
 
-hc keybind $Mod-Control-space split explode
+# mouse
+hc mouseunbind --all
+hc mousebind $Mod-Button1 move
+hc mousebind $Mod-Button2 resize
 
 # tags
 tag_names=( code shell org doc web mail misc )
