@@ -34,8 +34,6 @@ line-color = #f00
 border-top-size = 3
 border-bottom-size = 0
 
-wm-restack = i3
-
 padding-left = 0
 padding-right = 2
 
@@ -44,9 +42,9 @@ module-margin-right = 2
 
 font-0 = DejaVuSansMono Nerd Font:pixelsize=10
 
-modules-left = i3
+modules-left = ewmh
 modules-center = mpd title
-modules-right = mail calendar volume keyboard memory cpu eth battery1 battery2 date 
+modules-right = mail calendar volume keyboard memory cpu battery1 date 
 
 tray-position = right
 tray-padding = 2
@@ -58,10 +56,40 @@ cursor-scroll = ns-resize
 
 separator = |
 
-[module/xwindow]
-type = internal/xwindow
-label = %title:0:30:...%
+[module/ewmh]
+type = internal/xworkspaces
+enable-scroll = true
+format-padding = 2
+format-foreground = ${colors.foreground}
+format-background = ${colors.background}
 
+padding = 1
+
+format = <label-state>
+
+label-active = %icon% %name% 
+label-active-background = ${colors.bg-active}
+label-active-underline = ${colors.fg-active}
+label-active-padding = ${self.padding}
+
+label-occupied = %icon% %name% 
+label-occupied-padding = ${self.padding}
+
+label-urgent = %icon% %name% 
+label-urgent-background = ${colors.bg-urgent}
+label-urgent-padding = ${self.padding}
+
+label-empty = %icon% %name% 
+label-empty-padding = ${self.padding}
+
+
+icon-0 = code;
+icon-1 = shell;
+icon-2 = org;
+icon-3 = doc;
+icon-4 = web;
+icon-5 = mail;
+icon-default = 
 
 [module/keyboard]
 type = custom/ipc
@@ -88,59 +116,6 @@ format-prefix = " "
 format-underline = ${colors.col3}
 click-left = display_todays_agenda.sh
 
-
-[module/filesystem]
-type = internal/fs
-interval = 25
-
-mount-0 = /
-
-label-mounted = %{F#0a81f5}%mountpoint%%{F-}: %percentage_used%%
-label-unmounted = %mountpoint% not mounted
-;;label-unmounted-foreground = ${colors.foreground-alt}
-
-
-[module/i3]
-type = internal/i3
-format = <label-state> <label-mode>
-index-sort = true
-wrapping-scroll = false
-
-padding = 1
-
-; focused = Active workspace on focused monitor
-label-focused = %icon%
-label-focused-background = ${colors.bg-active}
-label-focused-underline = ${colors.fg-active}
-label-focused-padding = ${self.padding}
-
-; unfocused = Inactive workspace on any monitor
-label-unfocused = %icon%
-label-unfocused-padding = ${self.padding}
-
-; visible = Active workspace on unfocused monitor
-label-visible = %icon%
-label-visible-background = ${colors.background}
-label-visible-underline = ${colors.foreground}
-label-visible-padding = ${self.padding}
-
-; urgent = Workspace with urgency hint set
-label-urgent = %icon%
-label-urgent-background = ${colors.bg-urgent}
-label-urgent-padding = ${self.padding}
-
-ws-icon-0 = 1;
-ws-icon-1 = 2;
-ws-icon-2 = 3;
-ws-icon-3 = 4;
-ws-icon-4 = 5;
-ws-icon-5 = 6;
-ws-icon-6 = 7;
-ws-icon-7 = 8;
-ws-icon-8 = 9;
-ws-icon-9 = 10;
-ws-icon-default = 
-
 [module/mpd]
 type = internal/mpd
 format-online = <label-song>  <icon-prev> <icon-stop> <toggle> <icon-next>
@@ -156,28 +131,6 @@ label-song-maxlen = 25
 label-song-ellipsis = true
 label-song = %title%
 
-[module/xbacklight]
-type = internal/xbacklight
-
-format = <label> <bar>
-label = BL
-
-bar-width = 10
-bar-indicator = |
-bar-indicator-foreground = #ff
-bar-indicator-font = 2
-bar-fill = ─
-bar-fill-font = 2
-bar-fill-foreground = #9f78e1
-bar-empty = ─
-bar-empty-font = 2
-;bar-empty-foreground = ${colors.foreground-alt}
-
-[module/backlight-acpi]
-inherit = module/xbacklight
-type = internal/backlight
-card = intel_backlight
-
 [module/cpu]
 type = internal/cpu
 interval = 2
@@ -192,17 +145,6 @@ interval = 2
 format-prefix = "ﴖ "
 format-underline = ${colors.col3}
 label = %percentage_used%%
-
-[module/eth]
-type = internal/network
-interface = enp0s31f6
-interval = 3.0
-
-format-connected-underline = ${colors.col3}
-format-connected-prefix = "旅 "
-label-connected = %local_ip%
-
-format-disconnected =
 
 [module/date]
 type = internal/date
@@ -278,10 +220,6 @@ animation-charging-5 = 
 animation-charging-6 = 
 
 animation-charging-framerate = 750
-
-[module/battery2]
-inherit = module/battery1
-battery = BAT1
 
 [settings]
 screenchange-reload = true

@@ -69,70 +69,59 @@ shift + Print
 # WM Keybindings
 ##########################################
 # change focus
-# super + $left focus left
-# super + $down focus down
-# super + $up focus up
-# super + $right focus right
-
-# alternatively, you can use the cursor keys:
 super + { Left, Right, Up, Down }
-      i3 focus { left, right, up ,down }
+      herbstclient focus { left, right, up ,down }
+
+super + i
+      herbstclient jumpto urgent 
 
 # move focused window
-# super + shift + $left move left
-# super + shift + $down move down
-# super + shift + $up move up
-# super + shift + $right move right
-
-# alternatively, you can use the cursor keys:
 super + shift + { Left, Right, Up, Down }
-      i3 move {left, right, up ,down}
+      herbstclient shift {left, right, up ,down}
 
 # resize
-alt + {Left, Right}
-    i3 resize {shrink, grow} width 10 px or 10 ppt
+super + alt + {Left, Right, Up, Down}
+    herbstclient resize {left, right, up, down} +0.05
 
-alt + {Up, Down}
-    i3 resize {shrink, grow} height 10 px or 10 ppt
-
-# split orientation
+# split frames
 super + {h, v}
-      i3 split {h,v}
+      herbstclient split {rigth,bottom} 0.5
+
+super + g
+      herbstclient split explode 
+
+
+# remove frame
+super + r
+      herbstclient  remove 
 
 # enter fullscreen mode for the focused container
 F11
-	i3 fullscreen toggle
-
-# change container layout (stacked, tabbed, toggle split)
-super + s
-      i3 layout stacking
-super + w
-      i3 layout tabbed
-super + e
-      i3 layout toggle split
-
-# toggle tiling / floating
-super + shift + space
-      i3 floating toggle
+	herbstclient fullscreen toggle
 
 # change focus between tiling / floating windows
 super + space
-      i3 focus mode_toggle
+      herbstclient floating toggle
+
+super + Tab
+      herbstclient or , and . compare tags.focus.curframe_wcount = 2            \
+                     . cycle_layout +1 vertical horizontal max vertical grid    \
+               	     , cycle_layout +1
 
 # switch to workspace
-super + {0-9}
-      i3 workspace {10,1-9}
+super + {1-9,0}
+      herbstclient use_index {0-9}
 
 # move focused container to workspace
-super + shift + {1-9}
-      i3 move container to workspace {1-9}
+super + shift + {1-9,0}
+      herbstclient move_index {0-9}
 
 # reload the configuration file
 super + q
-      i3 kill
+      herbstclient close
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 super + shift + r
-      i3 restart
-# exit i3 (logs you out of your X session)
+      herbstclient reload
+# exit herbstluftwm (logs you out of your X session)
 super + shift + e 
-	i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'
+	i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit herbstluftwm? This will end your X session.' -b 'Yes, exit i3' 'herbstclient quit'
