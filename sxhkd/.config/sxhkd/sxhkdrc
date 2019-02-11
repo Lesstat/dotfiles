@@ -54,9 +54,7 @@ XF86MonBrightnessUp
 
 # Change Background
 super + b 
-      wal -o wal-set -i ~/Desktop/
-super + shift + b 
-      wal -l -o wal-set -i ~/Desktop/
+      nitrogen ~/Desktop/
 
 # Take Screenshot
 Print 

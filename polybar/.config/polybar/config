@@ -8,15 +8,11 @@
 ;=====================================================
 
 [colors]
-bg-active =  ${xrdb:color5:#f0f0f0} 
-fg-active =  ${xrdb:color9:#f0f0f0} 
+bg-active =  ${xrdb:color0:#f0f0f0} 
 bg-urgent =  ${xrdb:color1:#f0f0f0} 
-background = ${xrdb:color2:#222}
-foreground = ${xrdb:color7:#222}
-col1 = ${xrdb:color3:#f0f0f0}
-col2 = ${xrdb:color4:#f0f0f0}
-col3 = ${xrdb:color6:#f0f0f0}
-col4 = ${xrdb:color8:#f0f0f0}
+background = ${xrdb:color8:#222}
+foreground = ${xrdb:foreground:#222}
+underline = ${xrdb:color6:#f0f0f0}
 
 
 [bar/main]
@@ -69,7 +65,7 @@ format = <label-state>
 
 label-active = %icon% %name% 
 label-active-background = ${colors.bg-active}
-label-active-underline = ${colors.fg-active}
+label-active-underline = ${colors.underline}
 label-active-padding = ${self.padding}
 
 label-occupied = %icon% %name% 
@@ -98,28 +94,28 @@ initial = 1
 click-left = changeKeyboard.sh
 
 format-prefix = " "
-format-underline = ${colors.col3}
+format-underline = ${colors.underline}
 
 [module/mail]
 type = custom/ipc
 hook-0 = notmuchWidget.sh
 initial = 1
-click-left = emacsclient -e "(notmuch)"
+click-left = execInEmacs.sh "(notmuch)"
 click-right = mail_sync.sh &
-format-underline = ${colors.col3}
+format-underline = ${colors.underline}
 
 [module/calendar]
 type = custom/script
 exec = next_khal_date.sh
 interval = 60
 format-prefix = " "
-format-underline = ${colors.col3}
+format-underline = ${colors.underline}
 click-left = display_todays_agenda.sh
 
 [module/mpd]
 type = internal/mpd
 format-online = <label-song>  <icon-prev> <icon-stop> <toggle> <icon-next>
-format-online-underline = ${colors.col3}
+format-online-underline = ${colors.underline}
 
 icon-prev = 玲
 icon-stop = 栗
@@ -136,14 +132,14 @@ type = internal/cpu
 interval = 2
 format-prefix = " "
 ;format-prefix-foreground = ${colors.foreground-alt}
-format-underline = ${colors.col3}
+format-underline = ${colors.underline}
 label = %percentage:2%%
 
 [module/memory]
 type = internal/memory
 interval = 2
 format-prefix = "ﴖ "
-format-underline = ${colors.col3}
+format-underline = ${colors.underline}
 label = %percentage_used%%
 
 [module/date]
@@ -158,7 +154,7 @@ time-alt = %H:%M:%S
 
 format-prefix = 
 ;format-prefix-foreground = ${colors.foreground-alt}
-format-underline = ${colors.col3}
+format-underline = ${colors.underline}
 
 label = %date% %time%
 
@@ -166,7 +162,7 @@ label = %date% %time%
 type = internal/volume
 
 format-volume = <label-volume> <bar-volume>
-format-underline = ${colors.col3}
+format-underline = ${colors.underline}
 label-volume = VOL
 label-volume-foreground = ${root.foreground}
 
@@ -198,7 +194,7 @@ adapter = ADP1
 full-at = 90
 
 format-charging = <animation-charging> <label-charging>
-format-charging-underline = ${colors.col3}
+format-charging-underline = ${colors.underline}
 
 format-discharging = <ramp-capacity> <label-discharging>
 format-discharging-underline = ${self.format-charging-underline}
@@ -236,5 +232,5 @@ margin-bottom = 5
 [module/title]
 type = internal/xwindow
 label-maxlen = 50
-format-underline = ${colors.col3}
+format-underline = ${colors.underline}
 ; vim:ft=dosini
