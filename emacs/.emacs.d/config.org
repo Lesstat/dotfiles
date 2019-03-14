@@ -337,19 +337,19 @@ provided as org-contrib package.
     :config
     (require 'org-notmuch)
     (setq notmuch-saved-searches
-     (quote
-      ((:name "inbox" :query "tag:inbox" :key "i")
-       (:name "unread" :query "tag:unread" :key "u")
-       (:name "flagged" :query "tag:flagged" :key "f")
-       (:name "sent" :query "tag:sent" :key "t")
-       (:name "drafts" :query "tag:draft" :key "d")
-       (:name "spam" :query "tag:spam AND tag:unread" :key "s")
-       (:name "gmx" :query "tag:gmx")
-       (:name "studi_mail" :query "tag:uni")
-       (:name "todo" :query "tag:todo")
-       (:name "reply" :query "tag:doReply")
-       (:name "waiting" :query "tag:waiting")
-       )))
+          (quote
+           ((:name "inbox" :query "tag:inbox" :key "i")
+            (:name "unread" :query "tag:unread" :key "u")
+            (:name "flagged" :query "tag:flagged" :key "f")
+            (:name "sent" :query "tag:sent" :key "t")
+            (:name "drafts" :query "tag:draft" :key "d")
+            (:name "spam" :query "tag:spam AND tag:unread" :key "s")
+            (:name "gmx" :query "tag:gmx")
+            (:name "studi_mail" :query "tag:uni")
+            (:name "todo" :query "tag:todo")
+            (:name "reply" :query "tag:doReply")
+            (:name "waiting" :query "tag:waiting")
+            )))
     (setq notmuch-archive-tags '("-inbox" "-unread")
           message-kill-buffer-on-exit t
           notmuch-search-oldest-first nil
@@ -361,9 +361,12 @@ provided as org-contrib package.
           message-sendmail-f-is-evil t
           message-send-mail-function 'message-send-mail-with-sendmail
           mml-secure-openpgp-encrypt-to-self t
-          ) 
-      (add-hook 'message-setup-hook 'mml-secure-message-sign-pgpmime)
-   )
+          )
+
+    ;; # was bound to notmuch-show-print-message which lead to some paper wasting
+    (define-key notmuch-show-mode-map "#" nil)
+    (add-hook 'message-setup-hook 'mml-secure-message-sign-pgpmime)
+    )
 
 #+END_SRC
 ** Ace-window
