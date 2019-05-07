@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 # this is a simple config for herbstluftwm
+source ~/.zshrc 
 
 hc() {
     herbstclient "$@"
@@ -20,6 +21,8 @@ Mod=Mod4    # Use super as the main modifier
 hc mouseunbind --all
 hc mousebind $Mod-Button1 move
 hc mousebind $Mod-Button2 resize
+
+hc set default_frame_layout 3
 
 # tags
 tag_names=( code shell org doc web mail misc )
