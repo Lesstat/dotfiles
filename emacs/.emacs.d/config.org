@@ -1308,12 +1308,6 @@ I wrote a little shortcut for that.
   (define-key global-map "\C-cd" 'fb/switch_dict)
 #+END_SRC
 * Temp
-** org-caldav
-#+BEGIN_SRC emacs-lisp
-  (use-package org-caldav
-    :ensure t)
-
-#+END_SRC
 ** Auctex
 Auctex seems to be the greatest LaTeX package around. Setting
 Tex-master to nil makes Auctex ask for the master file to compile if
@@ -1354,17 +1348,6 @@ the document consists of multiple files.
     :ensure t
     :config
     (editorconfig-mode 1))
-#+END_SRC
-** wal config
-#+BEGIN_SRC emacs-lisp
-  (defun fb/load-wal-theme ()
-    (interactive)
-    (use-package xresources-theme
-      :ensure t
-      :config
-      (load-theme 'xresources)
-      )
-    )
 #+END_SRC
 ** latexmk for auctex
 #+BEGIN_SRC emacs-lisp
