@@ -42,7 +42,11 @@ define a path for packages I manipulate myself.
 #+END_SRC
 *** My base16-nord Theme
 #+BEGIN_SRC emacs-lisp 
-  (load-theme 'fb-base16-nord)
+  (use-package base16-theme
+    :ensure t
+    :config
+    (load-theme 'fb-base16-nord)
+    )
 #+END_SRC
 ** Evil-mode
 As much as I love Emacs I love having vim keybindings :)
