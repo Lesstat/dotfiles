@@ -11,7 +11,7 @@ super + l
 super + shift + l 
       lock.sh -h
 super + p
-      rofi -auto-select -show drun -lines 12 -eh 1 -width 50 -bw 0 -font "DejaVuSansMono 12"
+      dmenu_run
 
 super + shift + q 
       i3-nagbar -t warning -m 'You pressed the shutdown shortcut. Do you really want to shutdown?' -b 'Yes, shutdown now' 'exec shutdown now'
