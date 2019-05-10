@@ -439,7 +439,7 @@ provided as org-contrib package.
      '((auto-mode . emacs)
       ("\\.mm\\'" . default)
       ("\\.x?html?\\'" . default)
-      ("\\.pdf\\'" . "evince %s")))
+      ("\\.pdf\\'" . "zathura %s")))
 
    (use-package org-ref
      :ensure t)
@@ -458,33 +458,30 @@ provided as org-contrib package.
 ** *Org*anizing features
 *** Todo Stuff
 #+BEGIN_SRC emacs-lisp
+  (setq fb/inbox-file "~/brain/org/inbox.org")
   (setq org-todo-keywords
-        '((sequence "TODO(t!)" "NEXT(n!)" "IN-PROGRESS(p!)" "|" "DONE(d@)")
-          (sequence "WAITING(w@)" "REFILE(r)" "|" "CANCELLED(c)")))
-  (setq
-   org-global-properties  '(("EFFORT_ALL" . "00:25 00:50 01:15 01:40 00:10"))
-   org-columns-default-format "%25ITEM %TODO %6EFFORT(Effort) %6CLOCKSUM(Clock) %TAGS")
+        '((sequence "TODO(t!)" "|" "DONE(d@)")
+          (sequence "WAITING(w@)"  "|" "CANCELLED(c)")))
   '(org-enforce-todo-dependencies t)
   (setq org-refile-targets '((org-agenda-files :maxlevel . 5)
                              (fb/org-someday-file :maxlevel . 3)))
   (setq org-capture-templates
-        '(("t" "TODO" entry (file+headline org-default-notes-file "Tasks")
-           "** REFILE  %^{heading}  
+        '(("t" "TODO" entry (file fb/inbox-file)
+           "* TODO %?
   :PROPERTIES:
-  :CREATION_DOC: %a 
+  :CREATION_DOC: %a
   :CREATION_DATE: %U
   :END:
-  %?")
-          ("r" "Reference" entry 
-           (file+headline fb/org-references-file "Referenzen") ;; Variable is set in custom.el to differentiate between computers
-           "%? %T %a %x")
-          ("w" "Weekly Review" entry
-           (file+datetree fb/org-diary-file)
-           (file "~/.emacs.d/org-capture-template/weekly_review.org")
-           :jump-to-captured t)
-          ("d" "Diary entry" entry
-           (file+datetree fb/org-diary-file)
-           "* %?" :jump-to-captured t)))
+  ")
+          ("n" "note" entry (file fb/inbox-file)
+           "* %?
+  :PROPERTIES:
+  :CREATION_DOC: %a
+  :CREATION_DATE: %U
+  :END:
+  %x")
+          )
+        )
 #+END_SRC
 I want know when i finished my Todos or reschedule something.
 #+BEGIN_SRC emacs-lisp
