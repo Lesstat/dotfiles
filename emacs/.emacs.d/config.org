@@ -397,6 +397,38 @@ provided as org-contrib package.
                    purpose-display-maybe-pop-up-frame))
     )
 #+END_SRC
+** narrow to dwim
+#+BEGIN_SRC emacs-lisp
+  (defun narrow-or-widen-dwim (p)
+    "Widen if buffer is narrowed, narrow-dwim otherwise.
+  Dwim means: region, org-src-block, org-subtree, or
+  defun, whichever applies first. Narrowing to
+  org-src-block actually calls `org-edit-src-code'.
+
+  With prefix P, don't widen, just narrow even if buffer
+  is already narrowed."
+    (interactive "P")
+    (declare (interactive-only))
+    (cond ((and (buffer-narrowed-p) (not p)) (widen))
+          ((org-src-edit-buffer-p) (org-edit-src-exit))
+          ((region-active-p)
+           (narrow-to-region (region-beginning)
+                             (region-end)))
+          ((derived-mode-p 'org-mode)
+           ;; `org-edit-src-code' is not a real narrowing
+           ;; command. Remove this first conditional if
+           ;; you don't want it.
+           (cond ((ignore-errors (org-edit-src-code) t)
+                  (delete-other-windows))
+                 ((ignore-errors (org-narrow-to-block) t))
+                 (t (org-narrow-to-subtree))))
+          ((derived-mode-p 'latex-mode)
+           (LaTeX-narrow-to-environment))
+          (t (narrow-to-defun))))
+
+  (global-set-key (kbd "C-c '"  ) 'narrow-or-widen-dwim)
+
+  #+END_SRC
 * Org-mode
 #+BEGIN_SRC emacs-lisp
 
@@ -594,7 +626,14 @@ I don't want to mix tabs with spaces, so I'm going all spaces.
         tab-always-indent 'complete)
 
 #+END_SRC
-** Dumb-Jump
+*** Editorconfig
+#+BEGIN_SRC emacs-lisp
+  (use-package editorconfig
+    :ensure t
+    :config
+    (editorconfig-mode 1))
+#+END_SRC
+*** Dumb-Jump
 Dumb-Jump gives jump to definition functionality by searching instead
 of creating tags beforehand.
 #+BEGIN_SRC emacs-lisp
@@ -603,14 +642,14 @@ of creating tags beforehand.
     :config
     (dumb-jump-mode))
 #+END_SRC
-** Magit
+*** Magit
 #+BEGIN_SRC emacs-lisp
   (use-package magit
     :ensure t
     :config
     (define-key magit-status-mode-map (kbd "SPC") evil-leader--default-map))
 #+END_SRC
-** Company - Auto Completion
+*** Company - Auto Completion
 #+BEGIN_SRC emacs-lisp
   (use-package company
     :ensure t
@@ -659,7 +698,7 @@ of creating tags beforehand.
     )
 #+END_SRC
 
-** Flycheck 
+*** Flycheck 
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
     :ensure t
@@ -889,43 +928,43 @@ racer to work.
     (add-hook 'c++-mode-hook '(lambda () (hs-minor-mode 1)))
     )
 #+END_SRC
-** narrow to dwim
-#+BEGIN_SRC emacs-lisp
-  (defun narrow-or-widen-dwim (p)
-    "Widen if buffer is narrowed, narrow-dwim otherwise.
-  Dwim means: region, org-src-block, org-subtree, or
-  defun, whichever applies first. Narrowing to
-  org-src-block actually calls `org-edit-src-code'.
-
-  With prefix P, don't widen, just narrow even if buffer
-  is already narrowed."
-    (interactive "P")
-    (declare (interactive-only))
-    (cond ((and (buffer-narrowed-p) (not p)) (widen))
-          ((org-src-edit-buffer-p) (org-edit-src-exit))
-          ((region-active-p)
-           (narrow-to-region (region-beginning)
-                             (region-end)))
-          ((derived-mode-p 'org-mode)
-           ;; `org-edit-src-code' is not a real narrowing
-           ;; command. Remove this first conditional if
-           ;; you don't want it.
-           (cond ((ignore-errors (org-edit-src-code) t)
-                  (delete-other-windows))
-                 ((ignore-errors (org-narrow-to-block) t))
-                 (t (org-narrow-to-subtree))))
-          ((derived-mode-p 'latex-mode)
-           (LaTeX-narrow-to-environment))
-          (t (narrow-to-defun))))
-
-  (global-set-key (kbd "C-c '"  ) 'narrow-or-widen-dwim)
-
-  #+END_SRC
 ** Compilation Mode
 #+BEGIN_SRC emacs-lisp
   (setq compilation-scroll-output 'first-error)
   (add-hook 'compilation-filter-hook
     (lambda () (ansi-color-apply-on-region (point-min) (point-max))))
+#+END_SRC
+** Latex - Auctex
+Auctex seems to be the greatest LaTeX package around. Setting
+Tex-master to nil makes Auctex ask for the master file to compile if
+the document consists of multiple files.
+#+BEGIN_SRC emacs-lisp
+  (use-package tex
+    :defer t
+    :ensure auctex
+    :config
+    (setq-default TeX-master nil)
+    (defun fb/latexhook ()
+      (TeX-fold-mode)
+      (turn-on-reftex))
+    (add-hook 'LaTeX-mode-hook 'fb/latexhook)
+    (setq reftex-plug-into-AUCTeX t)
+    (evil-leader/set-key-for-mode 'latex-mode
+      "x" 'reftex-citation
+      "v" 'reftex-label
+      "V" 'reftex-reference)
+    )
+#+END_SRC
+*** latexmk for auctex
+#+BEGIN_SRC emacs-lisp
+  (use-package auctex-latexmk
+    :ensure t
+    :config
+    (auctex-latexmk-setup)
+    (setq auctex-latexmk-inherit-TeX-PDF-mode t)
+    (add-to-list 'TeX-output-view-style
+                 '("^pdf$" "." "okular %o %(outpage)"))
+    )
 #+END_SRC
 * Yasnippet
 Yasnippet provides great support for templates. But it destroys
@@ -970,45 +1009,6 @@ I wrote a little shortcut for that.
   (define-key global-map "\C-cd" 'fb/switch_dict)
 #+END_SRC
 * Temp
-** Auctex
-Auctex seems to be the greatest LaTeX package around. Setting
-Tex-master to nil makes Auctex ask for the master file to compile if
-the document consists of multiple files.
-#+BEGIN_SRC emacs-lisp
-  (use-package tex
-    :defer t
-    :ensure auctex
-    :config
-    (setq-default TeX-master nil)
-    (defun fb/latexhook ()
-      (TeX-fold-mode)
-      (turn-on-reftex))
-    (add-hook 'LaTeX-mode-hook 'fb/latexhook)
-    (setq reftex-plug-into-AUCTeX t)
-    (evil-leader/set-key-for-mode 'latex-mode
-      "x" 'reftex-citation
-      "v" 'reftex-label
-      "V" 'reftex-reference)
-    )
-#+END_SRC
-** Editorconfig
-#+BEGIN_SRC emacs-lisp
-  (use-package editorconfig
-    :ensure t
-    :config
-    (editorconfig-mode 1))
-#+END_SRC
-** latexmk for auctex
-#+BEGIN_SRC emacs-lisp
-  (use-package auctex-latexmk
-    :ensure t
-    :config
-    (auctex-latexmk-setup)
-    (setq auctex-latexmk-inherit-TeX-PDF-mode t)
-    (add-to-list 'TeX-output-view-style
-                 '("^pdf$" "." "okular %o %(outpage)"))
-    )
-#+END_SRC
 ** jinja2
 #+BEGIN_SRC emacs-lisp
   (use-package jinja2-mode
