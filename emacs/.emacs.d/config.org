@@ -652,7 +652,10 @@ of creating tags beforehand.
   (use-package magit
     :ensure t
     :config
-    (define-key magit-status-mode-map (kbd "SPC") evil-leader--default-map))
+    (define-key magit-status-mode-map (kbd "SPC") evil-leader--default-map)
+    ;; Ensures that commit buffer opens in insert mode
+    (add-hook 'with-editor-mode-hook 'evil-insert-state)
+    )
 #+END_SRC
 *** Company - Auto Completion
 #+BEGIN_SRC emacs-lisp
