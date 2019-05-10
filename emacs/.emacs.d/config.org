@@ -491,7 +491,8 @@ I want know when i finished my Todos or reschedule something.
 
 **** Org-pomodoro
 Pomodoro Timer for Org-mode. I added a little buffer reminding me that
-a pomodoro is over when I need to mute my audio.
+a pomodoro is over when I need to mute my audio. Additionally, a
+little pop-up is displayed via ~notify-send~. 
 #+BEGIN_SRC emacs-lisp
   (defun fb/display-pomodoro-finished-buffer ()
       (let (
@@ -501,6 +502,7 @@ a pomodoro is over when I need to mute my audio.
         (pop-to-buffer pomodoro-buffer) 
         (insert "Your pomodoro is finished. Now a break starts.")
         )
+        (shell-command "notify-send -t 30000 'Pomodoro is done'")
     )
 
   (use-package org-pomodoro
