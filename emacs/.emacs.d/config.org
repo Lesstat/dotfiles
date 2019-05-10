@@ -137,6 +137,7 @@ alternative leader key for modes where evil is not active.
         (fb/powerline-evil-center-color-theme-no-minor-modes)
         )
       )
+
     (use-package evil-org
       :ensure t
       :after org
@@ -145,6 +146,7 @@ alternative leader key for modes where evil is not active.
       (add-hook 'evil-org-mode-hook
                 (lambda ()
                   (evil-org-set-key-theme))))
+
     (use-package evil-leader
       :ensure t
       :config
@@ -152,7 +154,6 @@ alternative leader key for modes where evil is not active.
       (evil-leader/set-leader "SPC")
       (evil-leader/set-key
         "r" 'counsel-M-x
-        "o d" 'org-drill
         "o s" 'org-caldav-sync
         "o a" 'org-agenda
         "o c" 'org-capture
@@ -189,15 +190,12 @@ alternative leader key for modes where evil is not active.
         (evil-leader/set-key-for-mode 'go-mode
           "g" 'godef-jump
           "d" 'godoc-at-point)
-        (evil-leader/set-key-for-mode 'hledger-mode
-          "x" 'hledger-toggle-star
-          "v" 'fb/hleder-view-mode-in-new-buffer
-          )
         (evil-leader/set-key-for-mode 'c++-mode
           "g" 'rtags-find-symbol-at-point
           "ä" 'srefactor-refactor-at-point)
         (define-key global-map (kbd "<f5>") evil-leader--default-map)
         )
+
     (use-package nlinum-relative
       :ensure t
       :config
@@ -228,7 +226,14 @@ A more powerful way to move with evil mode. [[https://github.com/hlissner/evil-s
     (setq
      evil-snipe-scope 'buffer
      evil-snipe-repeat-scope 'whole-buffer)
-    (add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode))
+    (add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode)
+    (evil-define-key '(normal motion) 'evil-snipe-local-mode-map
+      "f" 'evil-snipe-s
+      "F" 'evil-snipe-S
+      "t" 'evil-snipe-x
+      "T" 'evil-snipe-X
+      )
+    )
 
 #+END_SRC
 
