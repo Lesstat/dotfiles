@@ -491,21 +491,6 @@ I want know when i finished my Todos or reschedule something.
   (setq org-log-done (quote time)
         org-log-into-drawer t)
 #+END_SRC
-Identifying stuck projects is an important part of GTD. But I only
-want top level :prj: tagged headings to be listed, so I exclude :prj:
-from tag inheritance.
-#+BEGIN_SRC emacs-lisp
-  (setq org-stuck-projects
-        '(
-          "+prj"
-          ( "NEXT" "IN-PROGRESS")
-          ("maybe")
-          ""
-          )
-        org-tags-exclude-from-inheritance '("prj") 
-        )
-
-#+END_SRC
 
 **** Org-pomodoro
 Pomodoro Timer for Org-mode. I added a little buffer reminding me that
@@ -530,12 +515,6 @@ a pomodoro is over when I need to mute my audio.
 
     )
 #+END_SRC
-As I am already fiddling around with timers, I will automatically
-change the State to in progress when a timer is activated.
-#+BEGIN_SRC emacs-lisp
-  (setq org-clock-in-hook
-        '(lambda () (if (org-entry-is-todo-p) (org-todo  "IN-PROGRESS" ))))
-#+END_SRC
 *** Agenda Stuff
 #+BEGIN_SRC emacs-lisp
   (setq org-agenda-span 'day)
@@ -559,7 +538,6 @@ Repeating Task should show only once.
   (define-key global-map "\C-cc" 'org-capture)
   (define-key global-map "\C-ca" 'org-agenda)
   (define-key global-map "\C-cl" 'org-store-link)
-  (define-key global-map "\C-cb" 'org-iswitchb)
 #+END_SRC
 ** Org-Babel
 #+BEGIN_SRC emacs-lisp
@@ -600,222 +578,6 @@ to work.
 #+BEGIN_SRC emacs-lisp
 (setq org-latex-listings 'minted)
 #+END_SRC
-**** Latex Classes
-#+BEGIN_SRC emacs-lisp
-
-(add-to-list 'org-latex-classes
-	     '("llncs"
-	       "
-\\documentclass[pdftex,english,oribibl]{llncs}
-
-%% Spracheinstellungen laden
-\\usepackage[english]{babel}
-
-%% Schriftart in der Ausgabe/Eingabe
-\\usepackage[T1]{fontenc}
-\\usepackage{textcomp}
-\\usepackage[utf8]{inputenc}
-
-%% Zitate
-\\usepackage[numbers]{natbib}
-\\bibliographystyle{abbrvnat}
-%\\bibliographystyle{dinat}
-%\\bibliographystyle{plainnat}
-%\\bibliographystyle{splncs}
-%% Similar to option \"sectionbib\" but \\refname instead of \\bibname
-\\makeatletter
-\\renewcommand\\bibsection{\\section*{\\refname\\@mkboth{\\MakeUppercase{\\refname}}{\\MakeUppercase{\\refname}}}}
-\\makeatother
-
-%% Index
-%\\usepackage{makeidx}
-%\\makeindex
-
-\\usepackage{minted}
-%% PDF Einstellungen
-% muss nach natbib geladen werden!
-\\usepackage{nameref}
-\\usepackage{varioref}
-\\usepackage[pdfusetitle,pdftex,colorlinks]{hyperref}
-\\hypersetup{pdfborder={0 0 0}}
-\\hypersetup{bookmarksdepth=3}
-\\hypersetup{bookmarksopen=true}
-\\hypersetup{bookmarksopenlevel=1}
-\\hypersetup{bookmarksnumbered=true}
-\\usepackage{color}
-\\hypersetup{colorlinks=false}
-
-%\\usepackage[section]{tocbibind}
-
-\\makeatletter
-\\gdef\\@keywords{}
-\\def\\keywords#1{\\gdef\\@keywords{#1}}
-\\gdef\\@subtitle{}
-\\def\\subtitle#1{\\gdef\\@subtitle{#1}}
-
-%% modified from llncs
-\\renewenvironment{abstract}{%
-  \\list{}{\\advance\\topsep by0.35cm\\relax\\small%
-          \\leftmargin=1cm%
-          \\labelwidth=\\z@%
-          \\listparindent=\\z@%
-          \\itemindent\\listparindent%
-          \\rightmargin\\leftmargin}%
-          \\item[\\hskip\\labelsep\\bfseries\\abstractname]}{%
-  \\if!\\@keywords!\\else{\\item[~]\\item[\\hskip\\labelsep\\bfseries\\keywordname]\\@keywords}\\fi%
-  \\endlist}
-
-\\AtBeginDocument{%
-  \\if!\\@subtitle!\\else\\hypersetup{pdfsubject={\\@subtitle}}\\fi
-  \\if!\\@keywords!\\else\\hypersetup{pdfkeywords={\\@keywords}}\\fi
-}
-\\makeatother
-
-% llncs hyperref fix
-\\makeatletter
-\\providecommand*{\\toclevel@author}{0}
-\\providecommand*{\\toclevel@title}{0}
-\\makeatother
-
-%% Grafiken
-\\usepackage[pdftex]{graphicx}
-\\DeclareGraphicsExtensions{.pdf,.jpg,.png}
-\\usepackage{subfigure}
-
-%% Mathe
-\\usepackage{amsmath}
-\\usepackage{amssymb}
-
-%% Listings
-\\usepackage{listings}
-\\lstset{escapechar=\\%, frame=tb, basicstyle=\\footnotesize}
-
-%% Sonstiges
-\\newcommand{\\TODO}[1]{\\par\\textcolor{red}{#1}\\marginpar{\\textcolor{red}{TODO}}}
-\\newcommand{\\TODOX}[1]{\\textcolor{red}{#1}\\marginpar{\\textcolor{red}{TODO}}}
-\\pagestyle{plain}
-
-% Keine \"Schusterjungen\"
-\\clubpenalty = 10000
-% Keine \"Hurenkinder\"
-\\widowpenalty = 10000 \\displaywidowpenalty = 10000
-      
-      [NO-DEFAULT-PACKAGES]
-      [NO-PACKAGES]"
-  ("\\section{%s}" . "\\section*{%s}")
-  ("\\subsection{%s}" . "\\subsection*{%s}")
-  ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-  ("\\paragraph{%s}" . "\\paragraph*{%s}")
-  ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
-	     )
-
-(add-to-list 'org-latex-classes
-	     '("llncs_deutsch"
-	       "
-\\documentclass[pdftex,german,oribibl]{llncs}
-
-%% Spracheinstellungen laden
-\\usepackage[main=german]{babel}
-
-%% Schriftart in der Ausgabe/Eingabe
-\\usepackage[T1]{fontenc}
-\\usepackage{textcomp}
-\\usepackage[utf8]{inputenc}
-
-%% Zitate
-\\usepackage[numbers]{natbib}
-\\bibliographystyle{abbrvnat}
-%\\bibliographystyle{dinat}
-%\\bibliographystyle{plainnat}
-%\\bibliographystyle{splncs}
-%% Similar to option \"sectionbib\" but \\refname instead of \\bibname
-\\makeatletter
-\\renewcommand\\bibsection{\\section*{\\refname\\@mkboth{\\MakeUppercase{\\refname}}{\\MakeUppercase{\\refname}}}}
-\\makeatother
-
-%% Index
-%\\usepackage{makeidx}
-%\\makeindex
-
-\\usepackage{minted}
-%% PDF Einstellungen
-% muss nach natbib geladen werden!
-\\usepackage{nameref}
-\\usepackage{varioref}
-\\usepackage[pdfusetitle,pdftex,colorlinks]{hyperref}
-\\hypersetup{pdfborder={0 0 0}}
-\\hypersetup{bookmarksdepth=3}
-\\hypersetup{bookmarksopen=true}
-\\hypersetup{bookmarksopenlevel=1}
-\\hypersetup{bookmarksnumbered=true}
-\\usepackage{color}
-\\hypersetup{colorlinks=false}
-
-%\\usepackage[section]{tocbibind}
-
-\\makeatletter
-\\gdef\\@keywords{}
-\\def\\keywords#1{\\gdef\\@keywords{#1}}
-\\gdef\\@subtitle{}
-\\def\\subtitle#1{\\gdef\\@subtitle{#1}}
-
-%% modified from llncs
-\\renewenvironment{abstract}{%
-  \\list{}{\\advance\\topsep by0.35cm\\relax\\small%
-          \\leftmargin=1cm%
-          \\labelwidth=\\z@%
-          \\listparindent=\\z@%
-          \\itemindent\\listparindent%
-          \\rightmargin\\leftmargin}%
-          \\item[\\hskip\\labelsep\\bfseries\\abstractname]}{%
-  \\if!\\@keywords!\\else{\\item[~]\\item[\\hskip\\labelsep\\bfseries\\keywordname]\\@keywords}\\fi%
-  \\endlist}
-
-\\AtBeginDocument{%
-  \\if!\\@subtitle!\\else\\hypersetup{pdfsubject={\\@subtitle}}\\fi
-  \\if!\\@keywords!\\else\\hypersetup{pdfkeywords={\\@keywords}}\\fi
-}
-\\makeatother
-
-% llncs hyperref fix
-\\makeatletter
-\\providecommand*{\\toclevel@author}{0}
-\\providecommand*{\\toclevel@title}{0}
-\\makeatother
-
-%% Grafiken
-\\usepackage[pdftex]{graphicx}
-\\DeclareGraphicsExtensions{.pdf,.jpg,.png}
-\\usepackage{subfigure}
-
-%% Mathe
-\\usepackage{amsmath}
-\\usepackage{amssymb}
-
-%% Listings
-\\usepackage{listings}
-\\lstset{escapechar=\\%, frame=tb, basicstyle=\\footnotesize}
-
-%% Sonstiges
-\\newcommand{\\TODO}[1]{\\par\\textcolor{red}{#1}\\marginpar{\\textcolor{red}{TODO}}}
-\\newcommand{\\TODOX}[1]{\\textcolor{red}{#1}\\marginpar{\\textcolor{red}{TODO}}}
-\\pagestyle{plain}
-
-% Keine \"Schusterjungen\"
-\\clubpenalty = 10000
-% Keine \"Hurenkinder\"
-\\widowpenalty = 10000 \\displaywidowpenalty = 10000
-      
-      [NO-DEFAULT-PACKAGES]
-      [NO-PACKAGES]"
-  ("\\section{%s}" . "\\section*{%s}")
-  ("\\subsection{%s}" . "\\subsection*{%s}")
-  ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-  ("\\paragraph{%s}" . "\\paragraph*{%s}")
-  ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
-	     )
-#+END_SRC
-
 *** Number formatting in Tables
 I hacked together a little function which replaces the point by a
 comma in decimal numbers on export if I need a German display style in
@@ -832,80 +594,6 @@ presentations / papers. Activation by uncommenting the add-hook call.
 ;;          'fb/org-use-comma-in-exported-tables)
 #+END_SRC
 
-** org-drill
-Proudly stolen from [[http://www.giovannicarmantini.com/2015/07/putting-some-make-up-on-my-org-mode-flashcards][Giovanni]]
-#+BEGIN_SRC emacs-lisp
-  (require 'org-drill)
-  (setq org-drill-left-cloze-delimiter "!|"
-        org-drill-right-cloze-delimiter "|!"
-        org-drill-sm5-initial-interval 2.0
-        org-drill-add-random-noise-to-intervals-p t
-        org-drill-scope 'agenda
-        org-drill-learn-fraction 0.45)
-
-  (add-hook 'org-export-before-processing-hook 'gsc/drill-cloze-removal)
-
-  ;; hide clozes in text ;;
-  (defvar gsc/drill-groups-to-hide '(1 3 4) 
-    "Group 1 and 4 are the left and right delimiters respectively,
-    group 3 is the cloze hint.")
-
-  (setplist 'gsc/inv-cloze '(invisible t))
-
-  (defun gsc/drill-cloze-removal (backend)
-    "Remove drill clozes in the current buffer. BACKEND is the
-  export back-end being used, as a symbol."
-    (while (re-search-forward (gsc/drill-compute-cloze-regexp) nil t)
-      ;; (Copy-pasted this from org-drill-el)
-      ;; Don't delete:
-      ;; - org links, partly because they might contain inline
-      ;;   images which we want to keep visible.
-      ;; - LaTeX math fragments
-      ;; - the contents of SRC blocks
-      (unless (save-match-data
-                (or (org-pos-in-regexp (match-beginning 0)
-                                       org-bracket-link-regexp 1)
-                    (org-in-src-block-p)
-                    (org-inside-LaTeX-fragment-p)))       
-        (replace-match "\\2" nil nil))))
-
-  (defun gsc/drill-compute-cloze-regexp ()
-    "Same regular expression as in org-drill-cloze-regexp,
-  but adding a group for the first delimiter, so that it can be
-  distinguished easily in a match."
-    (concat "\\("
-            (regexp-quote org-drill-left-cloze-delimiter)
-            "\\)\\([[:cntrl:][:graph:][:space:]]+?\\)\\(\\|"
-            (regexp-quote org-drill-hint-separator)
-            ".+?\\)\\("
-            (regexp-quote org-drill-right-cloze-delimiter)
-            "\\)"))
-  (defun gsc/hide-clozes-groups ()
-    (save-excursion
-      (goto-char (point-min))
-      (let ((cloze-regexp (gsc/drill-compute-cloze-regexp)))
-        (while (re-search-forward cloze-regexp nil t)
-          (loop for group in gsc/drill-groups-to-hide do
-                (overlay-put 
-                 (make-overlay (match-beginning group) (match-end group))
-                 'category 'gsc/inv-cloze))))))
-
-  (defun gsc/show-clozes-all ()
-    (save-excursion
-      (goto-char (point-min)) 
-      (while (re-search-forward (gsc/drill-compute-cloze-regexp) nil t)
-        (remove-overlays 
-         (match-beginning 1) (match-end 4) 'category 'gsc/inv-cloze))))
-
-  (defun gsc/hide-show-clozes (arg)
-    "If called with no argument, hides delimiters and hints for org-drill clozes.
-    If called with the C-u universal ARG, it shows them."
-    (interactive "p")
-    (case arg
-      (1 (gsc/hide-clozes-groups))
-      (4 (gsc/show-clozes-all))))
-  (define-key org-mode-map (kbd "C-c s") 'gsc/hide-show-clozes)
-#+END_SRC
 ** calfw
 #+BEGIN_SRC emacs-lisp
     (use-package calfw
