@@ -494,6 +494,8 @@ provided as org-contrib package.
   %x")
           )
         )
+
+  (setq org-archive-location "~/brain/archive/archive.org::datetree/* Finished")
 #+END_SRC
 I want know when i finished my Todos or reschedule something.
 #+BEGIN_SRC emacs-lisp
