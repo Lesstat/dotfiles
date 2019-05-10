@@ -1154,11 +1154,11 @@ racer to work.
       :config
       (push 'racer-help-mode evil-emacs-state-modes)
       (use-package company-racer
-	:ensure t)
+        :ensure t)
       )
       (use-package flycheck-rust
-	:ensure t
-	)
+        :ensure t
+        )
 
     (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
     (add-hook 'rust-mode-hook
@@ -1170,7 +1170,7 @@ racer to work.
                  (racer-turn-on-eldoc)
                  ;; Use flycheck-rust in rust-mode
                  (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
-                 (flycheck-select-checker 'rust-clippy)
+                 (setq flycheck-checker 'rust-clippy)
                  ;; Use company-racer in rust mode
                  (set (make-local-variable 'company-backends) '(company-racer))
                  (rust-enable-format-on-save)
