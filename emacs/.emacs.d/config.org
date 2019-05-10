@@ -469,14 +469,14 @@ provided as org-contrib package.
   (setq org-refile-targets '((org-agenda-files :maxlevel . 5)
                              (fb/org-someday-file :maxlevel . 3)))
   (setq org-capture-templates
-        '(("t" "TODO" entry (file fb/inbox-file)
+        '(("t" "Todo" entry (file fb/inbox-file)
            "* TODO %?
   :PROPERTIES:
   :CREATION_DOC: %a
   :CREATION_DATE: %U
   :END:
   ")
-          ("n" "note" entry (file fb/inbox-file)
+          ("n" "Note" entry (file fb/inbox-file)
            "* %?
   :PROPERTIES:
   :CREATION_DOC: %a
