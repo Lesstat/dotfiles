@@ -75,36 +75,6 @@ alias ta='task add'
 alias tm='task modify'
 alias ttt='task modify wait:tomorrow'
 
-function process_task_inbox(){
-    uuids=$(task -TAGGED and +PENDING uuids)
-    if [[ -z "${uuids}" ]]; then
-	echo "Inbox is empty";
-	return
-    fi
-
-    tmux split-window -h
-    for uuid in ${=uuids}; do
-	task $uuid information
-	read irrelevant
-    done
-
-    count=$(task -TAGGED and +PENDING count)
-    echo "Inbox has now ${count} elements"
-}
-
-alias tin='process_task_inbox'
-
-function open_projects_file() {
-   twpath=$(task _get rc.data.location) 
-   if [[ -z $1 ]]; then
-       emacsclient -c -n -a "" "${twpath}/projects"
-   else
-       pro=$1
-       emacsclient -c -n -a "" "${twpath}/projects/${pro}.org"
-   fi
-}
-alias tpro='open_projects_file'
-
 
 case $TERM in
 	screen*)
