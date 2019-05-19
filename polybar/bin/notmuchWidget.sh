@@ -1,7 +1,11 @@
-#!/bin/bash
+#!/bin/sh
 
-hash notmuch &> /dev/null || exit # leave if notmuch is not present
+hash notmuch > /dev/null 2>&1 || exit # leave if notmuch is not present
 
 mails=$(notmuch count tag:unread OR tag:inbox OR tag:unread AND tag:spam )
 
-((mails > 0)) && echo "" || echo ""
+if [ "$mails" -gt 0 ]; then
+    echo "" 
+else
+    echo ""
+fi	

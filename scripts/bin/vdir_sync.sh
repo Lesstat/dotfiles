@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
-source ~/bin/find_dbus_session.sh 
+. ~/bin/find_dbus_session.sh 
 vdirsyncer sync

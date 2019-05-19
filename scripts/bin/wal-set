@@ -4,7 +4,7 @@
 # https://github.com/dylanaraps/wal
 
 # Source generated colors.
-source "${HOME}/.cache/wal/colors.sh"
+. "${HOME}/.cache/wal/colors.sh"
 
 reload_dunst() {
     pkill dunst

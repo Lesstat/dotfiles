@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/bin/sh
 
-neo=$(setxkbmap -print | ag neo)
+neo=$(setxkbmap -print | grep neo)
 
-if [[ -z "$neo" ]]; then
+if [ -z "$neo" ]; then
 	echo "de"
 else 
 	echo "neo"

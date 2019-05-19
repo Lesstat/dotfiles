@@ -1,11 +1,15 @@
-#!/bin/bash
+#!/bin/sh
 
 command=$1
 
-class=$(xprop -id $(xdotool getactivewindow) WM_CLASS)
+class=$(xprop -id "$(xdotool getactivewindow)" WM_CLASS)
 
-if [[ $class = *emacs* ]]; then
+
+case "$class" in 
+    *emacs*)
 	emacsclient -n -a "" -e "${command}"	
-else
+	;;
+    *)
 	emacsclient -c -n -a "" -e "${command}"	
-fi
+	;;
+esac
