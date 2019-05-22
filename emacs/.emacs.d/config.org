@@ -584,6 +584,18 @@ it also stops org-caldav-sync)
   (setq org-export-with-broken-links t)
 #+end_src
 
+Most of the time the exported files are temporary anyway. Therefore I
+use this snippet I found [[https://stackoverflow.com/a/47850858][here]] to export to a temporary folder.
+#+BEGIN_SRC emacs-lisp 
+(defun org-export-output-file-name-modified (orig-fun extension &optional subtreep pub-dir)
+  (unless pub-dir
+    (setq pub-dir "/tmp/exported-org-files")
+    (unless (file-directory-p pub-dir)
+      (make-directory pub-dir)))
+  (apply orig-fun extension subtreep pub-dir nil))
+(advice-add 'org-export-output-file-name :around #'org-export-output-file-name-modified)
+#+END_SRC
+
 *** Exporting Source code
 #+BEGIN_SRC emacs-lisp
 (setq org-src-fontify-natively t)
