@@ -601,7 +601,7 @@ use this snippet I found [[https://stackoverflow.com/a/47850858][here]] to expor
 (setq org-src-fontify-natively t)
 #+END_SRC
 *** Latex
-I added "-shell-escape" so that Latex packages that use system comands
+I added "-shell-escape" so that Latex packages that use system commands
  (like minted for [[*Latex Listings][Listings]]) work
 #+BEGIN_SRC emacs-lisp
  (setq org-latex-pdf-process
@@ -610,10 +610,11 @@ I added "-shell-escape" so that Latex packages that use system comands
       "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
 #+END_SRC
 **** Latex Listings
-I want listings to look nice and colored. Pygmentize is neede for this
+I want listings to look nice and colored. Pygmentize and minted is needed for this
 to work.
 #+BEGIN_SRC emacs-lisp
-(setq org-latex-listings 'minted)
+  (add-to-list 'org-latex-packages-alist '("outputdir=/tmp/exported-org-files" "minted"))
+  (setq org-latex-listings 'minted)
 #+END_SRC
 *** Number formatting in Tables
 I hacked together a little function which replaces the point by a
