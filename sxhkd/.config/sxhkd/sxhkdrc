@@ -14,8 +14,7 @@ super + p
       dmenu_run
 
 super + shift + q 
-      i3-nagbar -t warning -m 'You pressed the shutdown shortcut. Do you really want to shutdown?' -b 'Yes, shutdown now' 'exec shutdown now'
-
+      test "yes" = $(printf "no\nyes" | dmenu -p "Shutdown now?") && shutdown now
 
 super + n 
       emacsclient -c -a ""
@@ -122,4 +121,4 @@ super + shift + r
       herbstclient reload
 # exit herbstluftwm (logs you out of your X session)
 super + shift + e 
-	i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit herbstluftwm? This will end your X session.' -b 'Yes, exit i3' 'herbstclient quit'
+      test "yes" = $(printf "no\nyes" | dmenu -p "Exit herbstluftwm?") && herbstclient quit
