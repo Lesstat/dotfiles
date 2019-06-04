@@ -985,7 +985,8 @@ the document consists of multiple files.
     (setq-default TeX-master nil)
     (defun fb/latexhook ()
       (TeX-fold-mode)
-      (turn-on-reftex))
+      (turn-on-reftex)
+      (add-hook 'after-save-hook 'TeX-fold-buffer))
     (add-hook 'LaTeX-mode-hook 'fb/latexhook)
     (setq reftex-plug-into-AUCTeX t)
     (evil-leader/set-key-for-mode 'latex-mode
