@@ -478,7 +478,7 @@ provided as org-contrib package.
   (setq org-default-notes-file (concat (car org-agenda-files) "/inbox.org"))
   (setq org-todo-keywords
         '((sequence "TODO(t!)" "|" "DONE(d@)")
-          (sequence "WAITING(w@)"  "|" "CANCELLED(c)")))
+          (sequence "WAIT(w@)"  "|" "CANCELLED(c)")))
   '(org-enforce-todo-dependencies t)
   (setq org-refile-targets '((org-agenda-files :maxlevel . 5)))
   (setq org-capture-templates
@@ -539,6 +539,29 @@ little pop-up is displayed via ~notify-send~.
 Repeating Task should show only once.
 #+BEGIN_SRC emacs-lisp
   (setq org-agenda-repeating-timestamp-show-all nil)
+#+END_SRC
+
+Custom agenda commands:
+#+BEGIN_SRC emacs-lisp 
+  (setq org-agenda-custom-commands
+        '(
+
+          ("w" "agenda and work tasks"
+           ((agenda)
+            (tags-todo "+work"))
+           ((org-agenda-sorting-strategy '(todo-state-down)))) 
+
+          ("p" "agenda and private tasks"
+           ((agenda)
+            (tags-todo "+private"))
+           ((org-agenda-sorting-strategy '(todo-state-down))))
+
+          ("A" "Tasks belonging to areas"
+           ((agenda)
+            (alltodo ""))
+           ((org-agenda-files '("~/brain/org/areas.org"))))
+
+          ))
 #+END_SRC
 
 ** In Buffer Styling
