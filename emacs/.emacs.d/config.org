@@ -379,7 +379,12 @@ provided as org-contrib package.
     (add-to-list 'purpose-user-mode-purposes '(compilation-mode . compilation))
     (add-to-list 'purpose-user-mode-purposes '(shell-mode . shell))
     (add-to-list 'purpose-user-name-purposes '("COMMIT_EDITMSG" . commit))
-    (purpose-compile-user-configuration)
+
+    (add-to-list 'purpose-user-mode-purposes '(notmuch-hello . utility))
+    (add-to-list 'purpose-user-mode-purposes '(deft-mode . utility))
+    (add-to-list 'purpose-user-mode-purposes '(org-mode . utility))
+    (add-to-list 'purpose-user-mode-purposes '(org-agenda-mode . utility))
+    (add-to-list 'purpose-user-mode-purposes '(help-mode . help-buffers))
 
 
     (add-to-list 'purpose-special-action-sequences
@@ -390,6 +395,7 @@ provided as org-contrib package.
                    purpose-display-reuse-window-purpose
                    purpose-display-maybe-pop-up-frame
                    ))
+
     (add-to-list 'purpose-special-action-sequences
                  '(errors
                    purpose-display-reuse-window-buffer-other-frame
@@ -398,14 +404,33 @@ provided as org-contrib package.
                    purpose-display-reuse-window-purpose
                    purpose-display-maybe-pop-up-frame
                    ))
+
+
+    (add-to-list 'purpose-special-action-sequences
+                 '(help-buffers
+                   purpose-display-reuse-window-buffer-other-frame
+                   purpose-display-reuse-window-purpose-other-frame
+                   purpose-display-reuse-window-buffer
+                   purpose-display-reuse-window-purpose
+                   purpose-display-maybe-pop-up-frame
+                   ))
+
     (add-to-list 'purpose-special-action-sequences
                 '(code
+                  purpose-display-reuse-window-buffer-other-frame
+                  purpose-display-reuse-window-purpose-other-frame
                   purpose-display-same-window
                   ))
 
     (add-to-list 'purpose-special-action-sequences
                  '(commit
                    purpose-display-maybe-pop-up-frame))
+
+    (add-to-list 'purpose-special-action-sequences
+                '(utility
+                  purpose-display-same-window))
+
+    (purpose-compile-user-configuration)
     )
 #+END_SRC
 ** narrow to dwim
