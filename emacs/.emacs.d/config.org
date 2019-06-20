@@ -983,6 +983,7 @@ racer to work.
       :ensure t
       :config
       (defun fb/flycheck-rtags-setup ()
+        (flycheck-add-next-checker 'rtags '(warning . c/c++-clang-tidy))
         (flycheck-select-checker 'rtags)
         (setq-local flycheck-highlighting-mode nil) ;; RTags creates more accurate overlays.
         (setq-local flycheck-check-syntax-automatically nil))
