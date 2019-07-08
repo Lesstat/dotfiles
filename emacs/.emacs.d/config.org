@@ -499,7 +499,6 @@ provided as org-contrib package.
 #+BEGIN_SRC emacs-lisp
 
   (setq org-agenda-files (cons (concat fb/brain-dir "/org") '()))
-  (message "org-agenda-files: %s" org-agenda-files)
   (setq org-default-notes-file (concat (car org-agenda-files) "/inbox.org"))
   (setq org-todo-keywords
         '((sequence "TODO(t!)" "|" "DONE(d@)")
@@ -573,18 +572,18 @@ Custom agenda commands:
 
           ("w" "agenda and work tasks"
            ((agenda)
-            (tags-todo "+work"))
-           ((org-agenda-sorting-strategy '(todo-state-down)))) 
+            (tags-todo "+work" ((org-agenda-sorting-strategy '(todo-state-down)))))
+           ) 
 
           ("p" "agenda and private tasks"
            ((agenda)
-            (tags-todo "+private"))
-           ((org-agenda-sorting-strategy '(todo-state-down))))
+            (tags-todo "+private" ((org-agenda-sorting-strategy '(todo-state-down)))))
+           )
 
           ("A" "Tasks belonging to areas"
            ((agenda)
-            (alltodo ""))
-           ((org-agenda-files '("~/brain/org/areas.org"))))
+            (alltodo "" ((org-agenda-files '("~/brain/org/areas.org")))))
+           )
 
           ))
 #+END_SRC
