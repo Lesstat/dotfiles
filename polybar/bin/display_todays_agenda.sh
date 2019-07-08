@@ -1,3 +1,3 @@
 #!/bin/sh
 
-notify-send  "$(khal list today today)"
+notify-send  "Agenda $(date +%y/%m/%d)" "$(khal list today today | tail -n +2)"
