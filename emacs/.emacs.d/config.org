@@ -42,17 +42,48 @@ define a path for packages I manipulate myself.
     :config
     (global-highlight-parentheses-mode t))
 #+END_SRC
-*** Toggling Themes
+*** Themes
+
+Loading theme in daemon mode only on first frame. (Taken from [[https://stackoverflow.com/a/34697306][here]])
+#+BEGIN_SRC emacs-lisp
+  (defvar fb/theme 'spacemacs-light)
+  (defvar fb/theme-window-loaded nil)
+  (defvar fb/theme-terminal-loaded nil)
+
+  (if (daemonp)
+      (add-hook 'after-make-frame-functions
+                (lambda (frame)
+                  (select-frame frame)
+                  (if (window-system frame)
+                      (unless fb/theme-window-loaded
+                        (if fb/theme-terminal-loaded
+                            (enable-theme fb/theme)
+                          (load-theme fb/theme t))
+                        (setq fb/theme-window-loaded t))
+                    (unless fb/theme-terminal-loaded
+                      (if fb/theme-window-loaded
+                          (enable-theme fb/theme)
+                        (load-theme fb/theme t))
+                      (setq fb/theme-terminal-loaded t)))))
+  
+    (progn
+      (load-theme fb/theme t)
+      (if (display-graphic-p)
+          (setq fb/theme-window-loaded t)
+        (setq fb/theme-terminal-loaded t))))
+#+END_SRC
+
+Heaven and "hell to switch" to dark theme if necessary:
 #+BEGIN_SRC emacs-lisp 
-(use-package heaven-and-hell
-  :ensure t
-  :init
-  (setq heaven-and-hell-themes
-        '((light . spacemacs-light)
-          (dark . spacemacs-dark))) 
-  :hook (after-init . heaven-and-hell-init-hook)
-  :bind (("C-c <f6>" . heaven-and-hell-load-default-theme)
-         ("<f6>" . heaven-and-hell-toggle-theme)))
+  (use-package heaven-and-hell
+    :ensure t
+    :init
+    (setq heaven-and-hell-themes
+          '((light . spacemacs-light)
+            (dark . spacemacs-dark))) 
+    :hook (after-init . heaven-and-hell-init-hook)
+    :bind (("C-c <f6>" . heaven-and-hell-load-default-theme)
+           ("<f6>" . heaven-and-hell-toggle-theme)))
 #+END_SRC
 ** Evil-mode
 As much as I love Emacs I love having vim keybindings :)
