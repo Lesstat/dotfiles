@@ -56,6 +56,8 @@ fi
 
 if (( $+commands[bat] )); then
     export PAGER='bat'
+    # Bat does not handle line wrapping in man pages well -.-
+    alias man='PAGER=less man' 
 fi
 
 export EDITOR='emacsclient --alternate-editor "" --create-frame'
