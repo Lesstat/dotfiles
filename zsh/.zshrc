@@ -48,7 +48,7 @@ if [[ -d "$HOME/.cargo/bin" ]]; then
     export PATH="$HOME/.cargo/bin:$PATH"
 fi
 
-export MPD_HOST="$HOME/.mpd/socket"
+export MPD_HOST="$HOME/.config/mpd/socket"
 
 if (( $+commands[st] )); then
     export TERMINAL='st'
