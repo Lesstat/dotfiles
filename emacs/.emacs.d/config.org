@@ -1101,11 +1101,11 @@ tab-completion in term, so I deactivated it for term.
   (use-package yasnippet
     :ensure t
     :config
-    (yas-global-mode 1)
-    (add-hook 'term-mode-hook (lambda () (yas-minor-mode -1)) )
     (use-package yasnippet-snippets
       :ensure t
       )
+    (yas-global-mode 1)
+    (add-hook 'term-mode-hook (lambda () (yas-minor-mode -1)) )
     )
 #+END_SRC
 * Spelling
@@ -1188,7 +1188,5 @@ already have first.
   (require 'scimax-org-babel-ipython-upstream)
   (org-babel-load-file (concat scimax-dir "scimax-notebook.org"))
   (setq nb-notebook-directory "~/workspaces/research/")
+  (yas-load-directory (concat scimax-dir "snippets/") t)
 #+END_SRC
-
-
-
