@@ -650,6 +650,7 @@ Load languages I use.
      (emacs-lisp . t)
      (shell . t)
      (python . t)
+     (ipython . t)
      ))
 #+END_SRC
 Deactivate annoying doccheck warnings in org source blocks.
@@ -1186,7 +1187,13 @@ already have first.
   (require 'scimax-mode)
   (require 'ob-ipython)
   (require 'scimax-org-babel-ipython-upstream)
-  (org-babel-load-file (concat scimax-dir "scimax-notebook.org"))
-  (setq nb-notebook-directory "~/workspaces/research/")
+  (setq scimax-notebook-initialized nil)
+  (add-hook 'after-make-frame-functions
+            (lambda (frame)
+              (unless scimax-notebook-initialized
+                (org-babel-load-file (concat scimax-dir "scimax-notebook.org"))
+                (setq nb-notebook-directory "~/workspaces/research/"))
+              (setq scimax-notebook-initialized t)
+              ))
   (yas-load-directory (concat scimax-dir "snippets/") t)
 #+END_SRC
