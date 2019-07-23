@@ -500,11 +500,12 @@ provided as org-contrib package.
 #+BEGIN_SRC emacs-lisp
 
    (setq org-modules
-         '(org-bbdb org-bibtex org-docview org-habit org-info org-mhe org-rmail org-w3m org-drill))
+         '(org-bbdb org-bibtex org-docview org-habit org-info org-mhe org-rmail org-w3m))
     (load-library "org-habit") ;; For some reason putting it into org-modules does not load it.
    (use-package org
      :ensure org-plus-contrib 
      :defer t)
+     
   (setq org-file-apps
      '((auto-mode . emacs)
       ("\\.mm\\'" . default)
@@ -512,7 +513,13 @@ provided as org-contrib package.
       ("\\.pdf\\'" . "zathura %s")))
 
    (use-package org-ref
-     :ensure t)
+     :ensure t
+     :config
+     (setq org-ref-pdf-directory "~/brain/files/references/pdfs/"
+           org-ref-bibliography-notes "~/brain/files/references/notes.org"
+           org-ref-default-bibliography '("~/brain/files/references/references.bib")
+           reftex-default-bibliography '("~/brain/files/references/references.bib"))
+     )
 
    (dolist (hook '(org-mode-hook))
      (add-hook hook (lambda () (flyspell-mode 1)))
@@ -891,6 +898,8 @@ of creating tags beforehand.
     (setq flycheck-python-pycompile-executable "python3")
     )
 #+END_SRC
+
+
 ** Haskell
 #+BEGIN_SRC emacs-lisp
 (use-package haskell-mode
@@ -1152,7 +1161,34 @@ I wrote a little shortcut for that.
     (push 'deft-mode evil-emacs-state-modes)
     )
 #+END_SRC
+** scimax
+I don't want to include all of [[https://github.com/jkitchin/scimax][scimax]] but cherrypick things I
+like. Therefore, I have to require all the dependencies I do not
+already have first.
 
+#+BEGIN_SRC emacs-lisp
+  (use-package ggtags
+    :ensure t)
+
+  (use-package ibuffer-projectile
+    :ensure t)
+  (use-package ag
+    :ensure t)
+
+  (use-package esup
+    :ensure t)
+#+END_SRC 
+
+
+#+BEGIN_SRC emacs-lisp
+  (setq scimax-dir "~/.emacs.d/scimax/")
+  (add-to-list 'load-path scimax-dir)
+  (require 'scimax-mode)
+  (require 'ob-ipython)
+  (require 'scimax-org-babel-ipython-upstream)
+  (org-babel-load-file (concat scimax-dir "scimax-notebook.org"))
+  (setq nb-notebook-directory "~/workspaces/research/")
+#+END_SRC
 
 
 
