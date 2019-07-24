@@ -505,7 +505,7 @@ provided as org-contrib package.
    (use-package org
      :ensure org-plus-contrib 
      :defer t)
-     
+
   (setq org-file-apps
      '((auto-mode . emacs)
       ("\\.mm\\'" . default)
@@ -529,6 +529,7 @@ provided as org-contrib package.
                  (setq-local yas/trigger-key [tab])
                  (define-key yas/keymap [tab] 'yas/next-field-or-maybe-expand))
                ))
+  (setq org-catch-invisible-edits 'smart)
 
 #+END_SRC
 
@@ -598,9 +599,19 @@ little pop-up is displayed via ~notify-send~.
 #+BEGIN_SRC emacs-lisp
   (setq org-agenda-span 'day)
 #+END_SRC
-Repeating Task should show only once.
+- Show repeating tasks only once
+- Hide done tasks with timestamp in agenda
+- Don't display tasks that are already in agenda (scheduled or with
+  deadline)
+
 #+BEGIN_SRC emacs-lisp
-  (setq org-agenda-repeating-timestamp-show-all nil)
+  (setq org-agenda-repeating-timestamp-show-all nil
+        org-agenda-tags-todo-honor-ignore-options t
+        org-agenda-skip-timestamp-if-done t
+        org-agenda-todo-ignore-scheduled 'all
+        org-agenda-todo-ignore-deadlines t
+        org-agenda-todo-ignore-timestamp t
+        org-agenda-start-on-weekday nil) ;; start on current day
 #+END_SRC
 
 Custom agenda commands:
@@ -627,6 +638,7 @@ Custom agenda commands:
 #+END_SRC
 
 ** In Buffer Styling
+Org Bullets for nicer Headlines:
 #+BEGIN_SRC emacs-lisp
   (use-package org-bullets
      :ensure t
@@ -635,6 +647,18 @@ Custom agenda commands:
      )
   (add-hook 'org-mode-hook 'org-indent-mode )
 #+END_SRC
+
+Always display inline images. Especially, after running babel source blocks.
+#+BEGIN_SRC emacs-lisp
+(setq org-startup-with-inline-images "inlineimages")
+(setq org-image-actual-width nil)
+
+;; redisplay figures when you run a block so they are always current.
+(add-hook 'org-babel-after-execute-hook
+	  'org-display-inline-images)
+#+END_SRC
+
+
 ** Global Org mode keybindings
 #+BEGIN_SRC emacs-lisp
   (define-key global-map "\C-cc" 'org-capture)
@@ -659,6 +683,10 @@ Deactivate annoying doccheck warnings in org source blocks.
     (setq-local flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
 
   (add-hook 'org-src-mode-hook 'disable-fylcheck-in-org-src-block)
+#+END_SRC
+Running code prompt-free.
+#+BEGIN_SRC emacs-lisp
+(setq org-confirm-babel-evaluate nil)
 #+END_SRC
 
 ** Export-Setting
@@ -695,6 +723,12 @@ I added "-shell-escape" so that Latex packages that use system commands
       "bibtex %b" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" 
       "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
 #+END_SRC
+
+When exporting to latex use custom labels whenever possible.
+#+BEGIN_SRC emacs-lisp
+(setq org-latex-prefer-user-labels t)
+#+END_SRC
+
 **** Latex Listings
 I want listings to look nice and colored. Pygmentize and minted is needed for this
 to work.
