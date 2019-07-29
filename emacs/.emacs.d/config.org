@@ -191,7 +191,6 @@ alternative leader key for modes where evil is not active.
       (evil-leader/set-leader "SPC")
       (evil-leader/set-key
         "r" 'counsel-M-x
-        "o s" 'org-caldav-sync
         "o a" 'org-agenda
         "o c" 'org-capture
         "n" 'narrow-or-widen-dwim
@@ -215,11 +214,10 @@ alternative leader key for modes where evil is not active.
         "i" 'ivy-resume
         "c" 'flycheck-list-errors)
         (evil-leader/set-key-for-mode 'org-mode
-          "o" nil
-          "o s" 'org-caldav-sync
-          "o d" 'org-drill
-          "o a" 'org-agenda
-          "l" 'counsel-locate
+          "t"  nil 
+          "t t" 'org-todo
+          "t s" 'org-schedule
+          "t d" 'org-deadline
           )
         (evil-leader/set-key-for-mode 'rust-mode
           "g" 'racer-find-definition
@@ -692,8 +690,7 @@ Running code prompt-free.
 ** Export-Setting
 
 *** General
-I don't want broken links to stop myself from exporting (especially as
-it also stops org-caldav-sync)
+I don't want broken links to stop myself from exporting. 
 #+begin_src emacs-lisp
   (setq org-export-with-broken-links t)
 #+end_src
@@ -763,16 +760,6 @@ presentations / papers. Activation by uncommenting the add-hook call.
         :ensure t)
       (setq calendar-week-start-day 1)
       )
-
-  (defun fb/cfw-org-my-agenda (&rest ARGS)
-    "Open calfw-buffer without the org-drill items."
-    (interactive)
-    (let ((org-agenda-tag-filter-preset '("-drill")))
-      (cfw:open-org-calendar)
-      )
-    (set (make-variable-buffer-local 'org-agenda-tag-filter-preset) '("-drill"))
-    )
-
 #+END_SRC
 * Programming
 ** General
