@@ -672,7 +672,6 @@ Load languages I use.
      (emacs-lisp . t)
      (shell . t)
      (python . t)
-     (ipython . t)
      ))
 #+END_SRC
 Deactivate annoying doccheck warnings in org source blocks.
@@ -1189,16 +1188,12 @@ like. Therefore, I have to require all the dependencies I do not
 already have first.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package ggtags
-    :ensure t)
+  (use-package ggtags :ensure t)
 
-  (use-package ibuffer-projectile
-    :ensure t)
-  (use-package ag
-    :ensure t)
+  (use-package ibuffer-projectile :ensure t)
+  (use-package ag :ensure t)
 
-  (use-package esup
-    :ensure t)
+  (use-package esup :ensure t)
 #+END_SRC 
 
 
@@ -1206,7 +1201,7 @@ already have first.
   (setq scimax-dir "~/.emacs.d/scimax/")
   (add-to-list 'load-path scimax-dir)
   (require 'scimax-mode)
-  (require 'ob-ipython)
+  (require 'ob-ipython (concat scimax-dir "ob-ipython-upstream/ob-ipython.el"))
   (require 'scimax-org-babel-ipython-upstream)
   (setq scimax-notebook-initialized nil)
   (add-hook 'after-make-frame-functions
