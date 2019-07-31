@@ -218,6 +218,7 @@ alternative leader key for modes where evil is not active.
           "t t" 'org-todo
           "t s" 'org-schedule
           "t d" 'org-deadline
+          "t w" 'org-refile
           )
         (evil-leader/set-key-for-mode 'rust-mode
           "g" 'racer-find-definition
@@ -712,12 +713,10 @@ use this snippet I found [[https://stackoverflow.com/a/47850858][here]] to expor
 #+END_SRC
 *** Latex
 I added "-shell-escape" so that Latex packages that use system commands
- (like minted for [[*Latex Listings][Listings]]) work
+ (like minted for [[*Latex Listings][Listings]]) work.
 #+BEGIN_SRC emacs-lisp
- (setq org-latex-pdf-process
-    '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" 
-      "bibtex %b" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" 
-      "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+  (setq org-latex-pdf-process
+     '("latexmk -shell-escape -interaction=nonstopmode -pdf -output-directory=%o %f"))
 #+END_SRC
 
 When exporting to latex use custom labels whenever possible.
