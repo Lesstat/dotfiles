@@ -1,7 +1,7 @@
 #!/bin/sh
 
 tmpbg=$(mktemp /tmp/XXXXXXX.png)
-scrot "$tmpbg"
+scrot -o "$tmpbg"
 convert "$tmpbg" -scale 10% -scale 1000% "$tmpbg"
 i3lock  -i "$tmpbg"
 if [ "${1}" = "-h" ]; then
