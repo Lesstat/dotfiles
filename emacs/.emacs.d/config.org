@@ -1,5 +1,6 @@
 #+Title: Emacs Configuration
 #+Author: Florian Barth
+#+Property: header-args :results silent
 
 * Auto-Compile
 Auto-Compile makes sure that I don't get errors from freshly updated
@@ -1211,4 +1212,27 @@ already have first.
               (setq scimax-notebook-initialized t)
               ))
   (yas-load-directory (concat scimax-dir "snippets/") t)
+#+END_SRC
+** git-gutter-fringe
+Git gutter shows which lines have changed (according to a vc like git)
+in the gutter. I have been inspired to look into it by a video on
+[[https://www.youtube.com/watch?v=GK3fij-D1G8][literate programming]] done in doom emacs. I liked the slim only colored
+style instead of characters the config is +inspired+ stolen from [[https://github.com/hlissner/doom-emacs/blob/develop/modules/ui/vc-gutter/config.el][doom-emacs]].
+
+#+BEGIN_SRC emacs-lisp
+  (use-package git-gutter-fringe
+    :ensure t
+    :config
+    (global-git-gutter-mode +1)
+    (if (fboundp 'fringe-mode) (fringe-mode '4))
+      (define-fringe-bitmap 'git-gutter-fr:added [224]
+        nil nil '(center repeated))
+      (define-fringe-bitmap 'git-gutter-fr:modified [224]
+        nil nil '(center repeated))
+      (define-fringe-bitmap 'git-gutter-fr:deleted [128 192 224 240]
+        nil nil 'bottom)
+      (setq flycheck-indication-mode 'right-fringe)
+      (define-fringe-bitmap 'flycheck-fringe-bitmap-double-arrow
+        [16 48 112 240 112 48 16] nil nil 'center)
+    )
 #+END_SRC
