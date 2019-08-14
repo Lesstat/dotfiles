@@ -512,14 +512,6 @@ provided as org-contrib package.
       ("\\.x?html?\\'" . default)
       ("\\.pdf\\'" . "zathura %s")))
 
-   (use-package org-ref
-     :ensure t
-     :config
-     (setq org-ref-pdf-directory "~/brain/files/references/pdfs/"
-           org-ref-bibliography-notes "~/brain/files/references/notes.org"
-           org-ref-default-bibliography '("~/brain/files/references/references.bib")
-           reftex-default-bibliography '("~/brain/files/references/references.bib"))
-     )
 
    (dolist (hook '(org-mode-hook))
      (add-hook hook (lambda () (flyspell-mode 1)))
@@ -531,6 +523,35 @@ provided as org-contrib package.
                ))
   (setq org-catch-invisible-edits 'smart)
 
+#+END_SRC
+** Reference management with Org-Ref
+Org-ref is a power tool for managing references, having clean bibtex
+entries, opening pdfs of references and taking notes. I throw in two
+small functions of my own to easily open either the central notes file
+or the central bibtex file. I also configure reftex to use the org-ref
+bibliography by default.
+
+#+BEGIN_SRC emacs-lisp
+
+  (use-package org-ref
+    :ensure t
+    :config
+    (setq org-ref-pdf-directory "~/brain/files/references/pdfs/"
+          org-ref-bibliography-notes "~/brain/files/references/notes.org"
+          org-ref-default-bibliography '("~/brain/files/references/references.bib")
+          reftex-default-bibliography org-ref-default-bibliography)
+
+    (defun fb/open-org-ref-notes ()
+      "Open the notes file from org-ref."
+      (interactive)
+      (find-file org-ref-bibliography-notes))
+
+    (defun fb/open-org-ref-bib-file ()
+      "Open the first bibtex file from the org-ref default
+  bibliography."
+      (interactive)
+      (find-file (car org-ref-default-bibliography)))
+    )
 #+END_SRC
 
 ** *Org*anizing features
