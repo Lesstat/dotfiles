@@ -526,10 +526,11 @@ provided as org-contrib package.
 #+END_SRC
 ** Reference management with Org-Ref
 Org-ref is a power tool for managing references, having clean bibtex
-entries, opening pdfs of references and taking notes. I throw in two
+entries, opening pdfs of references and taking notes. I wrote two
 small functions of my own to easily open either the central notes file
-or the central bibtex file. I also configure reftex to use the org-ref
-bibliography by default.
+or the central bibtex file and one that uses the download folder as
+default for finding pdfs to associate with bibtex entries. I also
+configured reftex to use the org-ref bibliography by default.
 
 #+BEGIN_SRC emacs-lisp
 
@@ -551,6 +552,15 @@ bibliography by default.
   bibliography."
       (interactive)
       (find-file (car org-ref-default-bibliography)))
+
+    (defun fb/assoc-downloaded-pdf-with-entry ()
+      "Like `org-ref-bibtext-assoc-pdf-with-entry` but sets initial
+  directory to the Downloads folder."
+      (interactive)
+      (let (dir default-directory)
+        (setq-local default-directory "~/Downloads/")
+        (org-ref-bibtex-assoc-pdf-with-entry)
+        (setq-local default-directory dir)))
     )
 #+END_SRC
 
