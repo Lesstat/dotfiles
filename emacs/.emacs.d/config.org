@@ -948,6 +948,8 @@ of creating tags beforehand.
       (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
     (add-hook 'elpy-mode-hook 'hs-minor-mode)
     (setq flycheck-python-pycompile-executable "python3")
+    ;; Runs both flake8 and pylint which makes for more information 
+    (flycheck-add-next-checker 'python-flake8 'python-pylint)
     )
 #+END_SRC
 
