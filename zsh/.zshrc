@@ -80,19 +80,34 @@ alias ttt='task modify wait:tomorrow'
 
 case $TERM in
 	screen*)
-		precmd(){
-			# Restore tmux-title to 'zsh'
-			printf "\033kzsh\033\\"
-			# Restore st-title to 'zsh'
-			print -Pn "\e]2;zsh:%~\a"
-		}
-		preexec(){
-			# set tmux-title to running program
-			printf "\033k$(echo "$1")\033\\"
-			# set st-title to running program
-			print -Pn "\e]2;$(echo "$1")\a"
-                }
-                ;;
+
+	    if (( $+commands[starship] )); then
+		eval "$(starship init zsh)"
+	    fi
+
+	    precmd(){
+		# Restore tmux-title to 'zsh'
+		printf "\033kzsh\033\\"
+		# Restore st-title to 'zsh'
+		print -Pn "\e]2;zsh:%~\a"
+	    }
+
+	    preexec(){
+		# set tmux-title to running program
+		printf "\033k$(echo "$1")\033\\"
+		# set st-title to running program
+		print -Pn "\e]2;$(echo "$1")\a"
+            }
+            ;;
+
+	dumb*)
+	    unsetopt zle
+	    unsetopt prompt_cr
+	    unsetopt prompt_subst
+	    unfunction precmd
+	    unfunction preexec
+	    PS1='$ '
+	    ;;
 esac
 
 export XDG_CONFIG_HOME=$HOME/.config
