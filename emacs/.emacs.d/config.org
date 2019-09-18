@@ -223,13 +223,16 @@ alternative leader key for modes where evil is not active.
           )
         (evil-leader/set-key-for-mode 'rust-mode
           "g" 'racer-find-definition
-          "d" 'racer-describe)
+          "d" 'racer-describe
+          "m c" 'fb/fold-rust-functions)
         (evil-leader/set-key-for-mode 'go-mode
           "g" 'godef-jump
           "d" 'godoc-at-point)
         (evil-leader/set-key-for-mode 'c++-mode
           "g" 'rtags-find-symbol-at-point
           "ä" 'srefactor-refactor-at-point)
+        (evil-leader/set-key-for-mode 'python-mode
+          "m c" 'fb/fold-rust-functions)
         (define-key global-map (kbd "<f5>") evil-leader--default-map)
         )
 
@@ -798,6 +801,32 @@ I don't want to mix tabs with spaces, so I'm going all spaces.
   (setq indent-tabs-mode nil
         tab-always-indent 'complete)
 
+#+END_SRC
+*** Folding
+To get an overview of a source file I like to fold all functions. It
+allows me to see the interface of classes/structs without too much
+clutter. This currently depends on evil mode for folding which might
+not be the best possible solution for this.
+#+BEGIN_SRC emacs-lisp
+  (defun fb/fold-functions (function-start function-paren)
+  "Folds all functions in buffer that contain FUNCTION-START and
+  their body begins with FUNCTION-PAREN."
+    (let ((start-point (point)))
+      (goto-char (point-min))
+      (while (search-forward function-start nil t)
+        (search-forward function-paren)
+        (evil-close-fold))
+      (goto-char start-point)))
+
+  (defun fb/fold-rust-functions ()
+  "Folds all functions in a rust buffer."
+    (interactive)
+    (fb/fold-functions "fn" "{"))
+    
+  (defun fb/fold-python-functions ()
+  "Folds all functions in a rust buffer."
+    (interactive)
+    (fb/fold-functions "def" ":"))
 #+END_SRC
 *** Editorconfig
 #+BEGIN_SRC emacs-lisp
