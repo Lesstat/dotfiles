@@ -908,6 +908,7 @@ of creating tags beforehand.
   (use-package flycheck
     :ensure t
     :config 
+    (setq-default flycheck-emacs-lisp-load-path 'inherit)
     (global-flycheck-mode)
     (use-package flycheck-clang-tidy
       :ensure t
