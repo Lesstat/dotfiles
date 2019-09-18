@@ -1197,28 +1197,16 @@ tab-completion in term, so I deactivated it for term.
   (use-package flyspell
     :ensure t
     :config
-    (setq flyspell-default-dictionary "english")
+    (setq ispell-program-name "hunspell")
+    (setq ispell-dictionary "en_US,de_DE")
+    ;; ispell-set-spellchecker-params has to be called
+    ;; before ispell-hunspell-add-multi-dic will work
+    (ispell-set-spellchecker-params)
+    (ispell-hunspell-add-multi-dic "en_US,de_DE")
+
     (add-hook 'text-mode-hook (lambda () (flyspell-mode 1)))
     (setq flyspell-mode-line-string nil)
     )
-#+END_SRC
-** Change Dictionaries
-I only use German and English dictionaries but I switch frequently so
-I wrote a little shortcut for that. 
-#+BEGIN_SRC emacs-lisp
-  (defvar fb/active_dict "english")
-  (defvar fb/next_dict "german")
-  (make-variable-buffer-local 'fb/active_dict)
-  (make-variable-buffer-local 'fb/next_dict)
-  (defun fb/switch_dict ()
-    (interactive)
-    (ispell-change-dictionary fb/next_dict)
-    (let ( (temp_dict fb/active_dict) )
-      (setq fb/active_dict fb/next_dict)
-      (setq fb/next_dict temp_dict)
-      )
-    )
-  (define-key global-map "\C-cd" 'fb/switch_dict)
 #+END_SRC
 * Temp
 ** jinja2
