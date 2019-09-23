@@ -1192,6 +1192,9 @@ tab-completion in term, so I deactivated it for term.
     )
 #+END_SRC
 * Spelling
+I configured hunspell for multiple dictionaries according to this
+[[https://emacs.stackexchange.com/a/21379][SO answer]]. For some reason I *needed* to have the en_GB dict also
+installed for hunspell to work, even though I do not use it.
 #+BEGIN_SRC emacs-lisp
   (use-package flyspell
     :ensure t
@@ -1204,8 +1207,7 @@ tab-completion in term, so I deactivated it for term.
     (ispell-hunspell-add-multi-dic "en_US,de_DE")
 
     (add-hook 'text-mode-hook (lambda () (flyspell-mode 1)))
-    (setq flyspell-mode-line-string nil)
-    )
+    (setq flyspell-mode-line-string nil))
 #+END_SRC
 * Temp
 ** jinja2
