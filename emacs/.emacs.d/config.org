@@ -512,8 +512,7 @@ provided as org-contrib package.
   (setq org-file-apps
      '((auto-mode . emacs)
       ("\\.mm\\'" . default)
-      ("\\.x?html?\\'" . default)
-      ("\\.pdf\\'" . "zathura %s")))
+      ("\\.x?html?\\'" . default)))
 
 
    (dolist (hook '(org-mode-hook))
@@ -1286,4 +1285,11 @@ style instead of characters the config is +inspired+ stolen from [[https://githu
       (define-fringe-bitmap 'flycheck-fringe-bitmap-double-arrow
         [16 48 112 240 112 48 16] nil nil 'center)
     )
+#+END_SRC
+** PDF Tools and Note Taking
+#+BEGIN_SRC emacs-lisp
+  (use-package pdf-tools
+    :ensure t
+    :config
+    (pdf-tools-install))
 #+END_SRC
