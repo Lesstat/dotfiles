@@ -1293,3 +1293,13 @@ style instead of characters the config is +inspired+ stolen from [[https://githu
     :config
     (pdf-tools-install))
 #+END_SRC
+** Indentation - Aggressive Indent Mode
+
+#+BEGIN_SRC emacs-lisp
+  (use-package aggressive-indent
+    :ensure t
+    :config
+    (global-aggressive-indent-mode 1))
+#+END_SRC
+
+
