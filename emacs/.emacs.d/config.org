@@ -870,7 +870,8 @@ of creating tags beforehand.
     :config
     (dumb-jump-mode))
 #+END_SRC
-*** Magit
+*** Version Control
+Magit is the ultimate git ui.
 #+BEGIN_SRC emacs-lisp
   (use-package magit
     :ensure t
@@ -878,6 +879,29 @@ of creating tags beforehand.
     (define-key magit-status-mode-map (kbd "SPC") evil-leader--default-map)
     ;; Ensures that commit buffer opens in insert mode
     (add-hook 'with-editor-mode-hook 'evil-insert-state)
+    )
+#+END_SRC
+
+Git gutter fringe shows which lines have changed (according to a vc like git)
+in the fringe. I have been inspired to look into it by a video on
+[[https://www.youtube.com/watch?v=GK3fij-D1G8][literate programming]] done in doom emacs. I liked the slim only colored
+style instead of characters the config is +inspired+ stolen from [[https://github.com/hlissner/doom-emacs/blob/develop/modules/ui/vc-gutter/config.el][doom-emacs]].
+
+#+BEGIN_SRC emacs-lisp
+  (use-package git-gutter-fringe
+    :ensure t
+    :config
+    (global-git-gutter-mode +1)
+    (if (fboundp 'fringe-mode) (fringe-mode '4))
+      (define-fringe-bitmap 'git-gutter-fr:added [224]
+        nil nil '(center repeated))
+      (define-fringe-bitmap 'git-gutter-fr:modified [224]
+        nil nil '(center repeated))
+      (define-fringe-bitmap 'git-gutter-fr:deleted [128 192 224 240]
+        nil nil 'bottom)
+      (setq flycheck-indication-mode 'right-fringe)
+      (define-fringe-bitmap 'flycheck-fringe-bitmap-double-arrow
+        [16 48 112 240 112 48 16] nil nil 'center)
     )
 #+END_SRC
 *** Company - Auto Completion
@@ -983,6 +1007,16 @@ of creating tags beforehand.
              ("O" counsel-projectile-switch-project-action-org-capture "org-capture into project")))
       ))
 
+#+END_SRC
+*** Indentation - Aggressive Indent Mode
+Aggressive indent mode adapts the indentation of the buffer after every changed
+character. This means a wrong line leads to a wrong looking buffer and
+a fix immediately reflects in code.
+#+BEGIN_SRC emacs-lisp
+  (use-package aggressive-indent
+    :ensure t
+    :config
+    (global-aggressive-indent-mode 1))
 #+END_SRC
 ** Python
 #+BEGIN_SRC emacs-lisp
@@ -1237,11 +1271,6 @@ installed for hunspell to work, even though I do not use it.
     (setq flyspell-mode-line-string nil))
 #+END_SRC
 * Temp
-** jinja2
-#+BEGIN_SRC emacs-lisp
-  (use-package jinja2-mode
-    :ensure t)
-#+END_SRC
 ** deft
 #+BEGIN_SRC emacs-lisp 
   (use-package deft
@@ -1292,43 +1321,12 @@ already have first.
               ))
   (yas-load-directory (concat scimax-dir "snippets/") t)
 #+END_SRC
-** git-gutter-fringe
-Git gutter shows which lines have changed (according to a vc like git)
-in the gutter. I have been inspired to look into it by a video on
-[[https://www.youtube.com/watch?v=GK3fij-D1G8][literate programming]] done in doom emacs. I liked the slim only colored
-style instead of characters the config is +inspired+ stolen from [[https://github.com/hlissner/doom-emacs/blob/develop/modules/ui/vc-gutter/config.el][doom-emacs]].
-
-#+BEGIN_SRC emacs-lisp
-  (use-package git-gutter-fringe
-    :ensure t
-    :config
-    (global-git-gutter-mode +1)
-    (if (fboundp 'fringe-mode) (fringe-mode '4))
-      (define-fringe-bitmap 'git-gutter-fr:added [224]
-        nil nil '(center repeated))
-      (define-fringe-bitmap 'git-gutter-fr:modified [224]
-        nil nil '(center repeated))
-      (define-fringe-bitmap 'git-gutter-fr:deleted [128 192 224 240]
-        nil nil 'bottom)
-      (setq flycheck-indication-mode 'right-fringe)
-      (define-fringe-bitmap 'flycheck-fringe-bitmap-double-arrow
-        [16 48 112 240 112 48 16] nil nil 'center)
-    )
-#+END_SRC
 ** PDF Tools and Note Taking
 #+BEGIN_SRC emacs-lisp
   (use-package pdf-tools
     :ensure t
     :config
     (pdf-tools-install))
-#+END_SRC
-** Indentation - Aggressive Indent Mode
-
-#+BEGIN_SRC emacs-lisp
-  (use-package aggressive-indent
-    :ensure t
-    :config
-    (global-aggressive-indent-mode 1))
 #+END_SRC
 ** Org-super-agenda
 #+BEGIN_SRC emacs-lisp
