@@ -644,7 +644,9 @@ little pop-up is displayed via ~notify-send~.
         org-agenda-todo-ignore-scheduled 'all
         org-agenda-todo-ignore-deadlines t
         org-agenda-todo-ignore-timestamp t
-        org-agenda-start-on-weekday nil) ;; start on current day
+        org-agenda-start-on-weekday nil
+        org-agenda-block-separator nil
+        org-agenda-compact-blocks t) ;; start on current day
 #+END_SRC
 
 Custom agenda commands:
@@ -652,20 +654,45 @@ Custom agenda commands:
   (setq org-agenda-custom-commands
         '(
 
-          ("w" "agenda and work tasks"
-           ((agenda)
-            (tags-todo "+work" ((org-agenda-sorting-strategy '(todo-state-down)))))
-           ) 
+          ("o" "Office"
+           ((agenda nil ((org-agenda-overriding-header "Agenda")
+                         (org-super-agenda-groups
+                          '((:name "Today"
+                                   :date today)
+                            (:name "Deadlines"
+                                   :deadline t)))))
+            (tags-todo "-home"
+                       ((org-agenda-overriding-header "Tasks")
+                        (org-super-agenda-groups
+                         '((:name "Context:"
+                                  :auto-tags t))))))) 
+	
+          ("h" "Home"
+           ((agenda nil ((org-agenda-overriding-header "Agenda")
+                         (org-super-agenda-groups
+                          '((:name "Today"
+                                   :date today)
+                            (:name "Deadlines"
+                                   :deadline t)))))
+            (tags-todo "-office"
+                       ((org-agenda-overriding-header "Tasks")
+                        (org-super-agenda-groups
+                         '((:name "Context:"
+                                  :auto-tags t))))))) 
 
-          ("p" "agenda and private tasks"
-           ((agenda)
-            (tags-todo "+private" ((org-agenda-sorting-strategy '(todo-state-down)))))
-           )
+          ("g" "On the Go"
+           ((agenda nil ((org-agenda-overriding-header "Agenda")
+                         (org-super-agenda-groups
+                          '((:name "Today"
+                                   :date today)
+                            (:name "Deadlines"
+                                   :deadline t)))))
+            (tags-todo "-office-home-online"
+                       ((org-agenda-overriding-header "Tasks")
+                        (org-super-agenda-groups
+                         '((:name "Context:"
+                                  :auto-tags t))))))) 
 
-          ("A" "Tasks belonging to areas"
-           ((agenda)
-            (alltodo "" ((org-agenda-files '("~/brain/org/areas.org")))))
-           )
 
           ))
 #+END_SRC
@@ -1303,5 +1330,12 @@ style instead of characters the config is +inspired+ stolen from [[https://githu
     :config
     (global-aggressive-indent-mode 1))
 #+END_SRC
-
+** Org-super-agenda
+#+BEGIN_SRC emacs-lisp
+  (use-package org-super-agenda
+    :ensure t
+    :config
+    (org-super-agenda-mode 1)
+    )
+#+END_SRC
 
