@@ -355,7 +355,7 @@ provided as org-contrib package.
   (use-package notmuch
     :ensure t
     :config
-    (require 'org-notmuch)
+    (require 'ol-notmuch)
     (setq notmuch-saved-searches
           (quote
            ((:name "inbox" :query "tag:inbox" :key "i")
