@@ -47,31 +47,9 @@ define a path for packages I manipulate myself.
 
 Loading theme in daemon mode only on first frame. (Taken from [[https://stackoverflow.com/a/34697306][here]])
 #+BEGIN_SRC emacs-lisp
-  (defvar fb/theme 'spacemacs-light)
-  (defvar fb/theme-window-loaded nil)
-  (defvar fb/theme-terminal-loaded nil)
-
-  (if (daemonp)
-      (add-hook 'after-make-frame-functions
-                (lambda (frame)
-                  (select-frame frame)
-                  (if (window-system frame)
-                      (unless fb/theme-window-loaded
-                        (if fb/theme-terminal-loaded
-                            (enable-theme fb/theme)
-                          (load-theme fb/theme t))
-                        (setq fb/theme-window-loaded t))
-                    (unless fb/theme-terminal-loaded
-                      (if fb/theme-window-loaded
-                          (enable-theme fb/theme)
-                        (load-theme fb/theme t))
-                      (setq fb/theme-terminal-loaded t)))))
-  
-    (progn
-      (load-theme fb/theme t)
-      (if (display-graphic-p)
-          (setq fb/theme-window-loaded t)
-        (setq fb/theme-terminal-loaded t))))
+  (use-package spacemacs-theme
+    :defer t
+    )
 #+END_SRC
 
 Heaven and "hell to switch" to dark theme if necessary:
@@ -1302,6 +1280,7 @@ already have first.
   (use-package ag :ensure t)
 
   (use-package esup :ensure t)
+  (use-package dash-functional :ensure t)
 #+END_SRC 
 
 
@@ -1326,7 +1305,7 @@ already have first.
   (use-package pdf-tools
     :ensure t
     :config
-    (pdf-tools-install))
+    (pdf-tools-install t))
 #+END_SRC
 ** Org-super-agenda
 #+BEGIN_SRC emacs-lisp
