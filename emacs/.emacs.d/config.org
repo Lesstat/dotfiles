@@ -1296,7 +1296,11 @@ already have first.
   (use-package pdf-tools
     :ensure t
     :config
-    (pdf-tools-install t))
+    (pdf-tools-install t)
+    (add-hook 'pdf-tools-enabled-hook
+              '(lambda () 
+                 (nlinum-mode -1)
+                 (nlinum-relative-mode -1))))
 #+END_SRC
 ** Org-super-agenda
 #+BEGIN_SRC emacs-lisp
