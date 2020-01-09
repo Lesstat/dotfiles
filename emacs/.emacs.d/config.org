@@ -78,9 +78,6 @@ alternative leader key for modes where evil is not active.
     :config
     (setq evil-insert-state-cursor '((bar . 3)))
     (define-key global-map (kbd "<f8>") 'evil-normal-state)
-    (use-package evil-anzu
-      :ensure t
-      )
     (use-package evil-surround
       :ensure t
       :config
