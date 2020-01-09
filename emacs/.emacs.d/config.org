@@ -1315,4 +1315,11 @@ already have first.
     (org-super-agenda-mode 1)
     )
 #+END_SRC
+** Paradox
+#+BEGIN_SRC emacs-lisp
+  (use-package paradox
+    :ensure t
+    :config
+    (paradox-enable))
+#+END_SRC
 
