@@ -153,9 +153,12 @@ alternative leader key for modes where evil is not active.
 
     (use-package evil-org
       :ensure t
+      :defer t
       :after org
+      :commands evil-org-mode
+      :init
+      (add-hook 'org-mode-hook  #'evil-org-mode)
       :config
-      (add-hook 'org-mode-hook 'evil-org-mode)
       (add-hook 'evil-org-mode-hook
                 (lambda ()
                   (evil-org-set-key-theme))))
@@ -189,27 +192,27 @@ alternative leader key for modes where evil is not active.
         "q q" 'save-buffers-kill-emacs
         "i" 'ivy-resume
         "c" 'flycheck-list-errors)
-        (evil-leader/set-key-for-mode 'org-mode
-          "t"  nil 
-          "t t" 'org-todo
-          "t s" 'org-schedule
-          "t d" 'org-deadline
-          "t w" 'org-refile
-          )
-        (evil-leader/set-key-for-mode 'rust-mode
-          "g" 'racer-find-definition
-          "d" 'racer-describe
-          "m c" 'fb/fold-rust-functions)
-        (evil-leader/set-key-for-mode 'go-mode
-          "g" 'godef-jump
-          "d" 'godoc-at-point)
-        (evil-leader/set-key-for-mode 'c++-mode
-          "g" 'rtags-find-symbol-at-point
-          "ä" 'srefactor-refactor-at-point)
-        (evil-leader/set-key-for-mode 'python-mode
-          "m c" 'fb/fold-rust-functions)
-        (define-key global-map (kbd "<f5>") evil-leader--default-map)
+      (evil-leader/set-key-for-mode 'org-mode
+        "t"  nil 
+        "t t" 'org-todo
+        "t s" 'org-schedule
+        "t d" 'org-deadline
+        "t w" 'org-refile
         )
+      (evil-leader/set-key-for-mode 'rust-mode
+        "g" 'racer-find-definition
+        "d" 'racer-describe
+        "m c" 'fb/fold-rust-functions)
+      (evil-leader/set-key-for-mode 'go-mode
+        "g" 'godef-jump
+        "d" 'godoc-at-point)
+      (evil-leader/set-key-for-mode 'c++-mode
+        "g" 'rtags-find-symbol-at-point
+        "ä" 'srefactor-refactor-at-point)
+      (evil-leader/set-key-for-mode 'python-mode
+        "m c" 'fb/fold-rust-functions)
+      (define-key global-map (kbd "<f5>") evil-leader--default-map)
+      )
 
     (use-package nlinum-relative
       :ensure t
@@ -235,6 +238,7 @@ A more powerful way to move with evil mode. [[https://github.com/hlissner/evil-s
 #+BEGIN_SRC emacs-lisp
   (use-package evil-snipe
     :ensure t
+    :defer t
     :config
     (evil-snipe-mode 1)
     (evil-snipe-override-mode 1)
@@ -242,12 +246,6 @@ A more powerful way to move with evil mode. [[https://github.com/hlissner/evil-s
      evil-snipe-scope 'buffer
      evil-snipe-repeat-scope 'whole-buffer)
     (add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode)
-    (evil-define-key '(normal motion) 'evil-snipe-local-mode-map
-      "f" 'evil-snipe-s
-      "F" 'evil-snipe-S
-      "t" 'evil-snipe-x
-      "T" 'evil-snipe-X
-      )
     )
 
 #+END_SRC
@@ -302,7 +300,8 @@ taken from [[https://www.emacswiki.org/emacs/BackupDirectory][emacswiki]]
     (use-package counsel
       :ensure t)
     (use-package ivy-hydra
-      :ensure t)
+      :ensure t
+      :defer t)
     (ivy-mode 1)
     (setq ivy-use-virtual-buffers    t
           ivy-re-builders-alist      '(( t . ivy--regex-ignore-order))
@@ -329,6 +328,7 @@ provided as org-contrib package.
 #+BEGIN_SRC emacs-lisp
   (use-package notmuch
     :ensure t
+    :defer t
     :config
     (require 'ol-notmuch)
     (setq notmuch-saved-searches
@@ -485,19 +485,20 @@ provided as org-contrib package.
      :defer t)
 
   (setq org-file-apps
-     '((auto-mode . emacs)
-      ("\\.mm\\'" . default)
-      ("\\.x?html?\\'" . default)))
+        '((auto-mode . emacs)
+          ("\\.mm\\'" . default)
+          ("\\.x?html?\\'" . default)))
 
 
-   (dolist (hook '(org-mode-hook))
-     (add-hook hook (lambda () (flyspell-mode 1)))
-     (add-hook hook (lambda () (auto-fill-mode 1)))
-     (add-hook 'org-mode-hook
-               (lambda ()
-                 (setq-local yas/trigger-key [tab])
-                 (define-key yas/keymap [tab] 'yas/next-field-or-maybe-expand))
-               ))
+  (dolist (hook '(org-mode-hook))
+    (add-hook hook (lambda () (flyspell-mode 1)))
+    (add-hook hook (lambda () (auto-fill-mode 1)))
+    (add-hook 'org-mode-hook
+              (lambda ()
+                (require 'yasnippet)
+                (setq-local yas/trigger-key [tab])
+                (define-key yas/keymap [tab] 'yas/next-field-or-maybe-expand))
+              ))
   (setq org-catch-invisible-edits 'smart)
 
 #+END_SRC
@@ -513,6 +514,7 @@ configured reftex to use the org-ref bibliography by default.
 
   (use-package org-ref
     :ensure t
+    :defer t
     :config
     (setq org-ref-pdf-directory "~/brain/files/references/pdfs/"
           org-ref-bibliography-notes "~/brain/files/references/notes.org"
@@ -596,6 +598,7 @@ little pop-up is displayed via ~notify-send~.
 
   (use-package org-pomodoro
     :ensure t
+    :defer t
     :config
     (add-hook 'org-pomodoro-finished-hook 'fb/display-pomodoro-finished-buffer)
     (setq org-pomodoro-keep-killed-pomodoro-time t
@@ -677,9 +680,8 @@ Org Bullets for nicer Headlines:
 #+BEGIN_SRC emacs-lisp
   (use-package org-bullets
      :ensure t
-     :config
-     (add-hook 'org-mode-hook 'org-bullets-mode)
-     )
+     :defer t
+     :hook (org-mode . org-bullets-mode))
   (add-hook 'org-mode-hook 'org-indent-mode )
 #+END_SRC
 
@@ -783,18 +785,6 @@ presentations / papers. Activation by uncommenting the add-hook call.
 ;;          'fb/org-use-comma-in-exported-tables)
 #+END_SRC
 
-** calfw
-#+BEGIN_SRC emacs-lisp
-    (use-package calfw
-      :ensure t
-      :config
-      (use-package calfw-ical
-        :ensure t)
-      (use-package calfw-org
-        :ensure t)
-      (setq calendar-week-start-day 1)
-      )
-#+END_SRC
 * Programming
 ** General
 I don't want to mix tabs with spaces, so I'm going all spaces.
@@ -842,6 +832,7 @@ of creating tags beforehand.
 #+BEGIN_SRC emacs-lisp
   (use-package dumb-jump
     :ensure t
+    :defer t
     :config
     (dumb-jump-mode))
 #+END_SRC
@@ -850,6 +841,7 @@ Magit is the ultimate git ui.
 #+BEGIN_SRC emacs-lisp
   (use-package magit
     :ensure t
+    :defer t
     :config
     (define-key magit-status-mode-map (kbd "SPC") evil-leader--default-map)
     ;; Ensures that commit buffer opens in insert mode
@@ -883,32 +875,43 @@ style instead of characters the config is +inspired+ stolen from [[https://githu
 #+BEGIN_SRC emacs-lisp
   (use-package company
     :ensure t
+    :hook (after-init . global-company-mode)
     :config
     (setq company-tooltip-align-annotations t)
     (setq company-async-timeout 5)
     (use-package company-c-headers
-      :ensure t)
+      :ensure t
+      :defer t)
     (use-package company-shell
-      :ensure t)
+      :ensure t
+      :defer t)
     (use-package company-go
-      :ensure t)
+      :ensure t
+      :defer t
+      :hook go)
     (use-package company-jedi
-      :ensure t)
+      :ensure t
+      :defer t
+      :hook elpy)
     (use-package company-web
-      :ensure t)
-    (add-hook 'after-init-hook 'global-company-mode)
+      :ensure t
+      :defer t
+      :hook (web js2))
     (define-key company-mode-map  (kbd "M-<tab>") 'company-complete)
     (use-package company-quickhelp
       :ensure t
+      :defer t
       :config
       (company-quickhelp-mode 1)
       (define-key company-active-map (kbd "M-h") #'company-quickhelp-manual-begin)
       )
     (use-package company-reftex
-      :ensure t)
+      :ensure t
+      :defer t)
     (use-package company-math
       :ensure t
-      :config
+      :defer t
+      :init
       (defun fb/company-latex-setup ()
         (setq-local company-backends
                     (append
@@ -932,19 +935,17 @@ style instead of characters the config is +inspired+ stolen from [[https://githu
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
     :ensure t
-    :config 
+    :init 
     (setq-default flycheck-emacs-lisp-load-path 'inherit)
     (global-flycheck-mode)
-    (use-package flycheck-clang-tidy
-      :ensure t
-      :config
-      (add-hook 'flycheck-mode-hook #'flycheck-clang-tidy-setup))
-    (use-package flycheck-inline
-      :ensure t
-      :config
-      (with-eval-after-load 'flycheck
-        (add-hook 'flycheck-mode-hook #'flycheck-inline-mode)))
     ) 
+
+  (use-package flycheck-inline
+    :ensure t
+    :config
+    :after flycheck
+    :init
+    (global-flycheck-inline-mode))
 
 #+END_SRC
 *** projectile
@@ -997,7 +998,9 @@ a fix immediately reflects in code.
 #+BEGIN_SRC emacs-lisp
   (use-package elpy
     :ensure t
-    :init (elpy-enable)
+    :defer t
+    :init 
+    (advice-add 'python-mode :before 'elpy-enable)
     :config
     (if (file-exists-p "/usr/bin/ipython")
         (progn
@@ -1006,9 +1009,11 @@ a fix immediately reflects in code.
                 python-shell-interpreter-args "--simple-prompt --pprint"))) 
     (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
     (use-package ein
-      :ensure t)
+      :ensure t
+      :defer t)
     (use-package py-autopep8
       :ensure t
+      :defer t
       :config
       (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
     (add-hook 'elpy-mode-hook 'hs-minor-mode)
@@ -1023,6 +1028,7 @@ a fix immediately reflects in code.
 #+BEGIN_SRC emacs-lisp
   (use-package go-mode
     :ensure t
+    :defer t
     :config
     (setq gofmt-command "goimports")
     (add-hook 'go-mode-hook (lambda ()
@@ -1040,15 +1046,18 @@ a fix immediately reflects in code.
 #+BEGIN_SRC emacs-lisp
   (use-package js2-mode
     :ensure t
+    :defer t
     :config
     (add-to-list 'auto-mode-alist '("\\.js?\\'" . js2-mode))
     (use-package js2-refactor
       :ensure t
+      :defer t
       :config
       (add-hook 'js2-mode-hook 'js2-refactor-mode))
     (add-hook 'js2-mode-hook 'hs-minor-mode)
     (use-package prettier-js
       :ensure t
+      :defer t
       :config
       (add-hook 'js2-mode-hook 'prettier-js-mode))
     )
@@ -1058,8 +1067,9 @@ Mode for editing all sorts of web stuff in a single file.
 #+BEGIN_SRC emacs-lisp
   (use-package web-mode
     :ensure t
+    :defer t
+    :mode (("\\.html?\\'" . web-mode))
     :config
-    (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
     (setq web-mode-markup-indent-offset 2
           web-mode-css-indent-offset 2
           web-mode-code-indent-offset 2
@@ -1073,6 +1083,7 @@ Mode for editing all sorts of web stuff in a single file.
 #+BEGIN_SRC emacs-lisp
   (use-package markdown-mode
     :ensure t
+    :defer t
     :commands (markdown-mode gfm-mode)
     :mode (("README\\.md\\'" . gfm-mode)
            ("\\.md\\'" . markdown-mode)
@@ -1087,17 +1098,8 @@ racer to work.
 #+BEGIN_SRC emacs-lisp
   (use-package rust-mode
     :ensure t
+    :defer t
     :config
-    (use-package racer
-      :ensure t
-      :config
-      (push 'racer-help-mode evil-emacs-state-modes)
-      (use-package company-racer
-        :ensure t)
-      )
-      (use-package flycheck-rust
-        :ensure t
-        )
 
     (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
     (add-hook 'rust-mode-hook
@@ -1118,14 +1120,35 @@ racer to work.
                  ))
     )
 
+    (use-package racer
+      :ensure t
+      :defer t
+      :commands racer-activate
+      :config
+      (push 'racer-help-mode evil-emacs-state-modes)
+      
+      )
+      
+      (use-package company-racer
+        :ensure t
+        :defer t
+        :config
+        )
+      (use-package flycheck-rust
+        :ensure t
+        :defer t
+        :commands flycheck-rust-setup
+        )
 #+END_SRC
 ** Cpp
 #+BEGIN_SRC emacs-lisp
   (use-package cc-mode
     :ensure t
+    :defer t
     :config
     (use-package company-rtags
       :ensure t
+      :defer t
       :config
       (setq rtags-autostart-diagnostics t
             rtags-completions-enabled t
@@ -1133,9 +1156,9 @@ racer to work.
       )
     (use-package flycheck-rtags
       :ensure t
+      :defer t
       :config
       (defun fb/flycheck-rtags-setup ()
-        (flycheck-add-next-checker 'rtags '(warning . c/c++-clang-tidy))
         (flycheck-select-checker 'rtags)
         (setq-local flycheck-highlighting-mode nil) ;; RTags creates more accurate overlays.
         (setq-local flycheck-check-syntax-automatically nil))
@@ -1145,26 +1168,26 @@ racer to work.
       )
     (use-package ivy-rtags
       :ensure t
+      :defer t
       :config
       (setq rtags-display-result-backend 'ivy))
 
     (use-package cmake-mode
-      :ensure t)
+      :ensure t
+      :defer t)
+
     (use-package cmake-ide
       :ensure t
+      :defer t
       :config
       (cmake-ide-setup))
     (use-package clang-format
       :ensure t
-      :config
+      :defer t
+      :init
       (add-hook 'c++-mode-hook '(lambda ()
                                   (add-hook 'before-save-hook 'clang-format-buffer nil t)
-                                  (semantic-mode 0)
                                   )))
-    (use-package srefactor
-      :ensure t
-      :config
-      )
     (add-hook 'c++-mode-hook '(lambda () (hs-minor-mode 1)))
     )
 #+END_SRC
@@ -1200,6 +1223,7 @@ the document consists of multiple files.
 #+BEGIN_SRC emacs-lisp
   (use-package auctex-latexmk
     :ensure t
+    :defer t
     :config
     (auctex-latexmk-setup)
     (setq auctex-latexmk-inherit-TeX-PDF-mode t)
@@ -1213,12 +1237,16 @@ tab-completion in term, so I deactivated it for term.
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
     :ensure t
+    :defer 5
     :config
     (use-package yasnippet-snippets
       :ensure t
       )
     (yas-global-mode 1)
     (add-hook 'term-mode-hook (lambda () (yas-minor-mode -1)) )
+    (if (boundp 'scimax-dir)
+        (yas-load-directory (concat scimax-dir "snippets/") t)
+      )
     )
 #+END_SRC
 * Spelling
@@ -1244,6 +1272,7 @@ installed for hunspell to work, even though I do not use it.
 #+BEGIN_SRC emacs-lisp 
   (use-package deft
     :ensure t
+    :defer t
     :config
     (setq deft-extensions '("org" "md")
           deft-directory "~/brain/notes"
@@ -1265,22 +1294,25 @@ like. Therefore, I have to require all the dependencies I do not
 already have first.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package ggtags :ensure t)
+  (use-package ggtags :ensure t :defer t)
 
-  (use-package ibuffer-projectile :ensure t)
-  (use-package ag :ensure t)
+  (use-package ibuffer-projectile :ensure t :defer t)
+  (use-package ag :ensure t :defer t)
 
-  (use-package esup :ensure t)
-  (use-package dash-functional :ensure t)
+  (use-package esup :ensure t :defer t)
+  (use-package dash-functional :ensure t :defer t)
 #+END_SRC 
 
 
 #+BEGIN_SRC emacs-lisp
   (setq scimax-dir "~/.emacs.d/scimax/")
   (add-to-list 'load-path scimax-dir)
-  (require 'scimax-mode)
-  (require 'ob-ipython (concat scimax-dir "ob-ipython-upstream/ob-ipython.el"))
-  (require 'scimax-org-babel-ipython-upstream)
+  (add-hook 'org-mode-hook
+            '(lambda ()
+               (require 'scimax-mode)
+               (require 'ob-ipython (concat scimax-dir "ob-ipython-upstream/ob-ipython.el"))
+               (require 'scimax-org-babel-ipython-upstream)
+               ))
   (setq scimax-notebook-initialized nil)
   (add-hook 'after-make-frame-functions
             (lambda (frame)
@@ -1289,12 +1321,12 @@ already have first.
                 (setq nb-notebook-directory "~/workspaces/research/"))
               (setq scimax-notebook-initialized t)
               ))
-  (yas-load-directory (concat scimax-dir "snippets/") t)
 #+END_SRC
 ** PDF Tools and Note Taking
 #+BEGIN_SRC emacs-lisp
   (use-package pdf-tools
     :ensure t
+    :defer t
     :config
     (pdf-tools-install t)
     (add-hook 'pdf-tools-enabled-hook
@@ -1314,6 +1346,7 @@ already have first.
 #+BEGIN_SRC emacs-lisp
   (use-package paradox
     :ensure t
+    :defer t
     :config
     (paradox-enable))
 #+END_SRC

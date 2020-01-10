@@ -44,6 +44,14 @@
 ;; From use-package README
 (eval-when-compile
   (require 'use-package))
+
+;; Uncomment to benchmark emacs startup time
+;; (use-package benchmark-init
+;;   :ensure t
+;;   :config
+;;   ;; To disable collection of benchmark data after init is done.
+;;   (add-hook 'after-init-hook 'benchmark-init/deactivate))
+
 (require 'bind-key)
 
 (setq vc-follow-symlinks t) ;; so emacs doesn't ask how to open config.org after every change
