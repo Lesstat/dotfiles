@@ -1169,7 +1169,7 @@ racer to work.
     (use-package ivy-rtags
       :ensure t
       :defer t
-      :config
+      :init
       (setq rtags-display-result-backend 'ivy))
 
     (use-package cmake-mode
@@ -1256,6 +1256,8 @@ installed for hunspell to work, even though I do not use it.
 #+BEGIN_SRC emacs-lisp
   (use-package flyspell
     :ensure t
+    :defer t
+    :hook (text-mode . flyspell-mode)
     :config
     (setq ispell-program-name "hunspell")
     (setq ispell-dictionary "en_US,de_DE")
@@ -1264,7 +1266,6 @@ installed for hunspell to work, even though I do not use it.
     (ispell-set-spellchecker-params)
     (ispell-hunspell-add-multi-dic "en_US,de_DE")
 
-    (add-hook 'text-mode-hook (lambda () (flyspell-mode 1)))
     (setq flyspell-mode-line-string nil))
 #+END_SRC
 * Temp
