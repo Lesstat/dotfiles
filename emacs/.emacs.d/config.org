@@ -519,7 +519,7 @@ configured reftex to use the org-ref bibliography by default.
   (use-package org-ref
     :ensure t
     :defer t
-    :config
+    :init
     (setq org-ref-pdf-directory "~/brain/files/references/pdfs/"
           org-ref-bibliography-notes "~/brain/files/references/notes.org"
           org-ref-default-bibliography '("~/brain/files/references/references.bib")
