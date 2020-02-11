@@ -66,6 +66,8 @@ hc set smart_window_surroundings 0
 hc set smart_frame_surroundings 1
 hc set mouse_recenter_gap 0
 hc set focus_follows_mouse 1
+# Allow applications to request focus
+hc set focus_stealing_prevention 0
 
 # rules
 hc unrule -F
