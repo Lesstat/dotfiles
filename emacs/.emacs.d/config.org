@@ -554,9 +554,8 @@ configured reftex to use the org-ref bibliography by default.
   (setq org-agenda-files (cons (concat fb/brain-dir "/org") '()))
   (setq org-default-notes-file (concat (car org-agenda-files) "/inbox.org"))
   (setq org-todo-keywords
-        '((sequence "TODO(t!)" "|" "DONE(d@)")
-          (sequence "WAIT(w@)"  "|" "CANCELLED(c)")))
-  '(org-enforce-todo-dependencies t)
+        '((sequence "TODO(t!)" "STARTED(s!)" "DEFERRED(r!)" "WAIT(w@)"  "|" "DONE(d@)"  "CANCELLED(c)")
+          (sequence "PROJECT(p!)" "|" "SOMEDAY(S!)" "DONE(d@)")))
   (setq org-refile-targets '((org-agenda-files :maxlevel . 5)))
   (setq org-capture-templates
         '(("t" "Todo" entry (file org-default-notes-file)
@@ -580,8 +579,7 @@ configured reftex to use the org-ref bibliography by default.
 #+END_SRC
 I want know when i finished my Todos or reschedule something.
 #+BEGIN_SRC emacs-lisp
-  (setq org-log-done (quote time)
-        org-log-into-drawer t)
+  (setq org-log-done (quote time))
 #+END_SRC
 
 **** Org-pomodoro
