@@ -581,6 +581,53 @@ I want know when i finished my Todos or reschedule something.
 #+BEGIN_SRC emacs-lisp
   (setq org-log-done (quote time))
 #+END_SRC
+I use GTD-Style context tags.
+#+BEGIN_SRC emacs-lisp
+  (setq org-tag-alist '(("@home" . ?h)
+                        ("@office" . ?o)
+                        ("@net" . ?n)
+                        ("@code" . ?c)
+                        ("@errand" . ?e)
+                        ("@call" . ?a)
+                        ("@pc" . ?p)
+                        ("@relpy" . ?r)))
+#+END_SRC
+
+**** GTD-Workflow stuff
+The following section contains some workflow automation
+functions. First of all a cleanup function. It puts actionable and
+high priority items at the top and updates statistics cookies. The
+`org-sort-all` function is from [[https://github.com/jwiegley/dot-emacs/blob/2ba00f8209920b7c260cacc0fe28660a29b6f824/dot-org.el#L436-L456][John Wiegleys Emacs conf]].
+#+BEGIN_SRC emacs-lisp
+  (defun fb/org-gtd-cleanup-buffer ()
+    "Sorts all headings by todo-state and priority and updates all
+  satistic cookies."
+    (interactive)
+    (fb/org-sort-all)
+    (org-update-statistics-cookies t)
+    (org-shifttab 3))
+
+  (defun fb/org-sort-all ()
+    "Sorts all headings by todo-state and priorty"
+    (interactive)
+    (save-excursion
+      (goto-char (point-min))
+      (while (re-search-forward "^\* " nil t)
+        (goto-char (match-beginning 0))
+        (condition-case err
+            (progn
+              (org-sort-entries t ?p)
+              (org-sort-entries t ?o))
+          (error nil))
+        (forward-line))
+      (goto-char (point-min))
+      (while (re-search-forward "\* PROJECT " nil t)
+        (goto-char (line-beginning-position))
+        (ignore-errors
+          (org-sort-entries t ?p)
+          (org-sort-entries t ?o))
+        (forward-line))))
+#+END_SRC
 
 **** Org-pomodoro
 Pomodoro Timer for Org-mode. I added a little buffer reminding me that
