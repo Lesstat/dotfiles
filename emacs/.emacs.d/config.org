@@ -198,6 +198,8 @@ alternative leader key for modes where evil is not active.
         "t s" 'org-schedule
         "t d" 'org-deadline
         "t w" 'org-refile
+        "t p" #'fb/org-process-inbox-item
+        "t c" #'fb/org-gtd-cleanup-buffer
         )
       (evil-leader/set-key-for-mode 'rust-mode
         "g" 'racer-find-definition
@@ -222,7 +224,7 @@ alternative leader key for modes where evil is not active.
                 '(lambda () 
                    (nlinum-mode -1)
                    (nlinum-relative-mode -1))))
-  
+
     (evil-mode 1)
     )
 #+END_SRC
@@ -627,6 +629,16 @@ high priority items at the top and updates statistics cookies. The
           (org-sort-entries t ?p)
           (org-sort-entries t ?o))
         (forward-line))))
+#+END_SRC
+
+Processing an inbox item consists of assigning a tag and the correct
+todo item and refiling it into its correct place.
+#+BEGIN_SRC emacs-lisp
+  (defun fb/org-process-inbox-item ()
+    (interactive)
+    (org-set-tags-command)
+    (org-todo)
+    (org-refile))
 #+END_SRC
 
 **** Org-pomodoro
