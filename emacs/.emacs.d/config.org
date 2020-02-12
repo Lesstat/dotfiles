@@ -631,14 +631,30 @@ high priority items at the top and updates statistics cookies. The
         (forward-line))))
 #+END_SRC
 
-Processing an inbox item consists of assigning a tag and the correct
-todo item and refiling it into its correct place.
+Processing an inbox item consists of assigning a tag, the correct
+todo item, an optional priority and refiling it into its correct place.
 #+BEGIN_SRC emacs-lisp
   (defun fb/org-process-inbox-item ()
+    "Go through necessary actions to ensure a todo is in a
+  sufficient state for usage in my gtd system"
     (interactive)
     (org-set-tags-command)
+    (fb/org-assert-heading-has-context)
     (org-todo)
+    (if (not (org-entry-is-done-p))
+        (error "No TODO keyword was assigned"))
+    (condition-case nil
+        (org-priority)
+      (error nil))
     (org-refile))
+
+  (defun fb/org-assert-heading-has-context ()
+    (interactive)
+    (save-excursion
+      (condition-case nil
+          (evil-narrow-to-line
+            (search-forward ":@"))
+        (error  (error "Item does not have a context")))))
 #+END_SRC
 
 **** Org-pomodoro
