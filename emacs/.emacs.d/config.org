@@ -638,23 +638,27 @@ todo item, an optional priority and refiling it into its correct place.
     "Go through necessary actions to ensure a todo is in a
   sufficient state for usage in my gtd system"
     (interactive)
-    (org-set-tags-command)
-    (fb/org-assert-heading-has-context)
     (org-todo)
-    (if (not (org-entry-is-done-p))
-        (error "No TODO keyword was assigned"))
+    (unless (org-entry-is-todo-p)
+      (error "No TODO keyword was assigned"))
+    (org-set-tags-command)
+    (unless (fb/org-todo-heading-has-context-p)
+      (error "Item does not have a context assigned"))
     (condition-case nil
         (org-priority)
       (error nil))
     (org-refile))
 
-  (defun fb/org-assert-heading-has-context ()
+  (defun fb/org-todo-heading-has-context-p ()
+    "Returns t if the heading at point has a tag starting with @
+  aka context-tag."
     (interactive)
-    (save-excursion
-      (condition-case nil
-          (evil-narrow-to-line
-            (search-forward ":@"))
-        (error  (error "Item does not have a context")))))
+    (if (eq "PROJECT" (org-get-todo-state))
+        (-any-p
+         (lambda (tag) (s-matches-p "@" tag))
+         (org-get-tags))
+      t))
+
 #+END_SRC
 
 **** Org-pomodoro
