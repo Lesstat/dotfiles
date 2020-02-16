@@ -556,8 +556,8 @@ configured reftex to use the org-ref bibliography by default.
   (setq org-agenda-files (cons (concat fb/brain-dir "/org") '()))
   (setq org-default-notes-file (concat (car org-agenda-files) "/inbox.org"))
   (setq org-todo-keywords
-        '((sequence "TODO(t!)" "STARTED(s!)" "DEFERRED(r!)" "WAIT(w@)"  "|" "DONE(d@)"  "CANCELLED(c)")
-          (sequence "PROJECT(p!)" "|" "SOMEDAY(S!)" "DONE(d@)")))
+        '((sequence "TODO(t!)" "STARTED(s!)"  "WAIT(w@)"  "|" "DONE(d@)"  "CANCELLED(c)")
+          (sequence "PROJECT(p!)" "|"  "DEFERRED(r!)" "SOMEDAY(S!)" "IDEA(i)" "DONE(d@)")))
   (setq org-refile-targets '((org-agenda-files :maxlevel . 5)))
   (setq org-capture-templates
         '(("t" "Todo" entry (file org-default-notes-file)
