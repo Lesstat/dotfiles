@@ -708,6 +708,14 @@ little pop-up is displayed via ~notify-send~.
         org-agenda-compact-blocks t) ;; start on current day
 #+END_SRC
 
+Projects are defined by the PROJECT keyword and are "stuck" in the
+gtd and org sense if they have no children with in the state "TODO"
+or "STARTED".
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-stuck-projects '("/PROJECT" ("TODO" "STARTED") nil ""))
+#+END_SRC
+
 Custom agenda commands:
 #+BEGIN_SRC emacs-lisp 
   (setq org-agenda-custom-commands
