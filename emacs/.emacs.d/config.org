@@ -563,14 +563,12 @@ configured reftex to use the org-ref bibliography by default.
         '(("t" "Todo" entry (file org-default-notes-file)
            "* TODO %?
   :PROPERTIES:
-  :CREATION_DOC: %a
   :CREATION_DATE: %U
   :END:
   ")
           ("n" "Note" entry (file org-default-notes-file)
            "* %?
   :PROPERTIES:
-  :CREATION_DOC: %a
   :CREATION_DATE: %U
   :END:
   %x")
