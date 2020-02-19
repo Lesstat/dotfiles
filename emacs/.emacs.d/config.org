@@ -45,7 +45,6 @@ define a path for packages I manipulate myself.
 #+END_SRC
 *** Themes
 
-Loading theme in daemon mode only on first frame. (Taken from [[https://stackoverflow.com/a/34697306][here]])
 #+BEGIN_SRC emacs-lisp
   (use-package spacemacs-theme
     :defer t
@@ -56,13 +55,21 @@ Heaven and "hell to switch" to dark theme if necessary:
 #+BEGIN_SRC emacs-lisp 
   (use-package heaven-and-hell
     :ensure t
+    :hook (after-init . heaven-and-hell-init-hook)
+    :bind (("C-c <f6>" . heaven-and-hell-load-default-theme)
+           ("<f6>" . heaven-and-hell-toggle-theme))
     :init
     (setq heaven-and-hell-themes
           '((light . spacemacs-light)
             (dark . spacemacs-dark))) 
-    :hook (after-init . heaven-and-hell-init-hook)
-    :bind (("C-c <f6>" . heaven-and-hell-load-default-theme)
-           ("<f6>" . heaven-and-hell-toggle-theme)))
+    (defvar fb/heaven-and-hell-loaded nil)
+    (if (daemonp)
+        (add-hook 'after-make-frame-functions
+                  (lambda (frame)
+                    (select-frame frame)
+                    (unless fb/heaven-and-hell-loaded
+                      (setq fb/heaven-and-hell-loaded 
+                            (load-theme (cdar heaven-and-hell-themes) t)))))))
 #+END_SRC
 ** Evil-mode
 As much as I love Emacs I love having vim keybindings :)
