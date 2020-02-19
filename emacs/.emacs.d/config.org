@@ -652,8 +652,7 @@ todo item, an optional priority and refiling it into its correct place.
   (defun fb/org-todo-heading-has-context-p ()
     "Returns t if the heading at point has a tag starting with @
   aka context-tag."
-    (interactive)
-    (if (eq "PROJECT" (org-get-todo-state))
+    (if (not (member (org-get-todo-state) (list "PROJECT")))
         (-any-p
          (lambda (tag) (s-matches-p "@" tag))
          (org-get-tags))
@@ -716,52 +715,68 @@ or "STARTED".
   (setq org-stuck-projects '("/PROJECT" ("TODO" "STARTED") nil ""))
 #+END_SRC
 
+Most Agenda commands should display tasks not agendas, so I have a
+skipping function for that.
+#+BEGIN_SRC emacs-lisp
+  (defun fb/org-agenda-skip-projects ()
+    "Skip Headings marked as PROJECT"
+    (interactive)
+    (let ((is-project (member (org-get-todo-state) (list "PROJECT"))))
+      (cond (is-project
+             (let ((old-point (point)))
+               (org-goto-first-child)
+               (if (eq old-point (point))
+                   (org-goto-sibling))
+               (point))))))
+
+
+#+END_SRC
 Custom agenda commands:
 #+BEGIN_SRC emacs-lisp 
+  (setq org-super-agenda-groups
+        '(
+          (:name "Overdue"
+                 :scheduled 'past
+                 :deadline 'past)
+          (:name "Today"
+                 :time-grid t
+                 :scheduled 'today
+                 :deadline 'today)
+          (:name "Started"
+                 :todo "STARTED"
+                 :order 1)
+          (:name "Important"
+                 :priority "A"
+                 :order 2)
+
+          (:name "TODO"
+                 :and (
+                       :todo ("TODO")
+                       :not (:priority "C"))
+                 :order 3)
+          (:name "Low Prio"
+                 :and (
+                       :todo "TODO"
+                       :priority "C")
+                 :order 9)
+          ))
+
   (setq org-agenda-custom-commands
         '(
 
           ("o" "Office"
-           ((agenda nil ((org-agenda-overriding-header "Agenda")
-                         (org-super-agenda-groups
-                          '((:name "Today"
-                                   :date today)
-                            (:name "Deadlines"
-                                   :deadline t)))))
-            (tags-todo "-home"
-                       ((org-agenda-overriding-header "Tasks")
-                        (org-super-agenda-groups
-                         '((:name "Context:"
-                                  :auto-tags t))))))) 
-	
+           ((agenda nil nil)
+            (tags-todo "-@home" ((org-agenda-skip-function #'fb/org-agenda-skip-projects))))) 
+
           ("h" "Home"
-           ((agenda nil ((org-agenda-overriding-header "Agenda")
-                         (org-super-agenda-groups
-                          '((:name "Today"
-                                   :date today)
-                            (:name "Deadlines"
-                                   :deadline t)))))
-            (tags-todo "-office"
-                       ((org-agenda-overriding-header "Tasks")
-                        (org-super-agenda-groups
-                         '((:name "Context:"
-                                  :auto-tags t))))))) 
+           ((agenda nil ((org-agenda-overriding-header "Agenda")))
+            (tags-todo "-@office" ((org-agenda-overriding-header "Tasks")
+                                   (org-agenda-skip-function #'fb/org-agenda-skip-projects))))) 
 
           ("g" "On the Go"
-           ((agenda nil ((org-agenda-overriding-header "Agenda")
-                         (org-super-agenda-groups
-                          '((:name "Today"
-                                   :date today)
-                            (:name "Deadlines"
-                                   :deadline t)))))
-            (tags-todo "-office-home-online"
-                       ((org-agenda-overriding-header "Tasks")
-                        (org-super-agenda-groups
-                         '((:name "Context:"
-                                  :auto-tags t))))))) 
-
-
-          ))
+           ((agenda nil ((org-agenda-overriding-header "Agenda")))
+            (tags-todo "-@office-@home-@net" ((org-agenda-overriding-header "Tasks")
+                                              (org-agenda-skip-function #'fb/org-agenda-skip-projects)))))))
 #+END_SRC
 
 ** In Buffer Styling
