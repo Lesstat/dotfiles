@@ -369,6 +369,7 @@ provided as org-contrib package.
           message-sendmail-f-is-evil t
           message-send-mail-function 'message-send-mail-with-sendmail
           mml-secure-openpgp-encrypt-to-self t
+          mml-secure-openpgp-sign-with-sender t
           )
 
     ;; # was bound to notmuch-show-print-message which lead to some paper wasting
