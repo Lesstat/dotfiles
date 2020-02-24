@@ -1120,6 +1120,34 @@ a fix immediately reflects in code.
     :config
     (global-aggressive-indent-mode 1))
 #+END_SRC
+*** Language Server
+#+BEGIN_SRC emacs-lisp
+  (use-package lsp-mode
+    :ensure t
+    :init (setq lsp-keymap-prefix "C-l"
+                lsp-rust-server 'rust-analyzer
+                lsp-rust-analyzer-server-command "/usr/bin/ra_lsp_server")
+    :hook ((rust-mode . #'lsp-deferred)
+           (lsp-mode . lsp-enable-which-key-integration))
+    :commands lsp)
+
+  (use-package lsp-ui 
+    :ensure t
+    :commands lsp-ui-mode)
+
+  (use-package company-lsp
+    :ensure t
+    :commands company-lsp)
+
+  (use-package lsp-ivy
+    :ensure t
+    :commands lsp-ivy-workspace-symbol)
+
+  ;; optionally if you want to use debugger
+  ;;(use-package dap-mode)
+  ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
+
+#+END_SRC
 ** Python
 #+BEGIN_SRC emacs-lisp
   (use-package elpy
@@ -1230,42 +1258,13 @@ racer to work.
 
     (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
     (add-hook 'rust-mode-hook
-
               '(lambda ()
-                 ;; Enable racer
-                 (racer-activate)
-                 ;; Hook in racer with eldoc to provide documentation
-                 (racer-turn-on-eldoc)
-                 ;; Use flycheck-rust in rust-mode
-                 (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
-                 (setq flycheck-checker 'rust-clippy)
-                 ;; Use company-racer in rust mode
-                 (set (make-local-variable 'company-backends) '(company-racer))
                  (rust-enable-format-on-save)
                  (flyspell-prog-mode)
                  (hs-minor-mode)
                  ))
     )
 
-    (use-package racer
-      :ensure t
-      :defer t
-      :commands racer-activate
-      :config
-      (push 'racer-help-mode evil-emacs-state-modes)
-      
-      )
-      
-      (use-package company-racer
-        :ensure t
-        :defer t
-        :config
-        )
-      (use-package flycheck-rust
-        :ensure t
-        :defer t
-        :commands flycheck-rust-setup
-        )
 #+END_SRC
 ** Cpp
 #+BEGIN_SRC emacs-lisp
