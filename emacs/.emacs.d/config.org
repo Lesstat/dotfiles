@@ -1003,8 +1003,11 @@ style instead of characters the config is +inspired+ stolen from [[https://githu
     :ensure t
     :hook (after-init . global-company-mode)
     :config
-    (setq company-tooltip-align-annotations t)
-    (setq company-async-timeout 5)
+    (setq company-tooltip-align-annotations t
+          company-async-timeout 5
+          company-minimum-prefix-length 1
+          company-idle-delay 0.0)
+          
     (use-package company-c-headers
       :ensure t
       :defer t)
@@ -1126,8 +1129,11 @@ a fix immediately reflects in code.
     :ensure t
     :init (setq lsp-keymap-prefix "C-l"
                 lsp-rust-server 'rust-analyzer
-                lsp-rust-analyzer-server-command "/usr/bin/ra_lsp_server")
-    :hook ((rust-mode . #'lsp-deferred)
+                lsp-rust-analyzer-server-command "/usr/bin/ra_lsp_server"
+                lsp-rust-analyzer-server-display-inlay-hints t
+                lsp-rust-analyzer-cargo-watch-command "clippy")
+    :hook ((rust-mode . lsp)
+           (c-mode-common . lsp)
            (lsp-mode . lsp-enable-which-key-integration))
     :commands lsp)
 
@@ -1138,6 +1144,7 @@ a fix immediately reflects in code.
   (use-package company-lsp
     :ensure t
     :commands company-lsp)
+
 
   (use-package lsp-ivy
     :ensure t
@@ -1271,51 +1278,18 @@ racer to work.
   (use-package cc-mode
     :ensure t
     :defer t
-    :config
-    (use-package company-rtags
-      :ensure t
-      :defer t
-      :config
-      (setq rtags-autostart-diagnostics t
-            rtags-completions-enabled t
-            rtags-display-result-backend 'ivy)
-      )
-    (use-package flycheck-rtags
-      :ensure t
-      :defer t
-      :config
-      (defun fb/flycheck-rtags-setup ()
-        (flycheck-select-checker 'rtags)
-        (setq-local flycheck-highlighting-mode nil) ;; RTags creates more accurate overlays.
-        (setq-local flycheck-check-syntax-automatically nil))
-      (add-hook 'c-mode-hook #'fb/flycheck-rtags-setup)
-      (add-hook 'c++-mode-hook #'fb/flycheck-rtags-setup)
-      (add-hook 'objc-mode-hook #'fb/flycheck-rtags-setup)
-      )
-    (use-package ivy-rtags
-      :ensure t
-      :defer t
-      :init
-      (setq rtags-display-result-backend 'ivy))
+    :init
+    (add-hook 'c-mode-common-hook '(lambda () (hs-minor-mode 1))))
 
-    (use-package cmake-mode
-      :ensure t
-      :defer t)
+  (use-package clang-format
+    :ensure t
+    :defer t
+    :init
+    (add-hook 'c-mode-common-hook '(lambda () (add-hook 'before-save-hook 'clang-format-buffer nil t))))
 
-    (use-package cmake-ide
-      :ensure t
-      :defer t
-      :config
-      (cmake-ide-setup))
-    (use-package clang-format
-      :ensure t
-      :defer t
-      :init
-      (add-hook 'c++-mode-hook '(lambda ()
-                                  (add-hook 'before-save-hook 'clang-format-buffer nil t)
-                                  )))
-    (add-hook 'c++-mode-hook '(lambda () (hs-minor-mode 1)))
-    )
+  (use-package cmake-mode
+    :ensure t
+    :defer t)
 #+END_SRC
 ** Compilation Mode
 #+BEGIN_SRC emacs-lisp
