@@ -600,6 +600,22 @@ I use GTD-Style context tags.
                         ("@relpy" . ?r)))
 #+END_SRC
 
+Custom Styling for my todo keywords and priorities:
+#+BEGIN_SRC emacs-lisp
+  (setq org-todo-keyword-faces
+        (quote
+         (("PROJECT" :foreground "blue" :background "white")
+          ("DEFERRED" :foreground "dark blue" :background "white")
+          ("IDEA" :foreground "dark green" :background "white")
+          ("TODO" :foreground "dark orange" :weight bold  :background "white")
+          ("WAIT" :foreground "red"  :background "white"))))
+
+  (setq org-priority-faces
+        (quote
+         ((?A :foreground "red" :weight bold)
+          (?B :foreground "orange" :weight bold)
+          (?C :foreground "dark green" :weight bold))))
+#+END_SRC
 **** GTD-Workflow stuff
 The following section contains some workflow automation
 functions. First of all a cleanup function. It puts actionable and
