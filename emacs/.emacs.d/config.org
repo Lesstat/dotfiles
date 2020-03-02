@@ -1057,6 +1057,20 @@ style instead of characters the config is +inspired+ stolen from [[https://githu
       (add-hook 'org-mode-hook  'fb/company-latex-setup)
       )
 
+    ;; integrate yasnippet with company/ insert snippets with open completion
+    (defun company-yasnippet-or-completion ()
+      (interactive)
+      (let ((yas-fallback-behavior nil))
+        (unless (yas-expand)
+          (call-interactively #'company-complete-common))))
+  
+    ;;To make sure that this is called instead of company-complete-common, use
+
+    (add-hook 'company-mode-hook (lambda ()
+                                   (substitute-key-definition 'company-complete-common
+                                                              'company-yasnippet-or-completion
+                                                              company-active-map)))
+
     )
 #+END_SRC
 
