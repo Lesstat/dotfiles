@@ -1,0 +1,308 @@
+#+Title: Emacs Configuration
+#+Author: Florian Barth
+#+Property: header-args :results silent
+
+* General
+** Style
+#+BEGIN_SRC elisp
+(setq doom-font "Fira Code"
+      doom-theme 'doom-one)
+#+END_SRC
+** Spelling Correction
+I want to have spelling for English and German at the same time.
+#+BEGIN_SRC elisp
+(after! ispell
+  (setq ispell-program-name "hunspell"
+        ispell-dictionary "en_US,de_DE")
+    ;; ispell-set-spellchecker-params has to be called
+    ;; before ispell-hunspell-add-multi-dic will work
+    (ispell-set-spellchecker-params)
+    (ispell-hunspell-add-multi-dic "en_US,de_DE"))
+#+END_SRC
+* Org-mode
+Do not do the stupid thing for invisible region.
+#+BEGIN_SRC elisp
+(setq org-catch-invisible-edits 'smart)
+#+END_SRC
+** *Org*anizing features
+*** Todo Stuff
+#+BEGIN_SRC elisp
+(defvar fb/brain-dir "~/brain"
+  "Basis dir for my Org-mode agenda files and other stuff")
+
+(after! org
+  (setq org-agenda-files (cons (concat fb/brain-dir "/org") '()))
+  (setq org-default-notes-file (concat (car org-agenda-files) "/inbox.org"))
+  (setq org-todo-keywords
+        '((sequence "TODO(t!)" "STARTED(s!)"  "WAIT(w@)"  "|" "DONE(d@)"  "CANCELLED(c)")
+          (sequence "PROJECT(p!)" "|"  "DEFERRED(r!)" "SOMEDAY(S!)" "IDEA(i)" "DONE(d@)")))
+  (setq org-refile-targets '((org-agenda-files :maxlevel . 5)))
+  (setq org-capture-templates
+        '(("t" "Todo" entry (file org-default-notes-file)
+           "* TODO %?
+  :PROPERTIES:
+  :CREATION_DATE: %U
+  :END:
+  ")
+          ("n" "Note" entry (file org-default-notes-file)
+           "* %?
+  :PROPERTIES:
+  :CREATION_DATE: %U
+  :END:
+  %x")))
+
+  (setq org-archive-location (concat fb/brain-dir  "/archive/archive.org::datetree/* Finished" )))
+#+END_SRC
+
+I want know when i finished my Todos or reschedule something.
+#+BEGIN_SRC elisp
+  (after! org(setq org-log-done (quote time)))
+#+END_SRC
+I use GTD-Style context tags.
+#+BEGIN_SRC elisp
+(after! org
+  (setq org-tag-alist '(("@home" . ?h)
+                        ("@office" . ?o)
+                        ("@net" . ?n)
+                        ("@code" . ?c)
+                        ("@errand" . ?e)
+                        ("@call" . ?a)
+                        ("@pc" . ?p)
+                        ("@relpy" . ?r))))
+#+END_SRC
+
+Custom Styling for my todo keywords and priorities:
+#+BEGIN_SRC elisp
+(after! org
+  (setq org-todo-keyword-faces
+        (quote
+         (("PROJECT" :foreground "lawn green" )
+          ("DEFERRED" :foreground "tomato" )
+          ("IDEA" :foreground "dark green" )
+          ("TODO" :foreground "dark orange" :weight bold  )
+          ("WAIT" :foreground "red"  ))))
+
+  (setq org-priority-faces
+        (quote
+         ((?A :foreground "red" :weight bold)
+          (?B :foreground "orange" :weight bold)
+          (?C :foreground "dark green" :weight bold)))))
+#+END_SRC
+**** GTD-Workflow stuff
+The following section contains some workflow automation
+functions. First of all a cleanup function. It puts actionable and
+high priority items at the top and updates statistics cookies. The
+`org-sort-all` function is from [[https://github.com/jwiegley/dot-emacs/blob/2ba00f8209920b7c260cacc0fe28660a29b6f824/dot-org.el#L436-L456][John Wiegleys Emacs conf]].
+#+BEGIN_SRC elisp
+  (defun fb/org-gtd-cleanup-buffer ()
+    "Sorts all headings by todo-state and priority and updates all
+  satistic cookies."
+    (interactive)
+    (fb/org-sort-all)
+    (org-update-statistics-cookies t)
+    (org-shifttab 3))
+
+  (defun fb/org-sort-all ()
+    "Sorts all headings by todo-state and priorty"
+    (interactive)
+    (save-excursion
+      (goto-char (point-min))
+      (while (re-search-forward "^\* " nil t)
+        (goto-char (match-beginning 0))
+        (condition-case err
+            (progn
+              (org-sort-entries t ?p)
+              (org-sort-entries t ?o))
+          (error nil))
+        (forward-line))
+      (goto-char (point-min))
+      (while (re-search-forward "\* PROJECT " nil t)
+        (goto-char (line-beginning-position))
+        (ignore-errors
+          (org-sort-entries t ?p)
+          (org-sort-entries t ?o))
+        (forward-line))))
+#+END_SRC
+
+Processing an inbox item consists of assigning a tag, the correct
+todo item, an optional priority and refiling it into its correct place.
+#+BEGIN_SRC elisp
+  (defun fb/org-process-inbox-item ()
+    "Go through necessary actions to ensure a todo is in a
+  sufficient state for usage in my gtd system"
+    (interactive)
+    (org-todo)
+    (unless (org-entry-is-todo-p)
+      (error "No TODO keyword was assigned"))
+    (org-set-tags-command)
+    (unless (fb/org-todo-heading-has-context-p)
+      (error "Item does not have a context assigned"))
+    (condition-case nil
+        (org-priority)
+      (error nil))
+    (org-refile))
+
+  (defun fb/org-todo-heading-has-context-p ()
+    "Returns t if the heading at point has a tag starting with @
+  aka context-tag."
+    (if (not (member (org-get-todo-state) (list "PROJECT")))
+        (-any-p
+         (lambda (tag) (s-matches-p "@" tag))
+         (org-get-tags))
+      t))
+
+#+END_SRC
+
+*** Agenda Stuff
+#+BEGIN_SRC elisp
+(after! org
+  (setq org-agenda-span 'day))
+#+END_SRC
+- Show repeating tasks only once
+- Hide done tasks with timestamp in agenda
+- Don't display tasks that are already in agenda (scheduled or with
+  deadline)
+
+#+BEGIN_SRC elisp
+(after! org
+  (setq org-agenda-repeating-timestamp-show-all nil
+        org-agenda-tags-todo-honor-ignore-options t
+        org-agenda-skip-timestamp-if-done t
+        org-agenda-todo-ignore-scheduled 'all
+        org-agenda-todo-ignore-deadlines t
+        org-agenda-todo-ignore-timestamp t
+        org-agenda-start-on-weekday nil
+        org-agenda-block-separator nil
+        org-agenda-compact-blocks t)) ;; start on current day
+#+END_SRC
+
+Projects are defined by the PROJECT keyword and are "stuck" in the
+gtd and org sense if they have no children with in the state "TODO"
+or "STARTED".
+
+#+BEGIN_SRC elisp
+(after! org
+  (setq org-stuck-projects '("/PROJECT" ("TODO" "STARTED") nil "")))
+#+END_SRC
+
+Most Agenda commands should display tasks not agendas, so I have a
+skipping function for that.
+#+BEGIN_SRC elisp
+  (defun fb/org-agenda-skip-projects ()
+    "Skip Headings marked as PROJECT"
+    (interactive)
+    (let ((is-project (member (org-get-todo-state) (list "PROJECT"))))
+      (cond (is-project
+             (let ((old-point (point)))
+               (org-goto-first-child)
+               (if (eq old-point (point))
+                   (org-goto-sibling))
+               (point))))))
+
+
+#+END_SRC
+Custom agenda commands:
+#+BEGIN_SRC elisp
+(after! org
+  (setq org-super-agenda-groups
+        '(
+          (:name "Overdue"
+                 :scheduled 'past
+                 :deadline 'past)
+          (:name "Today"
+                 :time-grid t
+                 :scheduled 'today
+                 :deadline 'today)
+          (:name "Started"
+                 :todo "STARTED"
+                 :order 1)
+          (:name "Important"
+                 :priority "A"
+                 :order 2)
+
+          (:name "TODO"
+                 :and (
+                       :todo ("TODO")
+                       :not (:priority "C"))
+                 :order 3)
+          (:name "Low Prio"
+                 :and (
+                       :todo "TODO"
+                       :priority "C")
+                 :order 9)
+          ))
+
+  (setq org-agenda-custom-commands
+        '(
+
+          ("o" "Office"
+           ((agenda nil nil)
+            (tags-todo "-@home" ((org-agenda-skip-function #'fb/org-agenda-skip-projects)))))
+
+          ("h" "Home"
+           ((agenda nil ((org-agenda-overriding-header "Agenda")))
+            (tags-todo "-@office" ((org-agenda-overriding-header "Tasks")
+                                   (org-agenda-skip-function #'fb/org-agenda-skip-projects)))))
+
+          ("g" "On the Go"
+           ((agenda nil ((org-agenda-overriding-header "Agenda")))
+            (tags-todo "-@office-@home-@net" ((org-agenda-overriding-header "Tasks")
+                                              (org-agenda-skip-function #'fb/org-agenda-skip-projects))))))))
+#+END_SRC
+** Knowledge Base stuff
+*** Deft
+Deft enables me to quickly filter through all my nodes in org mode files.
+#+BEGIN_SRC elisp
+    (setq deft-extensions '("org" "md")
+          deft-directory (concat fb/brain-dir "/notes")
+          deft-use-filter-string-for-filename t
+          deft-file-naming-rules
+          '((noslash . "-")
+            (nospace . "-")
+            (case-fn . downcase)
+            )
+          deft-default-extension "org")
+#+END_SRC
+
+
+* Programming
+
+** Language Server
+#+BEGIN_SRC elisp
+(setq lsp-keymap-prefix "C-l")
+#+END_SRC
+** Folding
+To get an overview of a source file I like to fold all functions. It
+allows me to see the interface of classes/structs without too much
+clutter. This currently depends on evil mode for folding which might
+not be the best possible solution for this.
+#+BEGIN_SRC elisp
+  (defun fb/fold-functions (function-start function-paren)
+  "Folds all functions in buffer that contain FUNCTION-START and
+  their body begins with FUNCTION-PAREN."
+    (let ((start-point (point)))
+      (goto-char (point-min))
+      (while (search-forward function-start nil t)
+        (search-forward function-paren)
+        (evil-close-fold))
+      (goto-char start-point)))
+
+  (defun fb/fold-rust-functions ()
+  "Folds all functions in a rust buffer."
+    (interactive)
+    (fb/fold-functions "fn" "{"))
+
+  (defun fb/fold-python-functions ()
+  "Folds all functions in a rust buffer."
+    (interactive)
+    (fb/fold-functions "def" ":"))
+#+END_SRC
+
+** Rust
+I like to use rust-analyzer for best performance lsp experience.
+#+BEGIN_SRC elisp
+(setq rustic-lsp-server 'rust-analyzer
+      lsp-rust-analyzer-server-display-inlay-hints t
+      lsp-rust-analyzer-cargo-watch-command "clippy"
+      lsp-rust-analyzer-cargo-all-targets t)
+#+END_SRC

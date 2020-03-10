@@ -15,7 +15,6 @@ if ! which fd &> /dev/null; then
 fi 
 
 git submodule update --init --recursive # don't forget to initialize the submodules
-touch ~/.emacs.d/custom.el #File needs to be existing for emacs config to work
 if [ ! -d ~/.config/mpd ]; then
     mkdir -p ~/.config/mpd # less clutter if the directory exists beforehand
 fi
