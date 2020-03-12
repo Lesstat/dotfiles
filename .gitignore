@@ -2,3 +2,4 @@
 /scripts/.dir-locals.el
 /emacs/.config/doom/config.el
 *.elc
+/emacs/.config/doom/mail.el

@@ -325,3 +325,9 @@ I want to annotate via local leader instead of the clunky default.
         :n "t" #'pdf-annot-add-text-annotation
         :n "," #'fb/add-comma-annotation))
 #+END_SRC
+* Mail - mu4e
+#+BEGIN_SRC elisp
+(setq mu4e-maildir "~/mails")
+(after! mu4e
+  (load-file (concat doom-private-dir  "mail.el")))
+#+END_SRC
