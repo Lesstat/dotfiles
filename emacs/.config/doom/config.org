@@ -307,3 +307,21 @@ I like to use rust-analyzer for best performance lsp experience.
       lsp-rust-analyzer-cargo-watch-command "clippy"
       lsp-rust-analyzer-cargo-all-targets t)
 #+END_SRC
+
+* PDFs
+I want to annotate via local leader instead of the clunky default.
+#+BEGIN_SRC elisp
+(defun fb/add-comma-annotation ()
+  (interactive)
+  (pdf-annot-add-highlight-markup-annotation
+   (pdf-view-active-region t)
+   "yellow"
+   '((contents . "comma"))))
+
+(map! :map pdf-view-mode-map
+      :localleader
+      :prefix ("a" . "Annotations")
+      ( :n "h" #'pdf-annot-add-highlight-markup-annotation
+        :n "t" #'pdf-annot-add-text-annotation
+        :n "," #'fb/add-comma-annotation))
+#+END_SRC
