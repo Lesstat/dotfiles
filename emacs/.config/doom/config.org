@@ -5,7 +5,7 @@
 * General
 ** Style
 #+BEGIN_SRC elisp
-(setq doom-font "Fira Code"
+(setq doom-font "Fira Code-10"
       doom-theme 'doom-one)
 #+END_SRC
 ** Spelling Correction
@@ -22,7 +22,8 @@ I want to have spelling for English and German at the same time.
 * Org-mode
 Do not do the stupid thing for invisible region.
 #+BEGIN_SRC elisp
-(setq org-catch-invisible-edits 'smart)
+(after! org
+ (setq org-catch-invisible-edits 'smart))
 #+END_SRC
 ** *Org*anizing features
 *** Todo Stuff
@@ -56,7 +57,7 @@ Do not do the stupid thing for invisible region.
 
 I want know when i finished my Todos or reschedule something.
 #+BEGIN_SRC elisp
-  (after! org(setq org-log-done (quote time)))
+(after! org(setq org-log-done (quote time)))
 #+END_SRC
 I use GTD-Style context tags.
 #+BEGIN_SRC elisp
@@ -94,62 +95,62 @@ functions. First of all a cleanup function. It puts actionable and
 high priority items at the top and updates statistics cookies. The
 `org-sort-all` function is from [[https://github.com/jwiegley/dot-emacs/blob/2ba00f8209920b7c260cacc0fe28660a29b6f824/dot-org.el#L436-L456][John Wiegleys Emacs conf]].
 #+BEGIN_SRC elisp
-  (defun fb/org-gtd-cleanup-buffer ()
-    "Sorts all headings by todo-state and priority and updates all
+(defun fb/org-gtd-cleanup-buffer ()
+  "Sorts all headings by todo-state and priority and updates all
   satistic cookies."
-    (interactive)
-    (fb/org-sort-all)
-    (org-update-statistics-cookies t)
-    (org-shifttab 3))
+  (interactive)
+  (fb/org-sort-all)
+  (org-update-statistics-cookies t)
+  (org-shifttab 3))
 
-  (defun fb/org-sort-all ()
-    "Sorts all headings by todo-state and priorty"
-    (interactive)
-    (save-excursion
-      (goto-char (point-min))
-      (while (re-search-forward "^\* " nil t)
-        (goto-char (match-beginning 0))
-        (condition-case err
-            (progn
-              (org-sort-entries t ?p)
-              (org-sort-entries t ?o))
-          (error nil))
-        (forward-line))
-      (goto-char (point-min))
-      (while (re-search-forward "\* PROJECT " nil t)
-        (goto-char (line-beginning-position))
-        (ignore-errors
-          (org-sort-entries t ?p)
-          (org-sort-entries t ?o))
-        (forward-line))))
+(defun fb/org-sort-all ()
+  "Sorts all headings by todo-state and priorty"
+  (interactive)
+  (save-excursion
+    (goto-char (point-min))
+    (while (re-search-forward "^\* " nil t)
+      (goto-char (match-beginning 0))
+      (condition-case err
+          (progn
+            (org-sort-entries t ?p)
+            (org-sort-entries t ?o))
+        (error nil))
+      (forward-line))
+    (goto-char (point-min))
+    (while (re-search-forward "\* PROJECT " nil t)
+      (goto-char (line-beginning-position))
+      (ignore-errors
+        (org-sort-entries t ?p)
+        (org-sort-entries t ?o))
+      (forward-line))))
 #+END_SRC
 
 Processing an inbox item consists of assigning a tag, the correct
 todo item, an optional priority and refiling it into its correct place.
 #+BEGIN_SRC elisp
-  (defun fb/org-process-inbox-item ()
-    "Go through necessary actions to ensure a todo is in a
+(defun fb/org-process-inbox-item ()
+  "Go through necessary actions to ensure a todo is in a
   sufficient state for usage in my gtd system"
-    (interactive)
-    (org-todo)
-    (unless (org-entry-is-todo-p)
-      (error "No TODO keyword was assigned"))
-    (org-set-tags-command)
-    (unless (fb/org-todo-heading-has-context-p)
-      (error "Item does not have a context assigned"))
-    (condition-case nil
-        (org-priority)
-      (error nil))
-    (org-refile))
+  (interactive)
+  (org-todo)
+  (unless (org-entry-is-todo-p)
+    (error "No TODO keyword was assigned"))
+  (org-set-tags-command)
+  (unless (fb/org-todo-heading-has-context-p)
+    (error "Item does not have a context assigned"))
+  (condition-case nil
+      (org-priority)
+    (error nil))
+  (org-refile))
 
-  (defun fb/org-todo-heading-has-context-p ()
-    "Returns t if the heading at point has a tag starting with @
+(defun fb/org-todo-heading-has-context-p ()
+  "Returns t if the heading at point has a tag starting with @
   aka context-tag."
-    (if (not (member (org-get-todo-state) (list "PROJECT")))
-        (-any-p
-         (lambda (tag) (s-matches-p "@" tag))
-         (org-get-tags))
-      t))
+  (if (not (member (org-get-todo-state) (list "PROJECT")))
+      (-any-p
+       (lambda (tag) (s-matches-p "@" tag))
+       (org-get-tags))
+    t))
 
 #+END_SRC
 
