@@ -359,3 +359,26 @@ Configuring sending mail.
         mml-secure-openpgp-encrypt-to-self t
         mml-secure-openpgp-sign-with-sender t))
 #+END_SRC
+** Bookmarks
+Some bookmarks for easy access.
+#+BEGIN_SRC elisp
+  (after! mu4e
+    (setq mu4e-bookmarks
+          `(
+            ,(make-mu4e-bookmark
+              :name "Unread messages"
+              :query "flag:unread AND NOT flag:trashed"
+              :key ?u)
+            ,(make-mu4e-bookmark
+              :name "Inboxes"
+              :query "maildir:/.*Inbox/"
+              :key ?i)
+            ,(make-mu4e-bookmark
+              :name "Todos"
+              :query "maildir:/.*Todo/"
+              :key ?t)
+            ,(make-mu4e-bookmark
+              :name "Todays messages"
+              :query "date:today..now"
+              :key ?T))) )
+#+END_SRC
