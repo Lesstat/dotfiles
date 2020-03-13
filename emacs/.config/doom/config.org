@@ -3,6 +3,9 @@
 #+Property: header-args :results silent
 
 * General
+#+BEGIN_SRC elisp
+(setq user-full-name "Florian Barth")
+#+END_SRC
 ** Style
 #+BEGIN_SRC elisp
 (setq doom-font "Fira Code-10"
@@ -326,8 +329,32 @@ I want to annotate via local leader instead of the clunky default.
         :n "," #'fb/add-comma-annotation))
 #+END_SRC
 * Mail - mu4e
+I set up general stuff for mu4e here but keep machine specific stuff in an extra
+file mail.el.
 #+BEGIN_SRC elisp
 (setq mu4e-maildir "~/mails")
 (after! mu4e
-  (load-file (concat doom-private-dir  "mail.el")))
+  (load-file (concat doom-private-dir  "mail.el"))
+  (defun fb/update-polybar-indicator ()
+    (interactive)
+    (start-process "update polybar indicator"
+                   nil
+                   "/usr/bin/polybar-msg"
+                   "hook" "mail" "1"))
+
+  (if (file-exists-p "/usr/bin/polybar-msg")
+      (add-hook 'mu4e-index-updated-hook #'fb/update-polybar-indicator)))
+#+END_SRC
+
+Configuring sending mail.
+#+BEGIN_SRC elisp
+(after! mu4e
+  (setq mail-specify-envelope-from t
+        message-sendmail-extra-arguments '("--read-envelope-from")
+        message-sendmail-envelope-from "header"
+        sendmail-program "/usr/bin/msmtp"
+        message-sendmail-f-is-evil t
+        message-send-mail-function #'message-send-mail-with-sendmail
+        mml-secure-openpgp-encrypt-to-self t
+        mml-secure-openpgp-sign-with-sender t))
 #+END_SRC
