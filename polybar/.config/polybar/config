@@ -94,15 +94,15 @@ hook-0 = currentKeyboard.sh
 initial = 1
 click-left = changeKeyboard.sh
 
-format-prefix = "%{T2}⌨ "
+format-prefix = "⌨ "
 format-underline = ${colors.underline}
 
 [module/mail]
 type = custom/ipc
-hook-0 = notmuchWidget.sh
+hook-0 = muWidget.sh
 initial = 1
-click-left = execInEmacs.sh "(notmuch)"
-click-right = mail_sync.sh &
+click-left = execInEmacs.sh "(mu4e)"
+click-right = mailsync
 format-underline = ${colors.underline}
 
 [module/calendar]

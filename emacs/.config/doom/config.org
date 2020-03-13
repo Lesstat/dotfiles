@@ -336,6 +336,7 @@ file mail.el.
 (after! mu4e
   (load-file (concat doom-private-dir  "mail.el"))
   (defun fb/update-polybar-indicator ()
+    "Update my custom polybar indicator which shows that mails need to be processed."
     (interactive)
     (start-process "update polybar indicator"
                    nil
