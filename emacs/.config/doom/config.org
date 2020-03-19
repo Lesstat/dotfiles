@@ -341,7 +341,8 @@ file mail.el.
                    "hook" "mail" "1"))
 (after! mu4e
   (setq mu4e-maildir "~/mails"
-        mu4e-view-html-plaintext-ratio-heuristic 100)
+        mu4e-view-html-plaintext-ratio-heuristic 100
+        mu4e-attachment-dir "~/Downloads/")
   (load-file (concat doom-private-dir  "mail.el"))
   (if (file-exists-p "/usr/bin/polybar-msg")
       (add-hook 'mu4e-index-updated-hook #'fb/update-polybar-indicator)))
