@@ -8,7 +8,7 @@
 #+END_SRC
 ** Style
 #+BEGIN_SRC elisp
-(setq doom-font "Fira Code-10"
+(setq doom-font "FiraCode Nerd Font 10"
       doom-theme 'doom-one)
 #+END_SRC
 ** Spelling Correction
