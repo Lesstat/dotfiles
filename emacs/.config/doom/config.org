@@ -60,7 +60,7 @@ Do not do the stupid thing for invisible region.
 
 I want know when i finished my Todos or reschedule something.
 #+BEGIN_SRC elisp
-(after! org(setq org-log-done (quote time)))
+(after! org (setq org-log-done (quote time)))
 #+END_SRC
 I use GTD-Style context tags.
 #+BEGIN_SRC elisp
@@ -177,7 +177,7 @@ todo item, an optional priority and refiling it into its correct place.
         org-agenda-todo-ignore-timestamp t
         org-agenda-start-on-weekday nil
         org-agenda-block-separator nil
-        org-agenda-compact-blocks t)) ;; start on current day
+        org-agenda-compact-blocks t))
 #+END_SRC
 
 Projects are defined by the PROJECT keyword and are "stuck" in the
@@ -207,7 +207,9 @@ skipping function for that.
 #+END_SRC
 Custom agenda commands:
 #+BEGIN_SRC elisp
-(after! org
+(use-package! org-super-agenda
+  :after org-agenda
+  :init
   (setq org-super-agenda-groups
         '(
           (:name "Overdue"
@@ -235,7 +237,10 @@ Custom agenda commands:
                        :priority "C")
                  :order 9)
           ))
+  :config
+  (org-super-agenda-mode))
 
+(after! org
   (setq org-agenda-custom-commands
         '(
 
