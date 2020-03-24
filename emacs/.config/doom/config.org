@@ -363,7 +363,11 @@ Configuring sending mail.
         message-sendmail-f-is-evil t
         message-send-mail-function #'message-send-mail-with-sendmail
         mml-secure-openpgp-encrypt-to-self t
-        mml-secure-openpgp-sign-with-sender t))
+        mml-secure-openpgp-sign-with-sender t
+        mu4e-compose-crypto-reply-plain-policy 'sign))
+
+(after! org-mu4e
+  (remove-hook 'mu4e-compose-mode-hook #'org-mu4e-compose-org-mode))
 #+END_SRC
 ** Bookmarks
 Some bookmarks for easy access.
