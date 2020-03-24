@@ -158,10 +158,6 @@ todo item, an optional priority and refiling it into its correct place.
 #+END_SRC
 
 *** Agenda Stuff
-#+BEGIN_SRC elisp
-(after! org
-  (setq org-agenda-span 'day))
-#+END_SRC
 - Show repeating tasks only once
 - Hide done tasks with timestamp in agenda
 - Don't display tasks that are already in agenda (scheduled or with
