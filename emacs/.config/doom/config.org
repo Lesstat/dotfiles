@@ -281,6 +281,13 @@ with the doom config and only works with the ivy interface to projectile.
 (after! projectile
   (setcar counsel-projectile-switch-project-action 13))
 #+END_SRC
+** Flycheck
+For now, just keybindings for going to the next and previous error.
+#+BEGIN_SRC elisp
+(map! :leader :prefix "c" ("n" #'flycheck-next-error
+                           "p" #'flycheck-previous-error))
+#+END_SRC
+
 ** Language Server
 #+BEGIN_SRC elisp
 (setq lsp-keymap-prefix "C-l")
