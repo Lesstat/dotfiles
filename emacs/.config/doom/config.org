@@ -272,6 +272,15 @@ Deft enables me to quickly filter through all my nodes in org mode files.
 
 * Programming
 
+** Projectile
+I configured projectile to go straight to the magit view, when I open a project, so I get an
+overview of the situation. The following code block sets the default action to
+be the 13th in the list of actions. Obviously, this will have to be kept in sync
+with the doom config and only works with the ivy interface to projectile.
+#+BEGIN_SRC elisp
+(after! projectile
+  (setcar counsel-projectile-switch-project-action 13))
+#+END_SRC
 ** Language Server
 #+BEGIN_SRC elisp
 (setq lsp-keymap-prefix "C-l")
