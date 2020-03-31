@@ -82,7 +82,7 @@ case $TERM in
 	screen*)
 
 	    if (( $+commands[starship] )); then
-		eval "$(starship init zsh)"
+		    eval "$(starship init zsh)"
 	    fi
 
 	    precmd(){
@@ -97,8 +97,8 @@ case $TERM in
 		printf "\033k$(echo "$1")\033\\"
 		# set st-title to running program
 		print -Pn "\e]2;$(echo "$1")\a"
-            }
-            ;;
+        }
+        ;;
 
 	dumb*)
 	    unsetopt zle
