@@ -33,6 +33,7 @@ Do not do the stupid thing for invisible region.
 #+BEGIN_SRC elisp
 (defvar fb/brain-dir "~/brain"
   "Basis dir for my Org-mode agenda files and other stuff")
+(setq org-directory (concat fb/brain-dir "/org"))
 
 (after! org
   (setq org-agenda-files (cons (concat fb/brain-dir "/org") '()))
@@ -269,6 +270,14 @@ Deft enables me to quickly filter through all my nodes in org mode files.
           deft-default-extension "org")
 #+END_SRC
 
+*** Org-roam
+Org-roam is a tool to make my notes an interconnected web, that is awesome to navigate.
+#+BEGIN_SRC elisp
+(after! org-roam
+  (setq org-roam-directory deft-directory
+        org-roam-capture-templates
+        '(("d" "default" plain #'org-roam-capture--get-point "%?" :file-name "${slug}" :head "#+TITLE: ${title}\nTAGS: \n" :unnarrowed t))))
+#+END_SRC
 
 * Programming
 
