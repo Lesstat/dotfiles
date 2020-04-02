@@ -113,21 +113,6 @@ format-prefix = "📅 "
 format-underline = ${colors.underline}
 click-left = display_todays_agenda.sh
 
-[module/mpd]
-type = internal/mpd
-format-online = <label-song>  <icon-prev> <icon-stop> <toggle> <icon-next>
-format-online-underline = ${colors.underline}
-
-icon-prev = 玲
-icon-stop = 栗
-icon-play = 
-icon-pause = 
-icon-next = 怜
-
-label-song-maxlen = 25
-label-song-ellipsis = true
-label-song = %title%
-
 [module/cpu]
 type = internal/cpu
 interval = 2
