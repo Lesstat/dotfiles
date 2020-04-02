@@ -16,9 +16,7 @@ plugins=(git emacs z)
 
 # User configuration
 
-export PATH=$HOME/bin:/usr/local/bin:$PATH
-
-
+# If not an interactive shell stop here
 [[ $- != *i* ]] && return
 
 [[ -d /opt/fsl/lib ]] && export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/opt/fsl/lib"
@@ -38,18 +36,6 @@ if (($+commands[exa])) ; then
 fi
 
 
-export RUST_SRC_PATH="$HOME/workspaces/rust/rust/src/"
-
-if [[ -d "$HOME/workspaces/go" ]]; then
-    export GOPATH="$HOME/workspaces/go"
-    export PATH="${PATH}:${GOPATH}/bin"
-fi
-if [[ -d "$HOME/.cargo/bin" ]]; then
-    export PATH="$HOME/.cargo/bin:$PATH"
-fi
-
-export MPD_HOST="$HOME/.config/mpd/socket"
-
 if (( $+commands[st] )); then
     export TERMINAL='st'
 fi
@@ -59,23 +45,6 @@ if (( $+commands[bat] )); then
     # Bat does not handle line wrapping in man pages well -.-
     alias man='PAGER=less man' 
 fi
-
-export EDITOR='emacsclient --alternate-editor "" --create-frame'
-
-
-if (( $+commands[clang] )); then
-	export CC="clang"
-	export CXX="clang++"
-fi
-
-export QT_AUTO_SCREEN_SCALE_FACTOR=0
-
-#Taskwarrior stuff
-alias t=task
-alias td='task done'
-alias ta='task add'
-alias tm='task modify'
-alias ttt='task modify wait:tomorrow'
 
 
 case $TERM in
@@ -110,11 +79,6 @@ case $TERM in
 	    ;;
 esac
 
-export XDG_CONFIG_HOME=$HOME/.config
-export XDG_CACHE_HOME=$HOME/.cache
-export XDG_DATA_HOME=$HOME/.local/share
-export XDG_DATA_DIRS="/usr/local/share:/usr/share"
-export XDG_CONFIG_DIRS="/etc/xdg"
 
 bindkey -v
 

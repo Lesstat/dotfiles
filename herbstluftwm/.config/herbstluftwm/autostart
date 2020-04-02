@@ -1,7 +1,6 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
 # this is a simple config for herbstluftwm
-source ~/.zshrc 
 
 hc() {
     herbstclient "$@"
@@ -25,12 +24,12 @@ hc mousebind $Mod-Button2 resize
 hc set default_frame_layout 3
 
 # tags
-tag_names=( code shell org doc web mail misc )
+tag_names=( 'code' 'shell' 'org' 'doc' 'web' 'mail' 'misc' )
 #tag_keys=( {1..9} 0 )
 
-hc rename default "${tag_names[0]}" || true
-for i in ${!tag_names[@]} ; do
-    hc add "${tag_names[$i]}"
+hc rename default "${tag_names[1]}" || true
+for i in ${tag_names} ; do
+    hc add "$i"
 done
 
 # theme
@@ -100,7 +99,7 @@ nitrogen --restore &&
 [ -x "$panel" ] || panel=/etc/xdg/herbstluftwm/panel.sh
 for monitor in $(herbstclient list_monitors | cut -d: -f1) ; do
     # start it on each monitor
-    "$panel" $monitor &
+    "${panel}" "${monitor}" &
 done
 if ! pgrep emacs &> /dev/null; then
     ~/.autostart.sh  &
