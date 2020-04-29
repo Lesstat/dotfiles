@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+
+# allows usage in cron jobs
+. "${HOME}/bin/find_dbus_session.sh"
+
+/usr/bin/notify-send -t $((1000 * 60 * 5)) "Stay Hydrated" "Take a gulp of water :)"
