@@ -102,7 +102,7 @@ type = custom/ipc
 hook-0 = muWidget.sh
 initial = 1
 click-left = execInEmacs.sh "(mu4e)"
-click-right = mailsync
+click-right = mailsync &
 format-underline = ${colors.underline}
 
 [module/calendar]
