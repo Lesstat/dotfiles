@@ -36,9 +36,7 @@ if (($+commands[exa])) ; then
 fi
 
 
-if (( $+commands[st] )); then
-    export TERMINAL='st'
-fi
+(( $+commands[st] )) && export TERMINAL='st'
 
 if (( $+commands[bat] )); then
     export PAGER='bat'
@@ -50,9 +48,7 @@ fi
 case $TERM in
 	screen*)
 
-	    if (( $+commands[starship] )); then
-		    eval "$(starship init zsh)"
-	    fi
+        (( $+commands[starship] )) && eval "$(starship init zsh)"
 
 	    precmd(){
 		# Restore tmux-title to 'zsh'
