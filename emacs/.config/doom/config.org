@@ -331,10 +331,13 @@ not be the best possible solution for this.
 ** Rust
 I like to use rust-analyzer for best performance lsp experience.
 #+BEGIN_SRC elisp
-(setq rustic-lsp-server 'rust-analyzer
-      lsp-rust-analyzer-server-display-inlay-hints t
-      lsp-rust-analyzer-cargo-watch-command "clippy"
-      lsp-rust-analyzer-cargo-all-targets t)
+(after! rustic
+  (setq
+   lsp-rust-server 'rust-analyzer
+   rustic-lsp-server 'rust-analyzer
+   lsp-rust-analyzer-server-display-inlay-hints t
+   lsp-rust-analyzer-cargo-watch-command "clippy"
+   lsp-rust-analyzer-cargo-all-targets t))
 #+END_SRC
 
 * PDFs
