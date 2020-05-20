@@ -279,6 +279,26 @@ Org-roam is a tool to make my notes an interconnected web, that is awesome to na
         '(("d" "default" plain #'org-roam-capture--get-point "%?" :file-name "${slug}" :head "#+TITLE: ${title}\nTAGS: \n" :unnarrowed t))))
 #+END_SRC
 
+*** Org-ref
+[[https://github.com/jkitchin/org-ref/][Org-ref]] is a fantastic reference management package from John Kitchin.
+
+#+BEGIN_SRC elisp
+(after! org-ref
+  (setq org-ref-pdf-directory "~/brain/files/references/pdfs/"
+        org-ref-bibliography-notes "~/brain/files/references/notes.org"
+        org-ref-default-bibliography '("~/brain/files/references/references.bib")
+        reftex-default-bibliography org-ref-default-bibliography))
+#+END_SRC
+
+** Exporting
+When exporting source code blocks they should be syntax highlighted (even in pdfs).
+#+BEGIN_SRC elisp
+(after! org
+  (setq org-latex-listings 'minted
+        org-latex-pdf-process '("latexmk -shell-escape -interaction=nonstopmode -pdf %f"))
+  (add-to-list 'org-latex-packages-alist '("newfloat" "minted")))
+#+END_SRC
+
 * Programming
 
 ** Projectile
