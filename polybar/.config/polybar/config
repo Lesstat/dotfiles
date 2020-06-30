@@ -9,10 +9,10 @@
 
 [colors]
 bg-active =  ${xrdb:color0:#f0f0f0} 
-bg-urgent =  ${xrdb:color1:#f0f0f0} 
-background = ${xrdb:color8:#222}
+bg-urgent =  ${xrdb:color1:#f0f0f0}
+background = #333
 foreground = ${xrdb:foreground:#222}
-underline = ${xrdb:color6:#f0f0f0}
+underline = #f55
 
 
 [bar/main]
