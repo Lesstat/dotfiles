@@ -40,7 +40,7 @@ Do not do the stupid thing for invisible region.
   (setq org-default-notes-file (concat (car org-agenda-files) "/inbox.org"))
   (setq org-todo-keywords
         '((sequence "TODO(t!)" "STARTED(s!)"  "WAIT(w@)"  "|" "DONE(d@)"  "CANCELLED(c)")
-          (sequence "PROJECT(p!)" "|"  "DEFERRED(r!)" "SOMEDAY(S!)" "IDEA(i)" "DONE(d@)")))
+          (sequence "PROJ(p!)" "|"  "LATER(r!)" "SOMEDAY(S!)" "IDEA(i)" "DONE(d@)")))
   (setq org-refile-targets '((org-agenda-files :maxlevel . 5)))
   (setq org-capture-templates
         '(("t" "Todo" entry (file org-default-notes-file)
@@ -81,8 +81,8 @@ Custom Styling for my todo keywords and priorities:
 (after! org
   (setq org-todo-keyword-faces
         (quote
-         (("PROJECT" :foreground "lawn green" )
-          ("DEFERRED" :foreground "tomato" )
+         (("PROJ" :foreground "lawn green" )
+          ("LATER" :foreground "tomato" )
           ("IDEA" :foreground "dark green" )
           ("TODO" :foreground "dark orange" :weight bold  )
           ("WAIT" :foreground "red"  ))))
