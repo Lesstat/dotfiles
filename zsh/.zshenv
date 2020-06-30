@@ -7,6 +7,7 @@ export XDG_DATA_DIRS="/usr/local/share:/usr/share"
 export XDG_CONFIG_DIRS="/etc/xdg"
 
 [ -d "${XDG_CONFIG_HOME}/emacs/bin" ] && export PATH="${PATH}:${XDG_CONFIG_HOME}/emacs/bin"
+[ -d "${HOME}/.local/bin" ] && export PATH="${PATH}:${HOME}/.local/bin"
 
 [ -d "$HOME/.cargo/bin" ] && export PATH="$HOME/.cargo/bin:$PATH"
 export RUST_SRC_PATH="$HOME/workspaces/rust/rust/src/"
