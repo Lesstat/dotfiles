@@ -317,10 +317,6 @@ For now, just keybindings for going to the next and previous error.
                            "p" #'flycheck-previous-error))
 #+END_SRC
 
-** Language Server
-#+BEGIN_SRC elisp
-(setq lsp-keymap-prefix "C-l")
-#+END_SRC
 ** Folding
 To get an overview of a source file I like to fold all functions. It
 allows me to see the interface of classes/structs without too much
