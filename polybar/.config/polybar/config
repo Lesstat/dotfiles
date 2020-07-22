@@ -16,6 +16,7 @@ underline = #f55
 
 
 [bar/main]
+monitor = ${env:MONITOR:}
 width = 100%
 height = 23
 radius = 2.0
