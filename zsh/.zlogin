@@ -4,6 +4,5 @@ if [[ -f /usr/bin/startx  &&  "$(tty)" = "/dev/tty1" ]]; then
 fi
 
 if [[ -z "$TMUX" ]]; then
-    tmux
+    tmux a || tmux
 fi
-
