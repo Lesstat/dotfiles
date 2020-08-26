@@ -12,15 +12,18 @@
       doom-theme 'doom-one)
 #+END_SRC
 ** Spelling Correction
-I want to have spelling for English and German at the same time.
+I want to have spelling for English and German at the same time. But spell-fu (default in doom now), doesn't support this yet ...
 #+BEGIN_SRC elisp
 (after! ispell
   (setq ispell-program-name "hunspell"
-        ispell-dictionary "en_US,de_DE")
+        ispell-dictionary "en_US")
+
+    ;; (setq ispell-dictionary "en_US,de_DE")
     ;; ispell-set-spellchecker-params has to be called
     ;; before ispell-hunspell-add-multi-dic will work
-    (ispell-set-spellchecker-params)
-    (ispell-hunspell-add-multi-dic "en_US,de_DE"))
+    ;; (ispell-set-spellchecker-params)
+    ;; (ispell-hunspell-add-multi-dic "en_US,de_DE")
+    )
 #+END_SRC
 * Org-mode
 Do not do the stupid thing for invisible region.
@@ -283,13 +286,15 @@ Org-roam is a tool to make my notes an interconnected web, that is awesome to na
 [[https://github.com/jkitchin/org-ref/][Org-ref]] is a fantastic reference management package from John Kitchin.
 
 #+BEGIN_SRC elisp
-(after! org-ref
+(use-package! org-ref
+  :init
   (setq org-ref-pdf-directory "~/brain/files/references/pdfs/"
         org-ref-bibliography-notes "~/brain/files/references/notes.org"
         org-ref-default-bibliography '("~/brain/files/references/references.bib")
         reftex-default-bibliography org-ref-default-bibliography))
+(after! org
+  (setcdr (assoc "\\.pdf\\'" org-file-apps) 'emacs))
 #+END_SRC
-
 ** Exporting
 When exporting source code blocks they should be syntax highlighted (even in pdfs).
 #+BEGIN_SRC elisp
