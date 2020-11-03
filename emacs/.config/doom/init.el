@@ -78,7 +78,8 @@
        syntax              ; tasing you for every semicolon you forget
        (spell
         +everywhere
-        +hunspell)             ; tasing you for misspelling mispelling
+        +flyspell
+        )             ; tasing you for misspelling mispelling
        grammar           ; tasing grammar mistake every you make
 
        :tools
@@ -146,6 +147,7 @@
         ;;+pandoc          ; export-with-pandoc support
         ;;+pomodoro        ; be fruitful with the tomato technique
         +present        ; using org-mode for presentations
+        +pretty
         )
        ;;perl              ; write code no one else can comprehend
        ;;php               ; perl's insecure younger brother

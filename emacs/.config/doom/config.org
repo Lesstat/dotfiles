@@ -14,15 +14,14 @@
 ** Spelling Correction
 I want to have spelling for English and German at the same time. But spell-fu (default in doom now), doesn't support this yet ...
 #+BEGIN_SRC elisp
-(after! ispell
+(after! flyspell
   (setq ispell-program-name "hunspell"
-        ispell-dictionary "en_US")
-
-    ;; (setq ispell-dictionary "en_US,de_DE")
+       ;; ispell-dictionary "en_US")
+    ispell-dictionary "en_US,de_DE")
     ;; ispell-set-spellchecker-params has to be called
     ;; before ispell-hunspell-add-multi-dic will work
-    ;; (ispell-set-spellchecker-params)
-    ;; (ispell-hunspell-add-multi-dic "en_US,de_DE")
+    (ispell-set-spellchecker-params)
+    (ispell-hunspell-add-multi-dic "en_US,de_DE")
     )
 #+END_SRC
 * Org-mode
@@ -39,27 +38,17 @@ Do not do the stupid thing for invisible region.
 (setq org-directory (concat fb/brain-dir "/org"))
 
 (after! org
-  (setq org-agenda-files (cons (concat fb/brain-dir "/org") '()))
-  (setq org-default-notes-file (concat (car org-agenda-files) "/inbox.org"))
-  (setq org-todo-keywords
-        '((sequence "TODO(t!)" "STARTED(s!)"  "WAIT(w@)"  "|" "DONE(d@)"  "CANCELLED(c)")
-          (sequence "PROJ(p!)" "|"  "LATER(r!)" "SOMEDAY(S!)" "IDEA(i)" "DONE(d@)")))
-  (setq org-refile-targets '((org-agenda-files :maxlevel . 5)))
-  (setq org-capture-templates
-        '(("t" "Todo" entry (file org-default-notes-file)
-           "* TODO %?
+  (setq org-agenda-files (cons (concat fb/brain-dir "/org") '())
+        org-default-notes-file (concat (car org-agenda-files) "/inbox.org")
+        org-todo-keywords '((sequence "TODO(t!)" "STARTED(s!)"  "WAIT(w@)"  "|" "DONE(d@)"  "CANCELLED(c)"))
+        org-refile-targets '((org-agenda-files :maxlevel . 5))
+        org-capture-templates '(("t" "Todo" entry (file org-default-notes-file)
+                                 "* TODO %?
   :PROPERTIES:
   :CREATION_DATE: %U
   :END:
-  ")
-          ("n" "Note" entry (file org-default-notes-file)
-           "* %?
-  :PROPERTIES:
-  :CREATION_DATE: %U
-  :END:
-  %x")))
-
-  (setq org-archive-location (concat fb/brain-dir  "/archive/archive.org::datetree/* Finished" )))
+  "))
+        org-archive-location (concat fb/brain-dir  "/archive/archive.org::datetree/* Finished" )))
 #+END_SRC
 
 I want know when i finished my Todos or reschedule something.
@@ -71,30 +60,9 @@ I use GTD-Style context tags.
 (after! org
   (setq org-tag-alist '(("@home" . ?h)
                         ("@office" . ?o)
-                        ("@net" . ?n)
-                        ("@code" . ?c)
                         ("@errand" . ?e)
                         ("@call" . ?a)
-                        ("@pc" . ?p)
-                        ("@relpy" . ?r))))
-#+END_SRC
-
-Custom Styling for my todo keywords and priorities:
-#+BEGIN_SRC elisp
-(after! org
-  (setq org-todo-keyword-faces
-        (quote
-         (("PROJ" :foreground "lawn green" )
-          ("LATER" :foreground "tomato" )
-          ("IDEA" :foreground "dark green" )
-          ("TODO" :foreground "dark orange" :weight bold  )
-          ("WAIT" :foreground "red"  ))))
-
-  (setq org-priority-faces
-        (quote
-         ((?A :foreground "red" :weight bold)
-          (?B :foreground "orange" :weight bold)
-          (?C :foreground "dark green" :weight bold)))))
+                        ("@work" . ?w))))
 #+END_SRC
 **** GTD-Workflow stuff
 The following section contains some workflow automation
@@ -122,13 +90,6 @@ high priority items at the top and updates statistics cookies. The
             (org-sort-entries t ?p)
             (org-sort-entries t ?o))
         (error nil))
-      (forward-line))
-    (goto-char (point-min))
-    (while (re-search-forward "\* PROJECT " nil t)
-      (goto-char (line-beginning-position))
-      (ignore-errors
-        (org-sort-entries t ?p)
-        (org-sort-entries t ?o))
       (forward-line))))
 #+END_SRC
 
@@ -143,22 +104,25 @@ todo item, an optional priority and refiling it into its correct place.
   (unless (org-entry-is-todo-p)
     (error "No TODO keyword was assigned"))
   (org-set-tags-command)
-  (unless (fb/org-todo-heading-has-context-p)
-    (error "Item does not have a context assigned"))
+  ;; (unless (fb/org-todo-heading-has-context-p)
+  ;;   (error "Item does not have a context assigned"))
   (condition-case nil
       (org-priority)
     (error nil))
-  (org-refile))
+  (org-mark-ring-push)
+  (let* ((file (concat org-directory "/todos.org"))
+         (pos (save-excursion
+                (find-file file)
+                (point-min))))
+    (org-refile nil nil (list "" file nil pos))
+    (org-mark-ring-goto)))
 
 (defun fb/org-todo-heading-has-context-p ()
   "Returns t if the heading at point has a tag starting with @
   aka context-tag."
-  (if (not (member (org-get-todo-state) (list "PROJECT")))
-      (-any-p
-       (lambda (tag) (s-matches-p "@" tag))
-       (org-get-tags))
-    t))
-
+  (-any-p
+   (lambda (tag) (s-matches-p "@" tag))
+   (org-get-tags)))
 #+END_SRC
 
 *** Agenda Stuff
@@ -180,65 +144,40 @@ todo item, an optional priority and refiling it into its correct place.
         org-agenda-compact-blocks t))
 #+END_SRC
 
-Projects are defined by the PROJECT keyword and are "stuck" in the
-gtd and org sense if they have no children with in the state "TODO"
-or "STARTED".
-
-#+BEGIN_SRC elisp
-(after! org
-  (setq org-stuck-projects '("/PROJECT" ("TODO" "STARTED") nil "")))
-#+END_SRC
-
-Most Agenda commands should display tasks not agendas, so I have a
-skipping function for that.
-#+BEGIN_SRC elisp
-  (defun fb/org-agenda-skip-projects ()
-    "Skip Headings marked as PROJECT"
-    (interactive)
-    (let ((is-project (member (org-get-todo-state) (list "PROJECT"))))
-      (cond (is-project
-             (let ((old-point (point)))
-               (org-goto-first-child)
-               (if (eq old-point (point))
-                   (org-goto-sibling))
-               (point))))))
-
-
-#+END_SRC
 Custom agenda commands:
 #+BEGIN_SRC elisp
-(use-package! org-super-agenda
-  :after org-agenda
-  :init
-  (setq org-super-agenda-groups
-        '(
-          (:name "Overdue"
-                 :scheduled 'past
-                 :deadline 'past)
-          (:name "Today"
-                 :time-grid t
-                 :scheduled 'today
-                 :deadline 'today)
-          (:name "Started"
-                 :todo "STARTED"
-                 :order 1)
-          (:name "Important"
-                 :priority "A"
-                 :order 2)
+;; (use-package! org-super-agenda
+;;   :after org-agenda
+;;   :init
+;;   (setq org-super-agenda-groups
+;;         '(
+;;           (:name "Overdue"
+;;                  :scheduled 'past
+;;                  :deadline 'past)
+;;           (:name "Today"
+;;                  :time-grid t
+;;                  :scheduled 'today
+;;                  :deadline 'today)
+;;           (:name "Started"
+;;                  :todo "STARTED"
+;;                  :order 1)
+;;           (:name "Important"
+;;                  :priority "A"
+;;                  :order 2)
 
-          (:name "TODO"
-                 :and (
-                       :todo ("TODO")
-                       :not (:priority "C"))
-                 :order 3)
-          (:name "Low Prio"
-                 :and (
-                       :todo "TODO"
-                       :priority "C")
-                 :order 9)
-          ))
-  :config
-  (org-super-agenda-mode))
+;;           (:name "TODO"
+;;                  :and (
+;;                        :todo ("TODO")
+;;                        :not (:priority "C"))
+;;                  :order 3)
+;;           (:name "Low Prio"
+;;                  :and (
+;;                        :todo "TODO"
+;;                        :priority "C")
+;;                  :order 9)
+;;           ))
+;;   :config
+;;   (org-super-agenda-mode))
 
 (after! org
   (setq org-agenda-custom-commands
@@ -246,17 +185,15 @@ Custom agenda commands:
 
           ("o" "Office"
            ((agenda nil nil)
-            (tags-todo "-@home" ((org-agenda-skip-function #'fb/org-agenda-skip-projects)))))
+            (tags-todo "-@home" nil)))
 
           ("h" "Home"
            ((agenda nil ((org-agenda-overriding-header "Agenda")))
-            (tags-todo "-@office" ((org-agenda-overriding-header "Tasks")
-                                   (org-agenda-skip-function #'fb/org-agenda-skip-projects)))))
+            (tags-todo "-@office" ((org-agenda-overriding-header "Tasks")))))
 
           ("g" "On the Go"
            ((agenda nil ((org-agenda-overriding-header "Agenda")))
-            (tags-todo "-@office-@home-@net" ((org-agenda-overriding-header "Tasks")
-                                              (org-agenda-skip-function #'fb/org-agenda-skip-projects))))))))
+            (tags-todo "-@office-@home-@net" ((org-agenda-overriding-header "Tasks"))))))))
 #+END_SRC
 ** Knowledge Base stuff
 *** Deft
@@ -312,8 +249,8 @@ overview of the situation. The following code block sets the default action to
 be the 13th in the list of actions. Obviously, this will have to be kept in sync
 with the doom config and only works with the ivy interface to projectile.
 #+BEGIN_SRC elisp
-(after! projectile
-  (setcar counsel-projectile-switch-project-action 13))
+(after! counsel-projectile
+  (setcar counsel-projectile-switch-project-action 14))
 #+END_SRC
 ** Flycheck
 For now, just keybindings for going to the next and previous error.
@@ -390,8 +327,7 @@ file mail.el.
                    "/usr/bin/polybar-msg"
                    "hook" "mail" "1"))
 (after! mu4e
-  (setq mu4e-maildir "~/mails"
-        mu4e-view-html-plaintext-ratio-heuristic 100
+  (setq mu4e-view-html-plaintext-ratio-heuristic 100
         mu4e-attachment-dir "~/Downloads/")
   (load-file (concat doom-private-dir  "mail.el"))
   (if (file-exists-p "/usr/bin/polybar-msg")
@@ -411,8 +347,11 @@ Configuring sending mail.
         mml-secure-openpgp-sign-with-sender t
         mu4e-compose-crypto-reply-plain-policy 'sign))
 
-(after! org-mu4e
-  (remove-hook 'mu4e-compose-mode-hook #'org-mu4e-compose-org-mode))
+;; (after! org-mu4e
+;;   (remove-hook 'mu4e-compose-mode-hook #'org-mu4e-compose-org-mode))
+
+(after! org-msg
+  (setq org-msg-default-alternatives '(text)))
 #+END_SRC
 ** Bookmarks
 Some bookmarks for easy access.
