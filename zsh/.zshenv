@@ -10,7 +10,6 @@ export XDG_CONFIG_DIRS="/etc/xdg"
 [ -d "${HOME}/.local/bin" ] && export PATH="${PATH}:${HOME}/.local/bin"
 
 [ -d "$HOME/.cargo/bin" ] && export PATH="$HOME/.cargo/bin:$PATH"
-export RUST_SRC_PATH="$HOME/workspaces/rust/rust/src/"
 
 (($+commands[sccache])) && export RUSTC_WRAPPER=sccache
 
