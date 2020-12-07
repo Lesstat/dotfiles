@@ -24,3 +24,4 @@ fi
 export MPD_HOST="$HOME/.config/mpd/socket"
 export EDITOR='emacsclient --alternate-editor "" --create-frame'
 export QT_AUTO_SCREEN_SCALE_FACTOR=0
+export SSH_AUTH_SOCK=${XDG_RUNTIME_DIR}/gnupg/S.gpg-agent.ssh
