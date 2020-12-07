@@ -38,13 +38,6 @@ fi
 
 (( $+commands[st] )) && export TERMINAL='st'
 
-if (( $+commands[bat] )); then
-    export PAGER='bat'
-    # Bat does not handle line wrapping in man pages well -.-
-    alias man='PAGER=less man' 
-fi
-
-
 case $TERM in
 	screen*)
 
