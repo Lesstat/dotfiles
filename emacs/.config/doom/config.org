@@ -38,17 +38,7 @@ Do not do the stupid thing for invisible region.
 (setq org-directory (concat fb/brain-dir "/org"))
 
 (after! org
-  (setq org-agenda-files (cons (concat fb/brain-dir "/org") '())
-        org-default-notes-file (concat (car org-agenda-files) "/inbox.org")
-        org-todo-keywords '((sequence "TODO(t!)" "STARTED(s!)"  "WAIT(w@)"  "|" "DONE(d@)"  "CANCELLED(c)"))
-        org-refile-targets '((org-agenda-files :maxlevel . 5))
-        org-capture-templates '(("t" "Todo" entry (file org-default-notes-file)
-                                 "* TODO %?
-  :PROPERTIES:
-  :CREATION_DATE: %U
-  :END:
-  "))
-        org-archive-location (concat fb/brain-dir  "/archive/archive.org::datetree/* Finished" )))
+  (setq org-archive-location (concat fb/brain-dir  "/archive/archive.org::datetree/* Finished" )))
 #+END_SRC
 
 I want know when i finished my Todos or reschedule something.
@@ -125,76 +115,6 @@ todo item, an optional priority and refiling it into its correct place.
    (org-get-tags)))
 #+END_SRC
 
-*** Agenda Stuff
-- Show repeating tasks only once
-- Hide done tasks with timestamp in agenda
-- Don't display tasks that are already in agenda (scheduled or with
-  deadline)
-
-#+BEGIN_SRC elisp
-(after! org
-  (setq org-agenda-repeating-timestamp-show-all nil
-        org-agenda-tags-todo-honor-ignore-options t
-        org-agenda-skip-timestamp-if-done t
-        org-agenda-todo-ignore-scheduled 'all
-        org-agenda-todo-ignore-deadlines t
-        org-agenda-todo-ignore-timestamp t
-        org-agenda-start-on-weekday nil
-        org-agenda-block-separator nil
-        org-agenda-compact-blocks t))
-#+END_SRC
-
-Custom agenda commands:
-#+BEGIN_SRC elisp
-;; (use-package! org-super-agenda
-;;   :after org-agenda
-;;   :init
-;;   (setq org-super-agenda-groups
-;;         '(
-;;           (:name "Overdue"
-;;                  :scheduled 'past
-;;                  :deadline 'past)
-;;           (:name "Today"
-;;                  :time-grid t
-;;                  :scheduled 'today
-;;                  :deadline 'today)
-;;           (:name "Started"
-;;                  :todo "STARTED"
-;;                  :order 1)
-;;           (:name "Important"
-;;                  :priority "A"
-;;                  :order 2)
-
-;;           (:name "TODO"
-;;                  :and (
-;;                        :todo ("TODO")
-;;                        :not (:priority "C"))
-;;                  :order 3)
-;;           (:name "Low Prio"
-;;                  :and (
-;;                        :todo "TODO"
-;;                        :priority "C")
-;;                  :order 9)
-;;           ))
-;;   :config
-;;   (org-super-agenda-mode))
-
-(after! org
-  (setq org-agenda-custom-commands
-        '(
-
-          ("o" "Office"
-           ((agenda nil nil)
-            (tags-todo "-@home" nil)))
-
-          ("h" "Home"
-           ((agenda nil ((org-agenda-overriding-header "Agenda")))
-            (tags-todo "-@office" ((org-agenda-overriding-header "Tasks")))))
-
-          ("g" "On the Go"
-           ((agenda nil ((org-agenda-overriding-header "Agenda")))
-            (tags-todo "-@office-@home-@net" ((org-agenda-overriding-header "Tasks"))))))))
-#+END_SRC
 ** Knowledge Base stuff
 *** Deft
 Deft enables me to quickly filter through all my nodes in org mode files.
