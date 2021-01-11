@@ -24,7 +24,6 @@ plugins=(git emacs z)
 alias sys=systemctl
 alias pacman='pacman --color always'
 
-ZSH_CACHE_DIR=$HOME/.oh-my-zsh-cache
 if [[ ! -d $ZSH_CACHE_DIR ]]; then
   mkdir $ZSH_CACHE_DIR
 fi
@@ -68,6 +67,8 @@ case $TERM in
 	    ;;
 esac
 
+alias gdb='gdb -nh -x ${XDG_CONFIG_HOME}/gdb/init'
+alias wget='wget --hsts-file="$XDG_CACHE_HOME/wget-hsts"'
 
 bindkey -v
 
@@ -76,5 +77,3 @@ bindkey "^[OA" up-line-or-beginning-search
 bindkey "^[OB" down-line-or-beginning-search
 bindkey -M vicmd "k" up-line-or-beginning-search
 bindkey -M vicmd "j" down-line-or-beginning-search
-
-eval $(thefuck --alias)

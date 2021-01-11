@@ -91,7 +91,7 @@ hc unlock
 # or simply:
 hc detect_monitors
 
-xrdb ~/.Xresources 
+xrdb ~/.config/X11/Xresources
 nitrogen --restore &&
 
     # find the panel

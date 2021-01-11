@@ -248,7 +248,8 @@ file mail.el.
                    "hook" "mail" "1"))
 (after! mu4e
   (setq mu4e-view-html-plaintext-ratio-heuristic 100
-        mu4e-attachment-dir "~/Downloads/")
+        mu4e-attachment-dir "~/Downloads/"
+        mu4e-get-mail-command "mbsync -c ~/.config/isync/mbsyncrc -a")
   (load-file (concat doom-private-dir  "mail.el"))
   (if (file-exists-p "/usr/bin/polybar-msg")
       (add-hook 'mu4e-index-updated-hook #'fb/update-polybar-indicator)))
@@ -265,13 +266,10 @@ Configuring sending mail.
         message-send-mail-function #'message-send-mail-with-sendmail
         mml-secure-openpgp-encrypt-to-self t
         mml-secure-openpgp-sign-with-sender t
-        mu4e-compose-crypto-reply-plain-policy 'sign))
-
-;; (after! org-mu4e
-;;   (remove-hook 'mu4e-compose-mode-hook #'org-mu4e-compose-org-mode))
-
-(after! org-msg
-  (setq org-msg-default-alternatives '(text)))
+        org-msg-default-alternatives '(html text)
+        mu4e-compose-crypto-policy '(sign-all-messages encrypt-encrypted-replies))
+  
+  (remove-hook 'mu4e-compose-pre-hook #'org-msg-mode))
 #+END_SRC
 ** Bookmarks
 Some bookmarks for easy access.
@@ -296,3 +294,7 @@ Some bookmarks for easy access.
               :query "date:today..now"
               :key ?T))) )
 #+END_SRC
+* GPG-Encryption
+#+begin_src elisp
+(setq epg-gpg-home-directory (getenv "GNUPGHOME"))
+#+end_src
