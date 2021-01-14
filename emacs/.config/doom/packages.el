@@ -52,3 +52,4 @@
 
 ;; (package! org-super-agenda)
 (package! org-ref)
+(package! org-gtd)
