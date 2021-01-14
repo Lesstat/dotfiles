@@ -35,7 +35,7 @@ if (($+commands[exa])) ; then
 fi
 
 
-(( $+commands[st] )) && export TERMINAL='st'
+(( $+commands[alacritty] )) && export TERMINAL='alacritty'
 
 case $TERM in
 	screen*)

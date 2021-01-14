@@ -1,6 +1,6 @@
 export ZDOTDIR=$HOME/.config/zsh
 export HISTFILE="$XDG_DATA_HOME"/zsh/history
-
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/bin"
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 export XDG_CONFIG_HOME=$HOME/.config
@@ -14,14 +14,14 @@ export ZSH_CACHE_DIR="${XDG_CACHE_HOME}/zsh"
 [ -d "${XDG_CONFIG_HOME}/emacs/bin" ] && export PATH="${PATH}:${XDG_CONFIG_HOME}/emacs/bin"
 [ -d "${HOME}/.local/bin" ] && export PATH="${PATH}:${HOME}/.local/bin"
 
-( ($+commands[sccache])) && export RUSTC_WRAPPER=sccache
+(($+commands[sccache])) && export RUSTC_WRAPPER=sccache
 
 export RUSTUP_HOME="${XDG_DATA_HOME}/rustup"
 
+export CARGO_HOME="$XDG_DATA_HOME/cargo"
 export CARGO_TARGET_DIR="${XDG_CACHE_HOME}/cargo-target"
 [ -d "${CARGO_TARGET_DIR}" ] || mkdir -p "${CARGO_TARGET_DIR}"
-export PATH="$HOME/.local/share/cargo/bin:$PATH"
-echo $PATH
+export PATH="$CARGO_HOME/bin:$PATH"
 
 if [[ -d "$HOME/workspaces/go" ]]; then
 	export GOPATH="$HOME/workspaces/go"

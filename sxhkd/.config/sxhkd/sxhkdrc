@@ -3,9 +3,9 @@ super + Escape
       pkill -USR1 sxhkd
 
 super + Return 
-      st -e tmux
+      alacritty -e tmux
 super + shift + Return 
-      st 
+      alacritty 
 super + l 
       lock.sh
 super + shift + l 
