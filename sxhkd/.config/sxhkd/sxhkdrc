@@ -23,11 +23,11 @@ super + c
 super + o 
       execInEmacs.sh "(org-agenda)"
 super + t 
-      st -e htop
+      alacritty -e htop
 super + m 
-      st -e tmux new-session ncmpcpp
+      alacritty -e tmux new-session ncmpcpp
 super + f 
-      st -e tmux new-session ranger
+      alacritty -e tmux new-session ranger
 
 # Audio
 XF86AudioNext
