@@ -27,7 +27,7 @@ super + t
 super + m 
       alacritty -e tmux new-session ncmpcpp
 super + f 
-      alacritty -e tmux new-session ranger
+      alacritty -e ranger
 
 # Audio
 XF86AudioNext
@@ -102,7 +102,7 @@ super + space
 
 super + Tab
       herbstclient or , and . compare tags.focus.curframe_wcount = 2            \
-                     . cycle_layout +1 vertical horizontal max vertical grid    \
+                     . cycle_layout +1 vertical horizontal max grid    \
                	     , cycle_layout +1
 
 # switch to workspace
