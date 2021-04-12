@@ -321,7 +321,8 @@ Configuring sending mail.
         mml-secure-openpgp-encrypt-to-self t
         mml-secure-openpgp-sign-with-sender t
         org-msg-default-alternatives '(html text)
-        mu4e-compose-crypto-policy '(sign-all-messages encrypt-encrypted-replies))
+        mu4e-compose-crypto-policy '(sign-all-messages encrypt-encrypted-replies)
+        mu4e-compose-context-policy 'ask)
   
   (remove-hook 'mu4e-compose-pre-hook #'org-msg-mode))
 #+END_SRC
