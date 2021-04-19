@@ -3,3 +3,4 @@
 /emacs/.config/doom/config.el
 *.elc
 /emacs/.config/doom/mail.el
+/emacs/.config/doom/custom.el
