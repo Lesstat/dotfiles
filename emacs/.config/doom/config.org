@@ -272,6 +272,12 @@ I like to use rust-analyzer for best performance lsp experience.
    lsp-rust-analyzer-cargo-all-targets t))
 #+END_SRC
 
+** LSP - Bread Crumbs
+The breadcrumbs mode of lsp-mode gives me a better sense of where I am at in the code.
+#+begin_src elisp
+(setq lsp-headerline-breadcrumb-enable t)
+#+end_src
+
 * PDFs
 I want to annotate via local leader instead of the clunky default.
 #+BEGIN_SRC elisp
