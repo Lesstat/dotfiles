@@ -4,6 +4,7 @@
 
 * General
 #+BEGIN_SRC elisp
+;;; -*- lexical-binding: t; -*-
 (setq user-full-name "Florian Barth")
 #+END_SRC
 ** Style
@@ -146,7 +147,7 @@ todo item, an optional priority and refiling it into its correct place.
   ;; :after org-gtd ;; because we need to add the org-gtd directory to the agenda files
   ;; use as-is if you don't have an existing org-agenda setup
   ;; otherwise push the directory to the existing list
-  (setq org-agenda-files `(,org-gtd-directory)
+  (setq org-agenda-files `(,org-gtd-directory ,(concat org-roam-directory "/proj"))
         org-agenda-custom-commands '(("g" "Scheduled today and all NEXT items" ((agenda "" ((org-agenda-span 1))) (todo "NEXT"))))
         org-agenda-start-day "today"))
 
@@ -186,11 +187,41 @@ Deft enables me to quickly filter through all my nodes in org mode files.
 
 *** Org-roam
 Org-roam is a tool to make my notes an interconnected web, that is awesome to navigate.
+My configuration is inspired by system-crafters series on org roam (e.g. [[https://systemcrafters.net/build-a-second-brain-in-emacs/5-org-roam-hacks/][this]]).
 #+BEGIN_SRC elisp
 (after! org-roam
   (setq org-roam-directory deft-directory
+        org-roam-dailies-directory "day/"
         org-roam-capture-templates
-        '(("d" "default" plain #'org-roam-capture--get-point "%?" :file-name "${slug}" :head "#+TITLE: ${title}\nTAGS: \n" :unnarrowed t))))
+        `(
+          ("d" "default" plain
+           "* %?"
+           :if-new (file+head "${slug}.org" "#+title: ${title}\n#+date: %U")
+           :unnarrowed t)
+          ("p" "project" plain
+           (file ,(concat org-roam-directory "/tmpls/project.org"))
+           :if-new (file+head "proj/${slug}.org" "#+title: ${title}")
+           :unnarrowed t)))
+
+  (defun fb/org-roam-filter-by-tag (tag-name)
+    (lambda (node)
+      (member tag-name (org-roam-node-tags node))))
+
+  (defun fb/org-roam-list-notes-by-tag (tag-name)
+    (mapcar #'org-roam-node-file
+            (seq-filter
+             (my/org-roam-filter-by-tag tag-name)
+             (org-roam-node-list))))
+
+  (defun fb/org-roam-find-nodes-by-tag ()
+    (interactive)
+
+    (let ((tag (ivy-read "Tag: " (org-roam-tag-completions))))
+      (org-roam-node-find
+       nil
+       nil
+       (fb/org-roam-filter-by-tag tag))))
+  )
 #+END_SRC
 
 *** Org-ref
