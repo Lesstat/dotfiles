@@ -39,7 +39,8 @@ Do not do the stupid thing for invisible region.
 (setq org-directory (concat fb/brain-dir "/org"))
 
 (after! org
-  (setq org-archive-location (concat fb/brain-dir  "/archive/archive.org::datetree/* Finished" )))
+  (setq org-archive-location (concat fb/brain-dir  "/archive/archive.org::datetree/* Finished" )
+        org-todo-keywords '((sequence "WAIT(w)" "TODO(t)" "NEXT(n)" "|"  "DONE(d)" "DEL(c)" ))))
 #+END_SRC
 
 I want know when i finished my Todos or reschedule something.
@@ -115,60 +116,12 @@ todo item, an optional priority and refiling it into its correct place.
    (lambda (tag) (s-matches-p "@" tag))
    (org-get-tags)))
 #+END_SRC
-**** org-gtd
-#+begin_src elisp
-(use-package! org-gtd
-  :custom
-  ;; where org-gtd will put its files. This value is also the default one.
-  (org-gtd-directory (concat fb/brain-dir "/gtd"))
-  ;; package: https://github.com/Malabarba/org-agenda-property
-  ;; this is so you can see who an item was delegated to in the agenda
-  (org-agenda-property-list '("DELEGATED_TO"))
-  ;; I think this makes the agenda easier to read
-  (org-agenda-property-position 'next-line)
-  ;; package: https://www.nongnu.org/org-edna-el/
-  ;; org-edna is used to make sure that when a project task gets DONE,
-  ;; the next TODO is automatically changed to NEXT.
-  (org-edna-use-inheritance t)
-  :config
-  (org-edna-load)
-
-  :init
-
-  (map! :leader :prefix "d"
-        ("c"  #'org-gtd-capture ;; add item to inbox
-         "a"  #'org-agenda-list ;; see what's on your plate today
-         "p"  #'org-gtd-process-inbox ;; process entire inbox
-         "n"  #'org-gtd-show-all-next ;; see all NEXT items
-         "s"  #'org-gtd-show-stuck-projects)) ;; see projects that don't have a NEXT item
-  (map! "C-c c" 'org-gtd-clarify-finalize)) ;; the keybinding to hit when you're done editing an item in the processing phase
-
-(after! org-gtd
-  ;; :after org-gtd ;; because we need to add the org-gtd directory to the agenda files
-  ;; use as-is if you don't have an existing org-agenda setup
-  ;; otherwise push the directory to the existing list
-  (setq org-agenda-files `(,org-gtd-directory ,(concat org-roam-directory "/proj"))
-        org-agenda-custom-commands '(("g" "Scheduled today and all NEXT items" ((agenda "" ((org-agenda-span 1))) (todo "NEXT"))))
-        org-agenda-start-day "today"))
-
-(after! org-gtd
-  ;; note that org-gtd has to be loaded before this
-  :config
-  ;; use as-is if you don't have an existing set of org-capture templates
-  ;; otherwise add to existing setup
-  ;; you can of course change the letters, too
-  (setq org-capture-templates `(("i" "Inbox"
-                                 entry (file ,(org-gtd--path org-gtd-inbox-file-basename))
-                                 "* %?\n%U\n\n  %i"
-                                 :kill-buffer t)
-                                ("l" "Todo with link"
-                                 entry (file ,(org-gtd--path org-gtd-inbox-file-basename))
-                                 "* %?\n%U\n\n  %i\n  %a"
-                                 :kill-buffer t))))
-#+end_src
 **** org agenda
 #+begin_src elisp
-(setq org-agenda-show-future-repeats nil)
+(setq org-agenda-show-future-repeats nil
+      org-agenda-custom-commands '(("n" "Agenda and next Todos"
+                                    ((agenda "")
+                                     (todo "NEXT")))))
 #+end_src
 ** Knowledge Base stuff
 *** Deft
@@ -189,19 +142,29 @@ Deft enables me to quickly filter through all my nodes in org mode files.
 Org-roam is a tool to make my notes an interconnected web, that is awesome to navigate.
 My configuration is inspired by system-crafters series on org roam (e.g. [[https://systemcrafters.net/build-a-second-brain-in-emacs/5-org-roam-hacks/][this]]).
 #+BEGIN_SRC elisp
+(setq org-roam-directory deft-directory
+      org-roam-dailies-directory "day/"
+      org-agenda-files `(,(concat org-roam-directory "/proj"))
+      org-edna-use-inheritance t
+
+      org-roam-capture-templates
+      `(
+        ("d" "default" plain
+         "* %?"
+         :if-new (file+head "${slug}.org" "#+title: ${title}\n#+date: %U")
+         :unnarrowed t)
+        ("p" "project" plain
+         (file ,(concat org-roam-directory "/tmpls/project.org"))
+         :if-new (file+head "proj/${slug}.org" "#+title: ${title}")
+         :unnarrowed t))
+
+      org-capture-templates
+      `(("i" "Inbox" entry (file ,(concat fb/brain-dir "/gtd/inbox.org"))
+         "* %?\n%U\n\n  %i"
+         :kill-buffer t)))
 (after! org-roam
-  (setq org-roam-directory deft-directory
-        org-roam-dailies-directory "day/"
-        org-roam-capture-templates
-        `(
-          ("d" "default" plain
-           "* %?"
-           :if-new (file+head "${slug}.org" "#+title: ${title}\n#+date: %U")
-           :unnarrowed t)
-          ("p" "project" plain
-           (file ,(concat org-roam-directory "/tmpls/project.org"))
-           :if-new (file+head "proj/${slug}.org" "#+title: ${title}")
-           :unnarrowed t)))
+
+  (org-edna-mode)
 
   (defun fb/org-roam-filter-by-tag (tag-name)
     (lambda (node)
