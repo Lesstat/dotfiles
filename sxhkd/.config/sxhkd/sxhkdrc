@@ -45,6 +45,10 @@ XF86AudioLowerVolume
 XF86AudioMute
       pactl set-sink-mute @DEFAULT_SINK@ toggle
 
+super + alt + m
+      pactl set-source-mute @DEFAULT_SOURCE@ toggle; \
+      notify-send $(pactl get-source-mute @DEFAULT_SOURCE@)
+
 # Backlight
 XF86MonBrightnessDown
       xbacklight -dec 5
