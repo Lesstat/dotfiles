@@ -309,6 +309,20 @@ file mail.el.
       (add-hook 'mu4e-index-updated-hook #'fb/update-polybar-indicator)))
 #+END_SRC
 
+I want trashed emails to not be deleted entirely but to be moved to the trash folder. Implementation adapted from [[http://cachestocaches.com/2017/3/complete-guide-email-emacs-using-mu-and-/][here]].
+#+begin_src elisp
+(after! mu4e
+  (setq mu4e-marks (cl-remove-if (lambda (elem) (eq (car elem) 'trash)) mu4e-marks))
+  (add-to-list 'mu4e-marks
+               '(trash
+                 :char ("d" . "▼")
+                 :prompt "dtrash"
+                 :dyn-target (lambda (target msg) (mu4e-get-trash-folder msg))
+                 :action (lambda (docid msg target)
+                           (mu4e~proc-move docid
+                                           (mu4e~mark-check-target target) "-N")))))
+#+end_src
+
 Configuring sending mail.
 #+BEGIN_SRC elisp
 (after! mu4e
