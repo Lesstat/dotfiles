@@ -320,7 +320,7 @@ I want trashed emails to not be deleted entirely but to be moved to the trash fo
                  :dyn-target (lambda (target msg) (mu4e-get-trash-folder msg))
                  :action (lambda (docid msg target)
                            (mu4e~proc-move docid
-                                           (mu4e~mark-check-target target) "-N")))))
+                                           (mu4e~mark-check-target target) "-N+S")))))
 #+end_src
 
 Configuring sending mail.
