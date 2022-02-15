@@ -12,6 +12,11 @@
 (setq doom-font "FiraCode Nerd Font 10"
       doom-theme 'doom-one)
 #+END_SRC
+There is one ligature defined in doom that I don't like so lets get rid of it:
+#+begin_src elisp
+(setq +ligatures-fira-font-alist
+      (cl-remove-if (lambda (elt) (string= (car elt) ":")) +ligatures-fira-font-alist))
+#+end_src
 ** Spelling Correction
 I want to have spelling for English and German at the same time. But spell-fu (default in doom now), doesn't support this yet ...
 #+BEGIN_SRC elisp
