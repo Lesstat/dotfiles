@@ -13,6 +13,7 @@ dates=$(eval "${command}" today "${now}" today 23:59)
 wholeday=$(
 	echo "$dates" | sed -e "/^[^ ]*day,/d" \
 		-e "s/^[^0-9].*/📆/" \
+		-e "^[0-9].*/d" \
 		-e "q"
 )
 printf "${wholeday} "
