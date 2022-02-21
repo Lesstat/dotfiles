@@ -4,20 +4,18 @@ exec 2>/dev/null
 
 now=$(date +%H:%M)
 
-command="khal list"
+command="khal list --notstarted"
 while IFS= read -r line 2>/dev/null; do
 	command="${command} -d \"${line}\""
 done <~/.config/calwidget/ignored_calendars
-dates=$(eval "${command}" today "${now}" today 23:59)
 
-wholeday=$(
-	echo "$dates" | sed -e "/^[^ ]*day,/d" \
-		-e "s/^[^0-9].*/📆/" \
-		-e "^[0-9].*/d" \
-		-e "q"
-)
-printf "${wholeday} "
-echo "${dates}" |
+events=$(khal at 01:00 | wc -l)
+
+if ((events > 1)); then
+	printf "🌈"
+fi
+
+eval "${command}" today "${now}" eod |
 	sed -e "/^[^ ]*day,/d" \
 		-e "/^[^0-9]/d" \
 		-e "/[↦↔⇥]/d" \
