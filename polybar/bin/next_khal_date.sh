@@ -9,7 +9,12 @@ while IFS= read -r line 2>/dev/null; do
 	command="${command} -d \"${line}\""
 done <~/.config/calwidget/ignored_calendars
 
-events=$(khal at 01:00 | wc -l)
+at_command="khal at 01:00"
+
+while IFS= read -r line 2>/dev/null; do
+	at_command="${at_command} -d \"${line}\""
+done <~/.config/calwidget/ignored_calendars
+events=$(eval "${at_command}" | wc -l)
 
 if ((events > 1)); then
 	printf "🌈"
