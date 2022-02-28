@@ -4,7 +4,7 @@ exec 2>/dev/null
 
 now=$(date +%H:%M)
 
-command="khal list --notstarted"
+command="khal list "
 while IFS= read -r line 2>/dev/null; do
 	command="${command} -d \"${line}\""
 done <~/.config/calwidget/ignored_calendars
