@@ -5,7 +5,7 @@
 * General
 #+BEGIN_SRC elisp
 ;;; -*- lexical-binding: t; -*-
-(setq user-full-name "Florian Barth")
+(setq user-full-name "Florian Ihle")
 #+END_SRC
 ** Style
 #+BEGIN_SRC elisp
@@ -350,24 +350,11 @@ Configuring sending mail.
 Some bookmarks for easy access.
 #+BEGIN_SRC elisp
   (after! mu4e
-    (setq mu4e-bookmarks
-          `(
-            ,(make-mu4e-bookmark
-              :name "Unread messages"
-              :query "flag:unread AND NOT flag:trashed"
-              :key ?u)
-            ,(make-mu4e-bookmark
-              :name "Inboxes"
-              :query "maildir:/.*Inbox/"
-              :key ?i)
-            ,(make-mu4e-bookmark
-              :name "Todos"
-              :query "maildir:/.*Todo/"
-              :key ?t)
-            ,(make-mu4e-bookmark
-              :name "Todays messages"
-              :query "date:today..now"
-              :key ?T))) )
+    (mu4e-bookmark-define "date:today..now" "Todays Messages" ?T)
+    (mu4e-bookmark-define "maildir:/.*Todo/" "Todos" ?t)
+    (mu4e-bookmark-define "maildir:/.*Inbox/" "Inboxes" ?i)
+    (mu4e-bookmark-define "flag:unread AND NTO flag:trashed" "Unread Messages" ?u)
+    )
 #+END_SRC
 * GPG-Encryption
 #+begin_src elisp
