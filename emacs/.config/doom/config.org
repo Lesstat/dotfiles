@@ -353,7 +353,7 @@ Some bookmarks for easy access.
     (mu4e-bookmark-define "date:today..now" "Todays Messages" ?T)
     (mu4e-bookmark-define "maildir:/.*Todo/" "Todos" ?t)
     (mu4e-bookmark-define "maildir:/.*Inbox/" "Inboxes" ?i)
-    (mu4e-bookmark-define "flag:unread AND NTO flag:trashed" "Unread Messages" ?u)
+    (mu4e-bookmark-define "flag:unread AND NOT flag:trashed" "Unread Messages" ?u)
     )
 #+END_SRC
 * GPG-Encryption
