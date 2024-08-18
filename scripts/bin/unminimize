@@ -1,0 +1,5 @@
+#!/bin/bash
+#
+for client in $(herbstclient list_clients); do
+    herbstclient set_attr clients.${client}.minimized false
+done

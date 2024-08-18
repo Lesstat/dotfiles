@@ -126,3 +126,7 @@ super + shift + r
 # exit herbstluftwm (logs you out of your X session)
 super + shift + e 
       test "yes" = $(printf "no\nyes" | dmenu -p "Exit herbstluftwm?") && herbstclient quit
+
+
+alt + Tab
+    herbstclient cycle_all
