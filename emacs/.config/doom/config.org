@@ -299,16 +299,21 @@ I set up general stuff for mu4e here but keep machine specific stuff in an extra
 file mail.el.
 #+BEGIN_SRC elisp
 (defun fb/update-polybar-indicator ()
-    "Update my custom polybar indicator which shows that mails need to be processed."
-    (interactive)
-    (start-process "update polybar indicator"
-                   nil
-                   "/usr/bin/polybar-msg"
-                   "hook" "mail" "1"))
+  "Update my custom polybar indicator which shows that mails need to be processed."
+  (interactive)
+  (start-process "update polybar indicator"
+                 nil
+                 "/usr/bin/polybar-msg"
+                 "hook" "mail" "1"))
 (after! mu4e
   (setq mu4e-view-html-plaintext-ratio-heuristic 100
         mu4e-attachment-dir "~/Downloads/"
-        mu4e-get-mail-command "mbsync -c ~/.config/isync/mbsyncrc -a")
+        mu4e-get-mail-command "mbsync -c ~/.config/isync/mbsyncrc -a"
+        mu4e-headers-fields '((:account . 10 )
+                              (:human-date . 12)
+                              (:flags . 6)
+                              (:from-or-to . 25)
+                              (:subject)))
   (load-file (concat doom-private-dir  "mail.el"))
   (if (file-exists-p "/usr/bin/polybar-msg")
       (add-hook 'mu4e-index-updated-hook #'fb/update-polybar-indicator)))
@@ -350,6 +355,7 @@ Configuring sending mail.
 Some bookmarks for easy access.
 #+BEGIN_SRC elisp
   (after! mu4e
+    (mu4e-bookmark-define "maildir:/.*Junk/" "Spam" ?s)
     (mu4e-bookmark-define "date:today..now" "Todays Messages" ?T)
     (mu4e-bookmark-define "maildir:/.*Todo/" "Todos" ?t)
     (mu4e-bookmark-define "maildir:/.*Inbox/" "Inboxes" ?i)
