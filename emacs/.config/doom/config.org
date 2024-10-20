@@ -347,7 +347,6 @@ Configuring sending mail.
         org-msg-default-alternatives '(html text)
         mu4e-compose-crypto-policy '(sign-all-messages encrypt-encrypted-replies)
         mu4e-compose-context-policy 'ask)
-   (mu4e-alert-set-default-style 'ignore)
 
   (remove-hook 'mu4e-compose-pre-hook #'org-msg-mode))
 #+END_SRC
